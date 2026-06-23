@@ -1,6 +1,6 @@
 # The Isle Companion
 
-Overlay de escritorio para **The Isle** que proporciona herramientas de apoyo sin modificar ni acceder al proceso del juego.
+Overlay de escritorio para **The Isle** que proporciona herramientas de informacion y seguimiento para mejorar tu experiencia de juego.
 
 ![Electron](https://img.shields.io/badge/Electron-35.7.5-47848F?logo=electron&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-24.x-339933?logo=nodedotjs&logoColor=white)
@@ -103,10 +103,6 @@ the-isle-companion/
 - [ ] Historial de posiciones (trail/rastro en el mapa)
 - [ ] Sistema de alertas para patrol zones
 - [ ] Soporte para futuros mapas
-
-## Aviso importante
-
-Esta aplicacion **no es un cheat**. No lee memoria del juego, no inyecta codigo, no interactua con el proceso de The Isle y no viola EasyAntiCheat. Solo lee el portapapeles del sistema operativo (que es publico) y muestra informacion de referencia.
 
 ## Licencia
 
