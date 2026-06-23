@@ -776,3 +776,125 @@ body {
   width: 0%;
   background: linear-gradient(90deg, var(--accent-dim), var(--accent));
 }
+
+/* ==================== TUTORIAL ==================== */
+#tut-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+#tut-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.80);
+  display: none;
+}
+
+#tut-spot {
+  position: fixed;
+  border-radius: 7px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.78);
+  border: 2px solid var(--accent);
+  box-sizing: border-box;
+  pointer-events: none;
+  display: none;
+  transition: top 0.22s ease, left 0.22s ease, width 0.22s ease, height 0.22s ease;
+}
+
+#tut-card {
+  position: fixed;
+  width: 272px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-bright);
+  border-radius: 10px;
+  padding: 13px 15px 11px;
+  pointer-events: all;
+  z-index: 10002;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.65), 0 0 14px var(--accent-glow);
+}
+
+#tut-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 7px;
+}
+
+#tut-counter {
+  font-size: 10px;
+  font-family: 'Rajdhani', sans-serif;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+
+#tut-skip {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-family: 'Rajdhani', sans-serif;
+  cursor: pointer;
+  padding: 2px 4px;
+  line-height: 1;
+  transition: color 0.15s;
+}
+
+#tut-skip:hover { color: var(--text-dim); }
+
+#tut-title {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Rajdhani', sans-serif;
+  color: var(--accent);
+  text-shadow: 0 0 8px var(--accent-glow);
+  letter-spacing: 0.03em;
+  margin: 0 0 6px;
+}
+
+#tut-desc {
+  font-size: 11px;
+  color: var(--text-mid);
+  line-height: 1.5;
+  margin: 0 0 11px;
+}
+
+#tut-nav {
+  display: flex;
+  gap: 7px;
+}
+
+.tut-btn {
+  flex: 1;
+  padding: 6px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: background 0.15s, box-shadow 0.15s, color 0.15s;
+}
+
+.tut-primary {
+  background: var(--accent);
+  color: #0a0e14;
+  border-color: var(--accent);
+}
+
+.tut-primary:hover {
+  background: #33ddff;
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.tut-secondary {
+  background: transparent;
+  color: var(--text-dim);
+}
+
+.tut-secondary:hover {
+  color: var(--text);
+  border-color: var(--border-bright);
+}
