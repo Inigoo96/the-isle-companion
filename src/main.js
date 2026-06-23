@@ -10,7 +10,7 @@ function createOverlay() {
     width: 400,
     height: 480,
     minWidth: 280,
-    minHeight: 350,
+    minHeight: 336,
     x: 20,
     y: 20,
     frame: false,
@@ -27,6 +27,7 @@ function createOverlay() {
 
   overlayWindow.loadFile(path.join(__dirname, 'renderer', 'index.html'));
   overlayWindow.setAlwaysOnTop(true, 'screen-saver');
+  overlayWindow.setAspectRatio(400 / 480);
 
   if (process.argv.includes('--dev')) {
     overlayWindow.webContents.openDevTools({ mode: 'detach' });
