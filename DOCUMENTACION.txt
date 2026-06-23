@@ -66,8 +66,15 @@ juego ni lee su memoria.
       Pteranodon, Beipiaosaurus, Troodon).
 
 2.3 MUTATION BUILDER (Guia de mutaciones)
-    - Recomendaciones de las 16 mutaciones ordenadas de la 1a a la 16a
-      para cada dinosaurio (disponible para dinos con lista completa).
+    - Lista de 14 mutaciones priorizadas por dino, ordenadas de mas a menos
+      importante segun el rol y las mecanicas especificas de cada especie.
+    - Cada mutacion muestra: nombre, descripcion del efecto, y badge de tipo:
+        * Slot 2 (naranja): exclusiva del segundo slot de mutacion.
+        * Unlock (azul): desbloqueable via lifestyle (se gana jugando).
+        * Situ (gris): situacional, relleno para slots finales.
+    - Datos cubiertos: los 20 dinos del roster 0.21.321.
+    - Fuente: data/mutations.json con 43 mutaciones catalogadas por
+      categoria (universal, carnivoro, herbivoro, hembra, slot2, desbloqueable).
     - Selector global de dinosaurio compartido con el tab Stats.
 
 2.4 DINO STATS POR ETAPA DE CRECIMIENTO
@@ -161,7 +168,10 @@ juego ni lee su memoria.
     │       ├── styles.css        Estilos del overlay (tema oscuro)
     │       └── app.js            Logica de la UI (tabs, mapa, dinos)
     ├── data/
-    │   ├── dinos.json            Base de datos de dinosaurios y mutations
+    │   ├── dinos.json            Base de datos de dinosaurios: stats por etapa,
+    │   │                         tiempos de crecimiento, mutaciones recomendadas
+    │   ├── mutations.json        Base de datos de mutaciones: 43 mutaciones con
+    │   │                         efecto y categoria (universal/carnivoro/etc.)
     │   └── zones.json            Zonas del mapa (PZ, MZ, Sanc) de Vulnona
     ├── assets/
     │   └── maps/
@@ -382,9 +392,51 @@ NOTA SOBRE DATOS:
 
 LIMITACIONES CONOCIDAS:
   - El estado de prime list no se guarda entre sesiones.
-  - Faltan listas de mutaciones para la mayoria de dinos.
   - Las coordenadas requieren copia manual al clipboard.
   - Stats sujetos a cambio en hotfixes posteriores al 0.21.321.
+
+
+========================================
+ VERSION 0.3.0 - Mutation Builder completo
+ Fecha: 2026-06-23
+ Mapa soportado: Gateway v0.21+
+ Build del juego: Evrima 0.21.321
+========================================
+
+CAMBIOS PRINCIPALES:
+  [x] data/mutations.json: nueva base de datos con 43 mutaciones catalogadas.
+      Categorias: universal (18), carnivoro (4), herbivoro (6), hembra (1),
+      slot2 (4), desbloqueable (9).
+      Cada entrada: nombre -> { effect, category }.
+      Correccion: Hypermetabolic Inanition = "cuanto mas hambre, mas daño"
+      (no al reves como indicaban fuentes erroneas).
+  [x] dinos.json: recommendedMutations actualizado en los 20 dinos.
+      Formato: lista de 14 objetos { name, tags[] } ordenada por prioridad.
+      Tags posibles: "s2" (Slot 2 exclusivo), "desb" (desbloqueable),
+      "situ" (situacional/relleno).
+  [x] UI Mutations tab rediseñada:
+        - Nombre + tags como badges coloreados (naranja/azul/gris).
+        - Descripcion del efecto en texto pequeño bajo el nombre.
+        - Carga asincrona de mutations.json separada de dinos.json.
+  [x] Logica de prioridades documentada en los comentarios de los dinos:
+        - Carnivoros: Cellular Regen siempre #1; Osteosclerosis alto en
+          dinos con fractura propia (Rex, Pachy); Congenital Hypoalgesia
+          en los que pesan menos que sus rivales directos.
+        - Herbivoros: nucleo universal Truculency + Hypervigilance +
+          resistencias; Tactile Endurance (s2) en todos los herbi.
+        - Acuaticos (Deino, Beipiaosaurus): Hydrodynamic + Wader arriba;
+          Sustained Hydration eliminada (nadando nunca tienes sed).
+
+FUENTE DE DATOS:
+  Listas de mutaciones elaboradas y verificadas por Inigo basandose en:
+  - Estadisticas reales del juego (Evrima Quick Guide 0.21.321).
+  - Analisis de rol por dino (peso, velocidad, mecanica especial, rivals).
+  - Consideraciones de "Entomb" (dificultad para maxear las 14 slots).
+
+LIMITACIONES CONOCIDAS:
+  - El estado de prime list no se guarda entre sesiones.
+  - Las coordenadas requieren copia manual al clipboard.
+  - Listas de mutaciones sujetas a revision en futuras versiones del juego.
 
 
 ================================================================================
