@@ -29,15 +29,22 @@ juego ni lee su memoria.
  2. FINALIDAD Y FUNCIONALIDADES
 ========================================
 
-2.1 MINIMAPA CON POSICION DEL JUGADOR
-    - Muestra la imagen real del mapa Gateway (descargada de Vulnona) como
-      fondo del minimapa.
-    - El jugador copia sus coordenadas in-game al clipboard.
-    - La app detecta las coordenadas automaticamente cada 500ms y muestra
-      la posicion en el mapa con un punto verde luminoso con efecto glow.
-    - No requiere interaccion manual: basta con copiar coords en el juego.
-    - Los limites del mapa (MAP_BOUNDS) estan calibrados con datos reales
-      extraidos de Vulnona (data_1.txt del mapa Gateway_v0.21).
+2.1 MAPA INTERACTIVO CON POSICION DEL JUGADOR
+    - Imagen real del mapa Gateway (webp 1.7 MB, fuente: Vulnona).
+    - Deteccion automatica de coordenadas via clipboard cada 500ms.
+    - Indicador de posicion blanco con glow y borde negro.
+    - Zoom con rueda del raton (centrado en el cursor) y botones +/-.
+    - Arrastre del mapa cuando hay zoom activo (drag to pan).
+    - Boton R para resetear zoom a 100%.
+    - Zoom maximo: 800%. Zoom minimo: 100%.
+    - Capas de zonas del juego con datos reales de Vulnona:
+        * Patrol Zones (PZ): 53 sub-zonas en rojo.
+        * Migration Zones (MZ): 11 zonas en verde.
+        * Sanctuaries (Sanc): 8 zonas en amarillo.
+    - Cada capa se puede activar/desactivar con checkboxes.
+    - Toolbar compacta: capas a la izquierda, zoom a la derecha.
+    - Mapa totalmente responsive: se ajusta al tamaño de la ventana.
+    - Tamaño minimo de ventana: 280x350 px.
 
 2.2 MUTATION BUILDER (Guia de mutaciones)
     - Base de datos de dinosaurios con sus stats base (HP, daño, velocidad,
@@ -65,7 +72,8 @@ juego ni lee su memoria.
     - F10: Activar modo click-through (los clicks pasan al juego, no al
            overlay). Se indica con un badge rojo "CLICK-THROUGH".
     - La barra de titulo se puede arrastrar para mover la ventana.
-    - La ventana es redimensionable.
+    - La ventana es redimensionable con tamaño minimo de 280x350 px.
+    - Todo el texto de la interfaz esta en ingles.
 
 
 ========================================
@@ -127,7 +135,8 @@ juego ni lee su memoria.
     │       ├── styles.css        Estilos del overlay (tema oscuro)
     │       └── app.js            Logica de la UI (tabs, mapa, dinos)
     ├── data/
-    │   └── dinos.json            Base de datos de dinosaurios y mutations
+    │   ├── dinos.json            Base de datos de dinosaurios y mutations
+    │   └── zones.json            Zonas del mapa (PZ, MZ, Sanc) de Vulnona
     ├── assets/
     │   └── maps/
     │       └── gateway.webp      Imagen real del mapa Gateway (1.7 MB)
@@ -257,17 +266,26 @@ Para usar como overlay:
 ========================================
 
 FUNCIONALIDADES INCLUIDAS:
-  [x] Overlay transparente con drag y resize
-  [x] Minimapa con imagen real del mapa Gateway (Vulnona, 1.7 MB webp)
+  [x] Overlay transparente con drag, resize y tamaño minimo (280x350)
+  [x] Mapa interactivo con imagen real de Gateway (Vulnona, 1.7 MB webp)
   [x] Deteccion automatica de coordenadas via clipboard (cada 500ms)
   [x] Parseo correcto del formato del juego (comas como miles+delimitador)
   [x] Proyeccion calibrada: ejes UE5 mapeados a pixeles del canvas
   [x] MAP_BOUNDS reales extraidos de Vulnona data_1.txt
+  [x] Zoom con rueda del raton y botones +/- (100% a 800%)
+  [x] Drag to pan cuando hay zoom activo
+  [x] Indicador de posicion blanco con glow y borde negro
+  [x] 53 Patrol Zones (rojo), 11 Migration Zones (verde), 8 Sanctuaries
+      (amarillo) con datos reales de Vulnona
+  [x] Checkboxes para activar/desactivar cada capa de zonas
+  [x] Toolbar compacta: capas a la izquierda, zoom a la derecha
+  [x] Mapa responsive que se ajusta al tamaño de la ventana
   [x] Atajos globales F9 (mostrar/ocultar) y F10 (click-through)
   [x] Selector de dinosaurios con stats base
   [x] Guia de 16 mutaciones recomendadas por dino
   [x] Patrol Zone tracker con checklist y barra de progreso
   [x] HP tracker manual con slider y barra de color
+  [x] Interfaz completamente en ingles
   [x] Repositorio publico en GitHub
 
 DINOSAURIOS DISPONIBLES:
@@ -285,7 +303,6 @@ PENDIENTE PARA FUTURAS VERSIONES:
   - Soporte para otros mapas cuando The Isle los añada
   - Sistema de alertas para zonas de patrulla
   - Historial de posiciones (trail/rastro en el mapa)
-  - Integracion con Leaflet.js para zoom y navegacion avanzada del mapa
 
 
 ================================================================================

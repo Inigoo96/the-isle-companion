@@ -8,7 +8,9 @@ let lastClipboard = '';
 function createOverlay() {
   overlayWindow = new BrowserWindow({
     width: 400,
-    height: 500,
+    height: 480,
+    minWidth: 280,
+    minHeight: 350,
     x: 20,
     y: 20,
     frame: false,

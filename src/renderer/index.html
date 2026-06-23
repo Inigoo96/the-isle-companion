@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>The Isle Companion</title>
@@ -12,13 +12,13 @@
       <span class="title">The Isle Companion</span>
       <div class="controls">
         <span id="click-through-badge" class="badge hidden">CLICK-THROUGH</span>
-        <span class="hint">F9 ocultar | F10 click-through</span>
+        <span class="hint">F9 hide | F10 click-through</span>
       </div>
     </div>
 
     <!-- Tab navigation -->
     <div id="tabs">
-      <button class="tab active" data-tab="map">Mapa</button>
+      <button class="tab active" data-tab="map">Map</button>
       <button class="tab" data-tab="mutations">Mutations</button>
       <button class="tab" data-tab="patrol">Patrol Zones</button>
       <button class="tab" data-tab="stats">Stats</button>
@@ -27,14 +27,22 @@
     <!-- MAP TAB -->
     <div id="tab-map" class="tab-content active">
       <div id="map-container">
-        <canvas id="minimap"></canvas>
-        <div id="coords-display">
-          <span id="coord-x">X: ---</span>
-          <span id="coord-y">Y: ---</span>
-          <span id="coord-z">Z: ---</span>
+        <div id="map-toolbar">
+          <div id="map-layers">
+            <label class="layer-toggle"><input type="checkbox" id="toggle-patrol" checked> <span class="layer-color patrol"></span> PZ</label>
+            <label class="layer-toggle"><input type="checkbox" id="toggle-migration" checked> <span class="layer-color migration"></span> MZ</label>
+            <label class="layer-toggle"><input type="checkbox" id="toggle-sanctuaries" checked> <span class="layer-color sanctuary"></span> Sanc</label>
+          </div>
+          <div id="zoom-controls">
+            <button id="zoom-out" class="zoom-btn">-</button>
+            <span id="zoom-level">100%</span>
+            <button id="zoom-in" class="zoom-btn">+</button>
+            <button id="zoom-reset" class="zoom-btn zoom-reset">R</button>
+          </div>
         </div>
+        <canvas id="minimap"></canvas>
         <div id="no-coords" class="hint-box">
-          Copia tus coordenadas en el juego para ver tu posición en el mapa
+          Copy your coordinates in-game to see your position on the map
         </div>
       </div>
     </div>
@@ -43,7 +51,7 @@
     <div id="tab-mutations" class="tab-content">
       <div id="dino-selector">
         <select id="dino-select">
-          <option value="">-- Selecciona dinosaurio --</option>
+          <option value="">-- Select dinosaur --</option>
         </select>
       </div>
       <div id="mutations-list"></div>
@@ -74,12 +82,12 @@
     <!-- STATS TAB -->
     <div id="tab-stats" class="tab-content">
       <div id="stats-dino-info">
-        <p class="hint-box">Selecciona un dinosaurio en la pestaña Mutations para ver sus stats base</p>
+        <p class="hint-box">Select a dinosaur in the Mutations tab to see its base stats</p>
       </div>
       <div id="hp-tracker" class="hidden">
-        <h3>HP Tracker manual</h3>
+        <h3>Manual HP Tracker</h3>
         <div class="stat-bar-container">
-          <label>HP actual (%):</label>
+          <label>Current HP (%):</label>
           <input type="range" id="hp-slider" min="0" max="100" value="100">
           <div class="stat-bar"><div id="hp-fill" class="fill hp"></div></div>
           <span id="hp-value">100%</span>

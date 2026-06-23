@@ -125,25 +125,121 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  min-height: 0;
+}
+
+#map-toolbar {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  padding: 0 2px;
 }
 
 #minimap {
   width: 100%;
-  max-width: 360px;
-  aspect-ratio: 1;
+  flex: 1;
+  min-height: 0;
   border: 1px solid rgba(80, 200, 120, 0.3);
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.4);
+  cursor: default;
 }
 
-#coords-display {
+#zoom-controls {
   display: flex;
-  gap: 16px;
-  font-family: 'Consolas', monospace;
-  font-size: 12px;
+  align-items: center;
+  gap: 4px;
+}
+
+.zoom-btn {
+  width: 24px;
+  height: 24px;
+  background: rgba(30, 30, 40, 0.9);
   color: #50c878;
+  border: 1px solid rgba(80, 200, 120, 0.3);
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.zoom-btn:hover {
+  background: rgba(80, 200, 120, 0.2);
+}
+
+.zoom-reset {
+  font-size: 10px;
+  margin-left: 2px;
+}
+
+#zoom-level {
+  font-family: 'Consolas', monospace;
+  font-size: 10px;
+  color: #888;
+  min-width: 32px;
+  text-align: center;
+}
+
+/* Map layer toggles */
+#map-layers {
+  display: flex;
+  gap: 8px;
+}
+
+.layer-toggle {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  color: #aaa;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.layer-toggle:hover {
+  color: #e0e0e0;
+}
+
+.layer-toggle input {
+  display: none;
+}
+
+.layer-toggle input:checked + .layer-color {
+  opacity: 1;
+}
+
+.layer-toggle input:not(:checked) + .layer-color {
+  opacity: 0.3;
+}
+
+.layer-toggle input:not(:checked) ~ span:last-child,
+.layer-toggle:has(input:not(:checked)) {
+  color: #555;
+}
+
+.layer-color {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  transition: opacity 0.15s;
+}
+
+.layer-color.patrol {
+  background: #ff3b3b;
+}
+
+.layer-color.migration {
+  background: #00e676;
+}
+
+.layer-color.sanctuary {
+  background: #ffd600;
 }
 
 .hint-box {
