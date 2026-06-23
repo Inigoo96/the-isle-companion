@@ -86,13 +86,15 @@ the-isle-companion/
 └── package.json
 ```
 
-## Dinosaurios disponibles (v0.1.0)
+## Dinosaurios disponibles (v0.2.0)
 
-**Carnivoros:** Carnotaurus, Utahraptor, Allosaurus, Ceratosaurus
+**Carnivoros (10):** Tyrannosaurus, Deinosuchus, Allosaurus, Ceratosaurus, Carnotaurus, Dilophosaurus, Omniraptor, Herrerasaurus, Pteranodon, Troodon
 
-**Herbivoros:** Stegosaurus, Tenontosaurus
+**Herbivoros (8):** Triceratops, Stegosaurus, Diabloceratops, Maiasaura, Tenontosaurus, Pachycephalosaurus, Dryosaurus, Hypsilophodon
 
-> Los stats son aproximados y se iran actualizando. Faltan muchos dinos por añadir.
+**Omnivoros (2):** Gallimimus, Beipiaosaurus
+
+> **Nota:** Los stats son aproximados y necesitan verificacion con datos reales del juego. Ver seccion "Pendiente" en el Roadmap.
 
 ## Roadmap
 
@@ -101,17 +103,28 @@ the-isle-companion/
 - [x] Calibracion exacta de coordenadas del mapa
 - [x] Mutation Builder con guia de 16 mutaciones
 - [x] Prime List (Patrol Zone Tracker) con progreso visual
-- [x] Dino Stats y HP Tracker
+- [x] Dino Stats (HP, Damage, Speed)
 - [x] Zonas interactivas en el mapa (MZ, Sanctuaries, Patrol Zones)
+- [x] Selector global de especie visible en todas las pestañas
+- [x] Growth Timer con countdown por stage y multiplicador de servidor
+- [x] 20 dinosaurios añadidos (10 carnivoros, 8 herbivoros, 2 omnivoros)
+- [x] Eliminado HP Tracker (no accesible desde cliente)
 
-### Fase 1 — Selector de especie + Growth Timer
-- [ ] Selector global de especie: al elegir dino, adaptar Prime List, Stats y Timer
-- [ ] Calculadora de crecimiento: countdown por stage (Hatchling → Juvenile → Sub-Adult → Adult)
-- [ ] Tiempos de las 18+ especies jugables con soporte para multiplicador de servidor
+### Pendiente — Correccion de datos de dinosaurios
+> **IMPORTANTE:** Los datos actuales de dinos.json necesitan revision. Las fuentes online (XGamingServer, Isle Helper, evrimaquickguide) tienen datos contradictorios entre si. Hay que verificar con datos reales del juego:
+- [ ] **HP**: En The Isle, HP = peso del dino en kg. Los valores actuales son incorrectos para muchos dinos (ej: Rex deberia ser ~12250, Trike ~12500, Croc ~13500, Troodon ~82, Dilo ~997)
+- [ ] **Damage**: Verificar valores de daño base de cada dino con datos reales
+- [ ] **Speed**: Verificar velocidades — las fuentes online no coinciden entre si
+- [ ] **Growth times**: Algunos timers no son correctos — las fuentes dan tiempos muy diferentes (ej: Rex 220min vs 35h segun la fuente). Verificar con gameplay real
+- [ ] **Quitar Bleed**: No es un stat util para el overlay, reemplazar por otro dato mas relevante
+- [ ] **Mutations**: Solo 5 de los 20 dinos tienen lista de mutaciones recomendadas
+
+### Fase 1.5 — Datos verificados + mejoras
+- [ ] Verificar y corregir todos los stats con datos reales del juego
 - [ ] Guia de dieta por especie y stage de crecimiento
+- [ ] Completar mutaciones recomendadas para los 20 dinos
 
-### Fase 2 — Datos completos y persistencia
-- [ ] Todos los dinosaurios del juego con stats verificados (28 especies)
+### Fase 2 — Persistencia e historial
 - [ ] Persistencia de datos entre sesiones (patrol zones, ultimo dino, posicion)
 - [ ] Historial de runs/vidas pasadas (dino, mutaciones conseguidas, causa de muerte)
 

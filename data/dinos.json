@@ -1,31 +1,48 @@
 {
   "carnivores": [
     {
-      "name": "Carnotaurus",
-      "tier": "Mid",
-      "baseStats": { "hp": 2800, "damage": 120, "speed": 42, "stamina": 100 },
-      "recommendedMutations": [
-        "Thick Hide", "Speed Burst", "Iron Stomach", "Night Vision",
-        "Enhanced Stamina", "Bone Break", "Bleed Resistance", "Pack Mentality",
-        "Scent Range", "Water Efficiency", "Healing Factor", "Tough Scales",
-        "Adrenaline", "Deep Breath", "Sharp Claws", "Apex Predator"
-      ]
+      "name": "Tyrannosaurus",
+      "diet": "carnivore",
+      "tier": "Apex",
+      "baseStats": { "hp": 5200, "damage": 550, "speed": 33, "bleed": 35 },
+      "growthData": {
+        "totalSeconds": 13200,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 2640 },
+          { "name": "Juvenile", "durationSeconds": 5280 },
+          { "name": "Sub-Adult", "durationSeconds": 5280 }
+        ]
+      },
+      "recommendedMutations": []
     },
     {
-      "name": "Utahraptor",
-      "tier": "Low-Mid",
-      "baseStats": { "hp": 1200, "damage": 80, "speed": 50, "stamina": 120 },
-      "recommendedMutations": [
-        "Speed Burst", "Night Vision", "Enhanced Stamina", "Bleed",
-        "Scent Range", "Pack Mentality", "Thick Hide", "Water Efficiency",
-        "Iron Stomach", "Healing Factor", "Adrenaline", "Sharp Claws",
-        "Deep Breath", "Bleed Resistance", "Bone Break", "Apex Predator"
-      ]
+      "name": "Deinosuchus",
+      "diet": "carnivore",
+      "tier": "Apex",
+      "baseStats": { "hp": 8000, "damage": 500, "speed": 18, "bleed": 0 },
+      "growthData": {
+        "totalSeconds": 16800,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 3360 },
+          { "name": "Juvenile", "durationSeconds": 6720 },
+          { "name": "Sub-Adult", "durationSeconds": 6720 }
+        ]
+      },
+      "recommendedMutations": []
     },
     {
       "name": "Allosaurus",
-      "tier": "Mid-High",
-      "baseStats": { "hp": 4500, "damage": 200, "speed": 35, "stamina": 90 },
+      "diet": "carnivore",
+      "tier": "High",
+      "baseStats": { "hp": 2800, "damage": 300, "speed": 34.2, "bleed": 25 },
+      "growthData": {
+        "totalSeconds": 10800,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 2160 },
+          { "name": "Juvenile", "durationSeconds": 4320 },
+          { "name": "Sub-Adult", "durationSeconds": 4320 }
+        ]
+      },
       "recommendedMutations": [
         "Thick Hide", "Bone Break", "Bleed", "Enhanced Stamina",
         "Night Vision", "Healing Factor", "Iron Stomach", "Scent Range",
@@ -35,21 +52,149 @@
     },
     {
       "name": "Ceratosaurus",
-      "tier": "Low-Mid",
-      "baseStats": { "hp": 2000, "damage": 100, "speed": 38, "stamina": 95 },
+      "diet": "carnivore",
+      "tier": "Mid",
+      "baseStats": { "hp": 2250, "damage": 350, "speed": 36.6, "bleed": 8 },
+      "growthData": {
+        "totalSeconds": 9000,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 1800 },
+          { "name": "Juvenile", "durationSeconds": 3600 },
+          { "name": "Sub-Adult", "durationSeconds": 3600 }
+        ]
+      },
       "recommendedMutations": [
         "Thick Hide", "Bleed", "Night Vision", "Enhanced Stamina",
         "Speed Burst", "Iron Stomach", "Scent Range", "Healing Factor",
         "Pack Mentality", "Water Efficiency", "Bone Break", "Tough Scales",
         "Adrenaline", "Deep Breath", "Bleed Resistance", "Sharp Claws"
       ]
+    },
+    {
+      "name": "Carnotaurus",
+      "diet": "carnivore",
+      "tier": "Mid",
+      "baseStats": { "hp": 2170, "damage": 200, "speed": 52.2, "bleed": 15 },
+      "growthData": {
+        "totalSeconds": 6600,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 1320 },
+          { "name": "Juvenile", "durationSeconds": 2640 },
+          { "name": "Sub-Adult", "durationSeconds": 2640 }
+        ]
+      },
+      "recommendedMutations": [
+        "Thick Hide", "Speed Burst", "Iron Stomach", "Night Vision",
+        "Enhanced Stamina", "Bone Break", "Bleed Resistance", "Pack Mentality",
+        "Scent Range", "Water Efficiency", "Healing Factor", "Tough Scales",
+        "Adrenaline", "Deep Breath", "Sharp Claws", "Apex Predator"
+      ]
+    },
+    {
+      "name": "Dilophosaurus",
+      "diet": "carnivore",
+      "tier": "Low-Mid",
+      "baseStats": { "hp": 1200, "damage": 150, "speed": 42.8, "bleed": 10 },
+      "growthData": {
+        "totalSeconds": 5400,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 1080 },
+          { "name": "Juvenile", "durationSeconds": 2160 },
+          { "name": "Sub-Adult", "durationSeconds": 2160 }
+        ]
+      },
+      "recommendedMutations": []
+    },
+    {
+      "name": "Omniraptor",
+      "diet": "carnivore",
+      "tier": "Low-Mid",
+      "baseStats": { "hp": 660, "damage": 65, "speed": 46.8, "bleed": 0 },
+      "growthData": {
+        "totalSeconds": 4800,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 960 },
+          { "name": "Juvenile", "durationSeconds": 1920 },
+          { "name": "Sub-Adult", "durationSeconds": 1920 }
+        ]
+      },
+      "recommendedMutations": []
+    },
+    {
+      "name": "Herrerasaurus",
+      "diet": "carnivore",
+      "tier": "Low-Mid",
+      "baseStats": { "hp": 850, "damage": 120, "speed": 43, "bleed": 12 },
+      "growthData": {
+        "totalSeconds": 5400,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 1080 },
+          { "name": "Juvenile", "durationSeconds": 2160 },
+          { "name": "Sub-Adult", "durationSeconds": 2160 }
+        ]
+      },
+      "recommendedMutations": []
+    },
+    {
+      "name": "Pteranodon",
+      "diet": "carnivore",
+      "tier": "Low",
+      "baseStats": { "hp": 520, "damage": 40, "speed": 58, "bleed": 0 },
+      "growthData": {
+        "totalSeconds": 3600,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 720 },
+          { "name": "Juvenile", "durationSeconds": 1440 },
+          { "name": "Sub-Adult", "durationSeconds": 1440 }
+        ]
+      },
+      "recommendedMutations": []
+    },
+    {
+      "name": "Troodon",
+      "diet": "carnivore",
+      "tier": "Low",
+      "baseStats": { "hp": 300, "damage": 40, "speed": 45, "bleed": 5 },
+      "growthData": {
+        "totalSeconds": 3000,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 600 },
+          { "name": "Juvenile", "durationSeconds": 1200 },
+          { "name": "Sub-Adult", "durationSeconds": 1200 }
+        ]
+      },
+      "recommendedMutations": []
     }
   ],
   "herbivores": [
     {
+      "name": "Triceratops",
+      "diet": "herbivore",
+      "tier": "High",
+      "baseStats": { "hp": 4900, "damage": 450, "speed": 31.5, "bleed": 25 },
+      "growthData": {
+        "totalSeconds": 10800,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 2160 },
+          { "name": "Juvenile", "durationSeconds": 4320 },
+          { "name": "Sub-Adult", "durationSeconds": 4320 }
+        ]
+      },
+      "recommendedMutations": []
+    },
+    {
       "name": "Stegosaurus",
-      "tier": "Mid-High",
-      "baseStats": { "hp": 6000, "damage": 250, "speed": 28, "stamina": 80 },
+      "diet": "herbivore",
+      "tier": "High",
+      "baseStats": { "hp": 3800, "damage": 400, "speed": 30.8, "bleed": 30 },
+      "growthData": {
+        "totalSeconds": 9000,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 1800 },
+          { "name": "Juvenile", "durationSeconds": 3600 },
+          { "name": "Sub-Adult", "durationSeconds": 3600 }
+        ]
+      },
       "recommendedMutations": [
         "Thick Hide", "Tough Scales", "Healing Factor", "Enhanced Stamina",
         "Bleed Resistance", "Bone Break", "Iron Stomach", "Water Efficiency",
@@ -58,16 +203,131 @@
       ]
     },
     {
+      "name": "Diabloceratops",
+      "diet": "herbivore",
+      "tier": "High",
+      "baseStats": { "hp": 3250, "damage": 350, "speed": 31.6, "bleed": 18 },
+      "growthData": {
+        "totalSeconds": 9000,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 1800 },
+          { "name": "Juvenile", "durationSeconds": 3600 },
+          { "name": "Sub-Adult", "durationSeconds": 3600 }
+        ]
+      },
+      "recommendedMutations": []
+    },
+    {
+      "name": "Maiasaura",
+      "diet": "herbivore",
+      "tier": "Mid",
+      "baseStats": { "hp": 1800, "damage": 110, "speed": 33.8, "bleed": 5 },
+      "growthData": {
+        "totalSeconds": 6000,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 1200 },
+          { "name": "Juvenile", "durationSeconds": 2400 },
+          { "name": "Sub-Adult", "durationSeconds": 2400 }
+        ]
+      },
+      "recommendedMutations": []
+    },
+    {
       "name": "Tenontosaurus",
-      "tier": "Low",
-      "baseStats": { "hp": 1800, "damage": 60, "speed": 40, "stamina": 110 },
+      "diet": "herbivore",
+      "tier": "Mid",
+      "baseStats": { "hp": 1750, "damage": 120, "speed": 33.6, "bleed": 8 },
+      "growthData": {
+        "totalSeconds": 6000,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 1200 },
+          { "name": "Juvenile", "durationSeconds": 2400 },
+          { "name": "Sub-Adult", "durationSeconds": 2400 }
+        ]
+      },
       "recommendedMutations": [
         "Speed Burst", "Enhanced Stamina", "Thick Hide", "Healing Factor",
         "Night Vision", "Scent Range", "Water Efficiency", "Iron Stomach",
         "Bleed Resistance", "Pack Mentality", "Tough Scales", "Deep Breath",
         "Adrenaline", "Fortified", "Bone Break", "Apex Herbivore"
       ]
+    },
+    {
+      "name": "Pachycephalosaurus",
+      "diet": "herbivore",
+      "tier": "Low-Mid",
+      "baseStats": { "hp": 1050, "damage": 100, "speed": 38.5, "bleed": 5 },
+      "growthData": {
+        "totalSeconds": 4800,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 960 },
+          { "name": "Juvenile", "durationSeconds": 1920 },
+          { "name": "Sub-Adult", "durationSeconds": 1920 }
+        ]
+      },
+      "recommendedMutations": []
+    },
+    {
+      "name": "Dryosaurus",
+      "diet": "herbivore",
+      "tier": "Low",
+      "baseStats": { "hp": 480, "damage": 30, "speed": 47.5, "bleed": 0 },
+      "growthData": {
+        "totalSeconds": 2400,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 480 },
+          { "name": "Juvenile", "durationSeconds": 960 },
+          { "name": "Sub-Adult", "durationSeconds": 960 }
+        ]
+      },
+      "recommendedMutations": []
+    },
+    {
+      "name": "Hypsilophodon",
+      "diet": "herbivore",
+      "tier": "Low",
+      "baseStats": { "hp": 20, "damage": 2, "speed": 39.6, "bleed": 0 },
+      "growthData": {
+        "totalSeconds": 1800,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 360 },
+          { "name": "Juvenile", "durationSeconds": 720 },
+          { "name": "Sub-Adult", "durationSeconds": 720 }
+        ]
+      },
+      "recommendedMutations": []
     }
   ],
-  "_note": "Stats are approximate and will need updating with actual game values. Mutations are suggestions - adjust per playstyle."
+  "omnivores": [
+    {
+      "name": "Gallimimus",
+      "diet": "omnivore",
+      "tier": "Low-Mid",
+      "baseStats": { "hp": 900, "damage": 60, "speed": 54.1, "bleed": 0 },
+      "growthData": {
+        "totalSeconds": 4200,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 840 },
+          { "name": "Juvenile", "durationSeconds": 1680 },
+          { "name": "Sub-Adult", "durationSeconds": 1680 }
+        ]
+      },
+      "recommendedMutations": []
+    },
+    {
+      "name": "Beipiaosaurus",
+      "diet": "omnivore",
+      "tier": "Low",
+      "baseStats": { "hp": 90, "damage": 20, "speed": 32, "bleed": 0 },
+      "growthData": {
+        "totalSeconds": 2100,
+        "stages": [
+          { "name": "Hatchling", "durationSeconds": 420 },
+          { "name": "Juvenile", "durationSeconds": 840 },
+          { "name": "Sub-Adult", "durationSeconds": 840 }
+        ]
+      },
+      "recommendedMutations": []
+    }
+  ]
 }
