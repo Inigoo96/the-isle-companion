@@ -450,6 +450,7 @@ body {
 .category-label.diet { background: rgba(241, 196, 15, 0.15); color: #f1c40f; }
 .category-label.exploration { background: rgba(52, 152, 219, 0.15); color: #3498db; }
 .category-label.breeding { background: rgba(155, 89, 182, 0.15); color: #9b59b6; }
+.category-label.special { background: rgba(80, 200, 120, 0.15); color: #50c878; }
 
 .prime-task {
   display: flex;
