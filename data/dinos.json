@@ -4,13 +4,20 @@
       "name": "Tyrannosaurus",
       "diet": "carnivore",
       "tier": "Apex",
-      "baseStats": { "hp": 5200, "damage": 550, "speed": 33, "bleed": 35 },
+      "ability": "Ambush, Crush, Muzzle Swing, Throw",
+      "stats": {
+        "hatchling": { "weight": 4.5, "speed": 11.3, "biteForce": 0.73 },
+        "juvenile": { "weight": 50, "speed": 25.4, "biteForce": 5.95 },
+        "adult": { "weight": 9300, "speed": 29, "biteForce": 699 },
+        "prime": { "weight": 12300, "speed": 33.7, "biteForce": 770 }
+      },
       "growthData": {
-        "totalSeconds": 13200,
+        "totalMinutes": 2133,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 2640 },
-          { "name": "Juvenile", "durationSeconds": 5280 },
-          { "name": "Sub-Adult", "durationSeconds": 5280 }
+          { "name": "Hatchling", "minutes": 70 },
+          { "name": "Juvenile", "minutes": 613 },
+          { "name": "Sub-Adult", "minutes": 840 },
+          { "name": "Elder", "minutes": 610 }
         ]
       },
       "recommendedMutations": []
@@ -19,13 +26,20 @@
       "name": "Deinosuchus",
       "diet": "carnivore",
       "tier": "Apex",
-      "baseStats": { "hp": 8000, "damage": 500, "speed": 18, "bleed": 0 },
+      "ability": "Lunge",
+      "stats": {
+        "hatchling": { "weight": 4.6, "speed": 5.5, "biteForce": 0.56 },
+        "juvenile": { "weight": 678, "speed": 13.3, "biteForce": 76 },
+        "adult": { "weight": 8000, "speed": 18, "biteForce": 500 },
+        "prime": { "weight": 13500, "speed": 21.4, "biteForce": 550 }
+      },
       "growthData": {
-        "totalSeconds": 16800,
+        "totalMinutes": 1383,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 3360 },
-          { "name": "Juvenile", "durationSeconds": 6720 },
-          { "name": "Sub-Adult", "durationSeconds": 6720 }
+          { "name": "Hatchling", "minutes": 33 },
+          { "name": "Juvenile", "minutes": 200 },
+          { "name": "Sub-Adult", "minutes": 500 },
+          { "name": "Elder", "minutes": 650 }
         ]
       },
       "recommendedMutations": []
@@ -34,13 +48,20 @@
       "name": "Allosaurus",
       "diet": "carnivore",
       "tier": "High",
-      "baseStats": { "hp": 2800, "damage": 300, "speed": 34.2, "bleed": 25 },
+      "ability": "Pounce",
+      "stats": {
+        "hatchling": { "weight": 2.4, "speed": 13.8, "biteForce": 5.25 },
+        "juvenile": { "weight": 49.2, "speed": 25.4, "biteForce": 5.52 },
+        "adult": { "weight": 2600, "speed": 39.8, "biteForce": 175 },
+        "prime": { "weight": 3700, "speed": 39, "biteForce": 201 }
+      },
       "growthData": {
-        "totalSeconds": 10800,
+        "totalMinutes": 600,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 2160 },
-          { "name": "Juvenile", "durationSeconds": 4320 },
-          { "name": "Sub-Adult", "durationSeconds": 4320 }
+          { "name": "Hatchling", "minutes": 60 },
+          { "name": "Juvenile", "minutes": 120 },
+          { "name": "Sub-Adult", "minutes": 200 },
+          { "name": "Elder", "minutes": 220 }
         ]
       },
       "recommendedMutations": [
@@ -54,13 +75,20 @@
       "name": "Ceratosaurus",
       "diet": "carnivore",
       "tier": "Mid",
-      "baseStats": { "hp": 2250, "damage": 350, "speed": 36.6, "bleed": 8 },
+      "ability": "Bacteria",
+      "stats": {
+        "hatchling": { "weight": 2.2, "speed": 8.8, "biteForce": 0.17 },
+        "juvenile": { "weight": 442, "speed": 34.3, "biteForce": 53.3 },
+        "adult": { "weight": 1450, "speed": 40.3, "biteForce": 150 },
+        "prime": { "weight": 1950, "speed": 39.7, "biteForce": 172.5 }
+      },
       "growthData": {
-        "totalSeconds": 9000,
+        "totalMinutes": 360,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 1800 },
-          { "name": "Juvenile", "durationSeconds": 3600 },
-          { "name": "Sub-Adult", "durationSeconds": 3600 }
+          { "name": "Hatchling", "minutes": 30 },
+          { "name": "Juvenile", "minutes": 60 },
+          { "name": "Sub-Adult", "minutes": 120 },
+          { "name": "Elder", "minutes": 150 }
         ]
       },
       "recommendedMutations": [
@@ -74,13 +102,20 @@
       "name": "Carnotaurus",
       "diet": "carnivore",
       "tier": "Mid",
-      "baseStats": { "hp": 2170, "damage": 200, "speed": 52.2, "bleed": 15 },
+      "ability": "Charge",
+      "stats": {
+        "hatchling": { "weight": 4.9, "speed": 14.7, "biteForce": 0.03 },
+        "juvenile": { "weight": 496, "speed": 43.4, "biteForce": 53 },
+        "adult": { "weight": 1300, "speed": 49.5, "biteForce": 150 },
+        "prime": { "weight": 1800, "speed": 55.6, "biteForce": 172.5 }
+      },
       "growthData": {
-        "totalSeconds": 6600,
+        "totalMinutes": 460,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 1320 },
-          { "name": "Juvenile", "durationSeconds": 2640 },
-          { "name": "Sub-Adult", "durationSeconds": 2640 }
+          { "name": "Hatchling", "minutes": 40 },
+          { "name": "Juvenile", "minutes": 90 },
+          { "name": "Sub-Adult", "minutes": 120 },
+          { "name": "Elder", "minutes": 210 }
         ]
       },
       "recommendedMutations": [
@@ -94,13 +129,20 @@
       "name": "Dilophosaurus",
       "diet": "carnivore",
       "tier": "Low-Mid",
-      "baseStats": { "hp": 1200, "damage": 150, "speed": 42.8, "bleed": 10 },
+      "ability": "Hallucinations",
+      "stats": {
+        "hatchling": { "weight": 1.4, "speed": 8.2, "biteForce": 0.11 },
+        "juvenile": { "weight": 179.7, "speed": 46.9, "biteForce": 23 },
+        "adult": { "weight": 700, "speed": 47.5, "biteForce": 85 },
+        "prime": { "weight": 977, "speed": 52.3, "biteForce": 97.75 }
+      },
       "growthData": {
-        "totalSeconds": 5400,
+        "totalMinutes": 360,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 1080 },
-          { "name": "Juvenile", "durationSeconds": 2160 },
-          { "name": "Sub-Adult", "durationSeconds": 2160 }
+          { "name": "Hatchling", "minutes": 20 },
+          { "name": "Juvenile", "minutes": 60 },
+          { "name": "Sub-Adult", "minutes": 120 },
+          { "name": "Elder", "minutes": 160 }
         ]
       },
       "recommendedMutations": []
@@ -109,13 +151,18 @@
       "name": "Omniraptor",
       "diet": "carnivore",
       "tier": "Low-Mid",
-      "baseStats": { "hp": 660, "damage": 65, "speed": 46.8, "bleed": 0 },
+      "ability": "Pounce",
+      "stats": {
+        "adult": { "weight": 395, "speed": 46.8, "biteForce": 65 },
+        "prime": { "weight": 660, "speed": 52.3, "biteForce": 75.75 }
+      },
       "growthData": {
-        "totalSeconds": 4800,
+        "totalMinutes": 355,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 960 },
-          { "name": "Juvenile", "durationSeconds": 1920 },
-          { "name": "Sub-Adult", "durationSeconds": 1920 }
+          { "name": "Hatchling", "minutes": 25 },
+          { "name": "Juvenile", "minutes": 60 },
+          { "name": "Sub-Adult", "minutes": 120 },
+          { "name": "Elder", "minutes": 150 }
         ]
       },
       "recommendedMutations": []
@@ -124,13 +171,20 @@
       "name": "Herrerasaurus",
       "diet": "carnivore",
       "tier": "Low-Mid",
-      "baseStats": { "hp": 850, "damage": 120, "speed": 43, "bleed": 12 },
+      "ability": "Climb",
+      "stats": {
+        "hatchling": { "weight": 0.27, "speed": 4.8, "biteForce": 0.04 },
+        "juvenile": { "weight": 64.2, "speed": 25.3, "biteForce": 10.9 },
+        "adult": { "weight": 175, "speed": 45, "biteForce": 30 },
+        "prime": { "weight": 225, "speed": 46.8, "biteForce": 34.5 }
+      },
       "growthData": {
-        "totalSeconds": 5400,
+        "totalMinutes": 325,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 1080 },
-          { "name": "Juvenile", "durationSeconds": 2160 },
-          { "name": "Sub-Adult", "durationSeconds": 2160 }
+          { "name": "Hatchling", "minutes": 25 },
+          { "name": "Juvenile", "minutes": 50 },
+          { "name": "Sub-Adult", "minutes": 110 },
+          { "name": "Elder", "minutes": 140 }
         ]
       },
       "recommendedMutations": []
@@ -139,13 +193,19 @@
       "name": "Pteranodon",
       "diet": "carnivore",
       "tier": "Low",
-      "baseStats": { "hp": 520, "damage": 40, "speed": 58, "bleed": 0 },
+      "ability": "Flight (18% growth)",
+      "stats": {
+        "hatchling": { "weight": 0.1, "speed": 3.6, "biteForce": 0.01 },
+        "adult": { "weight": 45, "speed": 28.5, "biteForce": 20 },
+        "prime": { "weight": 60, "speed": 31.4, "biteForce": 23 }
+      },
       "growthData": {
-        "totalSeconds": 3600,
+        "totalMinutes": 270,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 720 },
-          { "name": "Juvenile", "durationSeconds": 1440 },
-          { "name": "Sub-Adult", "durationSeconds": 1440 }
+          { "name": "Hatchling", "minutes": 20 },
+          { "name": "Juvenile", "minutes": 40 },
+          { "name": "Sub-Adult", "minutes": 90 },
+          { "name": "Elder", "minutes": 120 }
         ]
       },
       "recommendedMutations": []
@@ -154,13 +214,20 @@
       "name": "Troodon",
       "diet": "carnivore",
       "tier": "Low",
-      "baseStats": { "hp": 300, "damage": 40, "speed": 45, "bleed": 5 },
+      "ability": "Venom",
+      "stats": {
+        "hatchling": { "weight": 0.07, "speed": 13.1, "biteForce": 0.01 },
+        "juvenile": { "weight": 11.1, "speed": 39.8, "biteForce": 2.24 },
+        "adult": { "weight": 60, "speed": 45, "biteForce": 15 },
+        "prime": { "weight": 79.8, "speed": 52.2, "biteForce": 17.25 }
+      },
       "growthData": {
-        "totalSeconds": 3000,
+        "totalMinutes": 190,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 600 },
-          { "name": "Juvenile", "durationSeconds": 1200 },
-          { "name": "Sub-Adult", "durationSeconds": 1200 }
+          { "name": "Hatchling", "minutes": 20 },
+          { "name": "Juvenile", "minutes": 40 },
+          { "name": "Sub-Adult", "minutes": 60 },
+          { "name": "Elder", "minutes": 70 }
         ]
       },
       "recommendedMutations": []
@@ -171,13 +238,20 @@
       "name": "Triceratops",
       "diet": "herbivore",
       "tier": "High",
-      "baseStats": { "hp": 4900, "damage": 450, "speed": 31.5, "bleed": 25 },
+      "ability": "Spar",
+      "stats": {
+        "hatchling": { "weight": 4.7, "speed": 5.4, "biteForce": 1 },
+        "juvenile": { "weight": 85, "speed": 16.2, "biteForce": 12.6 },
+        "adult": { "weight": 9500, "speed": 23.6, "biteForce": 600 },
+        "prime": { "weight": 12500, "speed": 25.1, "biteForce": 1035 }
+      },
       "growthData": {
-        "totalSeconds": 10800,
+        "totalMinutes": 1750,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 2160 },
-          { "name": "Juvenile", "durationSeconds": 4320 },
-          { "name": "Sub-Adult", "durationSeconds": 4320 }
+          { "name": "Hatchling", "minutes": 60 },
+          { "name": "Juvenile", "minutes": 200 },
+          { "name": "Sub-Adult", "minutes": 640 },
+          { "name": "Elder", "minutes": 850 }
         ]
       },
       "recommendedMutations": []
@@ -186,13 +260,19 @@
       "name": "Stegosaurus",
       "diet": "herbivore",
       "tier": "High",
-      "baseStats": { "hp": 3800, "damage": 400, "speed": 30.8, "bleed": 30 },
+      "ability": "Tail Swing",
+      "stats": {
+        "hatchling": { "weight": 5.8, "speed": 5.7, "biteForce": 0.04 },
+        "adult": { "weight": 6000, "speed": 26.2, "biteForce": 50 },
+        "prime": { "weight": 9300, "speed": 30.6, "biteForce": 57.5 }
+      },
       "growthData": {
-        "totalSeconds": 9000,
+        "totalMinutes": 1075,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 1800 },
-          { "name": "Juvenile", "durationSeconds": 3600 },
-          { "name": "Sub-Adult", "durationSeconds": 3600 }
+          { "name": "Hatchling", "minutes": 45 },
+          { "name": "Juvenile", "minutes": 180 },
+          { "name": "Sub-Adult", "minutes": 405 },
+          { "name": "Elder", "minutes": 445 }
         ]
       },
       "recommendedMutations": [
@@ -206,13 +286,18 @@
       "name": "Diabloceratops",
       "diet": "herbivore",
       "tier": "High",
-      "baseStats": { "hp": 3250, "damage": 350, "speed": 31.6, "bleed": 18 },
+      "ability": "Spar",
+      "stats": {
+        "adult": { "weight": 3000, "speed": 36, "biteForce": 275 },
+        "prime": { "weight": 3900, "speed": 37.8, "biteForce": 316.25 }
+      },
       "growthData": {
-        "totalSeconds": 9000,
+        "totalMinutes": 465,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 1800 },
-          { "name": "Juvenile", "durationSeconds": 3600 },
-          { "name": "Sub-Adult", "durationSeconds": 3600 }
+          { "name": "Hatchling", "minutes": 45 },
+          { "name": "Juvenile", "minutes": 90 },
+          { "name": "Sub-Adult", "minutes": 140 },
+          { "name": "Elder", "minutes": 190 }
         ]
       },
       "recommendedMutations": []
@@ -221,13 +306,19 @@
       "name": "Maiasaura",
       "diet": "herbivore",
       "tier": "Mid",
-      "baseStats": { "hp": 1800, "damage": 110, "speed": 33.8, "bleed": 5 },
+      "ability": "Bipedal/Quadrupedal",
+      "stats": {
+        "hatchling": { "weight": 101.25, "speed": 38.9, "biteForce": 1.6 },
+        "adult": { "weight": 3700, "speed": 46.9, "biteForce": 39.4 },
+        "prime": { "weight": 5400, "speed": 42.3, "biteForce": 57.5 }
+      },
       "growthData": {
-        "totalSeconds": 6000,
+        "totalMinutes": 420,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 1200 },
-          { "name": "Juvenile", "durationSeconds": 2400 },
-          { "name": "Sub-Adult", "durationSeconds": 2400 }
+          { "name": "Hatchling", "minutes": 30 },
+          { "name": "Juvenile", "minutes": 100 },
+          { "name": "Sub-Adult", "minutes": 140 },
+          { "name": "Elder", "minutes": 150 }
         ]
       },
       "recommendedMutations": []
@@ -236,13 +327,19 @@
       "name": "Tenontosaurus",
       "diet": "herbivore",
       "tier": "Mid",
-      "baseStats": { "hp": 1750, "damage": 120, "speed": 33.6, "bleed": 8 },
+      "ability": "Tail Slam",
+      "stats": {
+        "hatchling": { "weight": 1.03, "speed": 5.7, "biteForce": 0.04 },
+        "adult": { "weight": 1600, "speed": 40.5, "biteForce": 35 },
+        "prime": { "weight": 1830, "speed": 43.2, "biteForce": 40.25 }
+      },
       "growthData": {
-        "totalSeconds": 6000,
+        "totalMinutes": 340,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 1200 },
-          { "name": "Juvenile", "durationSeconds": 2400 },
-          { "name": "Sub-Adult", "durationSeconds": 2400 }
+          { "name": "Hatchling", "minutes": 20 },
+          { "name": "Juvenile", "minutes": 90 },
+          { "name": "Sub-Adult", "minutes": 110 },
+          { "name": "Elder", "minutes": 120 }
         ]
       },
       "recommendedMutations": [
@@ -256,13 +353,18 @@
       "name": "Pachycephalosaurus",
       "diet": "herbivore",
       "tier": "Low-Mid",
-      "baseStats": { "hp": 1050, "damage": 100, "speed": 38.5, "bleed": 5 },
+      "ability": "Fractures",
+      "stats": {
+        "adult": { "weight": 500, "speed": 41.8, "biteForce": 30 },
+        "prime": { "weight": 910, "speed": 46.5, "biteForce": 34.5 }
+      },
       "growthData": {
-        "totalSeconds": 4800,
+        "totalMinutes": 375,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 960 },
-          { "name": "Juvenile", "durationSeconds": 1920 },
-          { "name": "Sub-Adult", "durationSeconds": 1920 }
+          { "name": "Hatchling", "minutes": 25 },
+          { "name": "Juvenile", "minutes": 50 },
+          { "name": "Sub-Adult", "minutes": 140 },
+          { "name": "Elder", "minutes": 160 }
         ]
       },
       "recommendedMutations": []
@@ -271,13 +373,18 @@
       "name": "Dryosaurus",
       "diet": "herbivore",
       "tier": "Low",
-      "baseStats": { "hp": 480, "damage": 30, "speed": 47.5, "bleed": 0 },
+      "ability": "Dodge",
+      "stats": {
+        "adult": { "weight": 130, "speed": 45, "biteForce": 20 },
+        "prime": { "weight": 185, "speed": 50.4, "biteForce": 23 }
+      },
       "growthData": {
-        "totalSeconds": 2400,
+        "totalMinutes": 265,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 480 },
-          { "name": "Juvenile", "durationSeconds": 960 },
-          { "name": "Sub-Adult", "durationSeconds": 960 }
+          { "name": "Hatchling", "minutes": 20 },
+          { "name": "Juvenile", "minutes": 45 },
+          { "name": "Sub-Adult", "minutes": 90 },
+          { "name": "Elder", "minutes": 110 }
         ]
       },
       "recommendedMutations": []
@@ -286,13 +393,18 @@
       "name": "Hypsilophodon",
       "diet": "herbivore",
       "tier": "Low",
-      "baseStats": { "hp": 20, "damage": 2, "speed": 39.6, "bleed": 0 },
+      "ability": "Blind Spit",
+      "stats": {
+        "adult": { "weight": 20, "speed": 39.6, "biteForce": 2 },
+        "prime": { "weight": 23, "speed": 39.6, "biteForce": 2.3 }
+      },
       "growthData": {
-        "totalSeconds": 1800,
+        "totalMinutes": 110,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 360 },
-          { "name": "Juvenile", "durationSeconds": 720 },
-          { "name": "Sub-Adult", "durationSeconds": 720 }
+          { "name": "Hatchling", "minutes": 20 },
+          { "name": "Juvenile", "minutes": 20 },
+          { "name": "Sub-Adult", "minutes": 30 },
+          { "name": "Elder", "minutes": 40 }
         ]
       },
       "recommendedMutations": []
@@ -303,13 +415,19 @@
       "name": "Gallimimus",
       "diet": "omnivore",
       "tier": "Low-Mid",
-      "baseStats": { "hp": 900, "damage": 60, "speed": 54.1, "bleed": 0 },
+      "ability": "Group Buffs",
+      "stats": {
+        "hatchling": { "weight": 0.5, "speed": 24.6, "biteForce": 0.03 },
+        "adult": { "weight": 535, "speed": 45.6, "biteForce": 25 },
+        "prime": { "weight": 560, "speed": 54, "biteForce": 28.75 }
+      },
       "growthData": {
-        "totalSeconds": 4200,
+        "totalMinutes": 325,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 840 },
-          { "name": "Juvenile", "durationSeconds": 1680 },
-          { "name": "Sub-Adult", "durationSeconds": 1680 }
+          { "name": "Hatchling", "minutes": 15 },
+          { "name": "Juvenile", "minutes": 80 },
+          { "name": "Sub-Adult", "minutes": 110 },
+          { "name": "Elder", "minutes": 120 }
         ]
       },
       "recommendedMutations": []
@@ -318,13 +436,18 @@
       "name": "Beipiaosaurus",
       "diet": "omnivore",
       "tier": "Low",
-      "baseStats": { "hp": 90, "damage": 20, "speed": 32, "bleed": 0 },
+      "ability": "Dive",
+      "stats": {
+        "adult": { "weight": 90, "speed": 32, "biteForce": 20 },
+        "prime": { "weight": 90, "speed": 32, "biteForce": 23 }
+      },
       "growthData": {
-        "totalSeconds": 2100,
+        "totalMinutes": 220,
         "stages": [
-          { "name": "Hatchling", "durationSeconds": 420 },
-          { "name": "Juvenile", "durationSeconds": 840 },
-          { "name": "Sub-Adult", "durationSeconds": 840 }
+          { "name": "Hatchling", "minutes": 20 },
+          { "name": "Juvenile", "minutes": 40 },
+          { "name": "Sub-Adult", "minutes": 70 },
+          { "name": "Elder", "minutes": 90 }
         ]
       },
       "recommendedMutations": []

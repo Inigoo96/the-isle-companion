@@ -8,7 +8,7 @@ let currentCoords = null;
 let selectedDino = null;
 let growthTimerInterval = null;
 let growthStartTime = null;
-let growthStartStageIndex = 0;
+let growthStartPercent = 0;
 let growthMultiplier = 1;
 
 // Gateway map bounds (from Vulnona data_1.txt, converted to game units *1000)
@@ -319,23 +319,67 @@ function renderMutations() {
   });
 }
 
+function formatWeight(w) {
+  if (w >= 1000) return (w / 1000).toFixed(1).replace(/\.0$/, '') + 't';
+  if (w >= 1) return Math.round(w).toLocaleString() + ' kg';
+  return w + ' kg';
+}
+
+function formatStat(val) {
+  if (val >= 1000) return val.toLocaleString();
+  if (val >= 1) return Math.round(val * 10) / 10;
+  return val;
+}
+
 function renderStats() {
   const container = document.getElementById('stats-dino-info');
 
   if (!selectedDino) {
-    container.innerHTML = '<p class="hint-box">Select a dinosaur above to see its base stats</p>';
+    container.innerHTML = '<p class="hint-box">Select a dinosaur above to see its stats</p>';
     return;
   }
 
-  const s = selectedDino.baseStats;
+  const s = selectedDino.stats;
+  const stageOrder = ['hatchling', 'juvenile', 'adult', 'prime'];
+  const stageLabels = { hatchling: 'Hatchling', juvenile: 'Juvenile', adult: 'Adult', prime: 'Prime' };
+  const available = stageOrder.filter(k => s[k]);
+
+  let abilityHtml = '';
+  if (selectedDino.ability) {
+    abilityHtml = `<div class="ability-badge">${selectedDino.ability}</div>`;
+  }
+
+  let tableHtml = `<table class="stats-table">
+    <thead><tr><th></th>`;
+  available.forEach(k => {
+    const cls = k === 'prime' ? ' class="prime-col"' : '';
+    tableHtml += `<th${cls}>${stageLabels[k]}</th>`;
+  });
+  tableHtml += `</tr></thead><tbody>`;
+
+  const rows = [
+    { label: 'HP / Weight', key: 'weight', fmt: formatWeight },
+    { label: 'Sprint', key: 'speed', fmt: v => v + ' km/h' },
+    { label: 'Bite Force', key: 'biteForce', fmt: formatStat }
+  ];
+
+  rows.forEach(row => {
+    tableHtml += `<tr><td class="stat-row-label">${row.label}</td>`;
+    available.forEach(k => {
+      const cls = k === 'prime' ? ' class="prime-col"' : '';
+      tableHtml += `<td${cls}>${row.fmt(s[k][row.key])}</td>`;
+    });
+    tableHtml += `</tr>`;
+  });
+
+  tableHtml += `</tbody></table>`;
+
   container.innerHTML = `
-    <h3>${selectedDino.name} <span style="color:#888;font-size:11px">(${selectedDino.tier})</span></h3>
-    <div class="dino-stats-grid">
-      <div class="stat-card"><div class="label">HP</div><div class="value">${s.hp.toLocaleString()}</div></div>
-      <div class="stat-card"><div class="label">Damage</div><div class="value">${s.damage}</div></div>
-      <div class="stat-card"><div class="label">Speed</div><div class="value">${s.speed} km/h</div></div>
-      <div class="stat-card"><div class="label">Bleed</div><div class="value">${s.bleed}/s</div></div>
+    <div class="stats-header">
+      <h3>${selectedDino.name} <span class="tier-label">${selectedDino.tier}</span></h3>
+      ${abilityHtml}
     </div>
+    ${tableHtml}
   `;
 }
 
@@ -403,13 +447,44 @@ function formatDuration(totalSeconds) {
   const m = Math.floor((totalSeconds % 3600) / 60);
   const s = Math.floor(totalSeconds % 60);
   if (h > 0) return `${h}h ${String(m).padStart(2, '0')}m`;
-  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  return `${m}m ${String(s).padStart(2, '0')}s`;
+}
+
+function formatMinutes(mins) {
+  const h = Math.floor(mins / 60);
+  const m = Math.round(mins % 60);
+  if (h > 0) return `${h}h ${String(m).padStart(2, '0')}m`;
+  return `${m}m`;
+}
+
+function getStageAtPercent(percent) {
+  if (percent < 25) return 0;
+  if (percent < 50) return 1;
+  if (percent < 75) return 2;
+  return 3;
+}
+
+function percentToVanillaMinutes(stages, percent) {
+  const stageIdx = getStageAtPercent(percent);
+  let mins = 0;
+  for (let i = 0; i < stageIdx; i++) mins += stages[i].minutes;
+  const progressInStage = (percent - stageIdx * 25) / 25;
+  mins += progressInStage * stages[stageIdx].minutes;
+  return mins;
+}
+
+function vanillaMinutesToStage(stages, vanillaMins) {
+  let accumulated = 0;
+  for (let i = 0; i < stages.length; i++) {
+    if (vanillaMins < accumulated + stages[i].minutes) return i;
+    accumulated += stages[i].minutes;
+  }
+  return stages.length - 1;
 }
 
 function renderGrowthTimer() {
   const container = document.getElementById('growth-timer');
   const stagesDiv = document.getElementById('growth-stages');
-  const stageSelect = document.getElementById('growth-stage-select');
 
   stopGrowthTimer();
 
@@ -420,27 +495,26 @@ function renderGrowthTimer() {
 
   container.classList.remove('hidden');
   const gd = selectedDino.growthData;
-  const stageTargets = ['Juvenile', 'Sub-Adult', 'Adult'];
+  const multiplier = parseFloat(document.getElementById('growth-multiplier').value) || 1;
+  const percent = parseFloat(document.getElementById('growth-percent').value) || 0;
+  const currentStageIdx = getStageAtPercent(percent);
+
+  const vanillaElapsed = percentToVanillaMinutes(gd.stages, percent);
+  const remainingMins = (gd.totalMinutes - vanillaElapsed) / multiplier;
+  document.getElementById('growth-total-time').textContent = formatMinutes(remainingMins);
 
   stagesDiv.innerHTML = '';
   gd.stages.forEach((stage, i) => {
+    const adjustedMins = stage.minutes / multiplier;
     const div = document.createElement('div');
     div.className = 'growth-stage-card';
+    if (i < currentStageIdx) div.classList.add('completed-stage');
+    if (i === currentStageIdx) div.classList.add('active-stage');
     div.innerHTML = `
       <span class="stage-name">${stage.name}</span>
-      <span class="stage-arrow">→</span>
-      <span class="stage-target">${stageTargets[i]}</span>
-      <span class="stage-duration">${formatDuration(stage.durationSeconds)}</span>
+      <span class="stage-duration">${formatMinutes(adjustedMins)}</span>
     `;
     stagesDiv.appendChild(div);
-  });
-
-  stageSelect.innerHTML = '';
-  gd.stages.forEach((stage, i) => {
-    const opt = document.createElement('option');
-    opt.value = i;
-    opt.textContent = stage.name;
-    stageSelect.appendChild(opt);
   });
 
   document.getElementById('growth-progress').classList.add('hidden');
@@ -452,14 +526,14 @@ function startGrowthTimer() {
   if (!selectedDino || !selectedDino.growthData) return;
 
   growthMultiplier = parseFloat(document.getElementById('growth-multiplier').value) || 1;
-  growthStartStageIndex = parseInt(document.getElementById('growth-stage-select').value) || 0;
+  growthStartPercent = parseFloat(document.getElementById('growth-percent').value) || 0;
   growthStartTime = Date.now();
 
   document.getElementById('growth-progress').classList.remove('hidden');
   document.getElementById('growth-start-btn').classList.add('hidden');
   document.getElementById('growth-reset-btn').classList.remove('hidden');
   document.getElementById('growth-multiplier').disabled = true;
-  document.getElementById('growth-stage-select').disabled = true;
+  document.getElementById('growth-percent').disabled = true;
 
   growthTimerInterval = setInterval(updateGrowthDisplay, 1000);
   updateGrowthDisplay();
@@ -472,65 +546,65 @@ function stopGrowthTimer() {
   }
   growthStartTime = null;
   const multiplierInput = document.getElementById('growth-multiplier');
-  const stageSelect = document.getElementById('growth-stage-select');
+  const percentInput = document.getElementById('growth-percent');
   if (multiplierInput) multiplierInput.disabled = false;
-  if (stageSelect) stageSelect.disabled = false;
+  if (percentInput) percentInput.disabled = false;
 }
 
 function resetGrowthTimer() {
   stopGrowthTimer();
-  document.getElementById('growth-progress').classList.add('hidden');
-  document.getElementById('growth-start-btn').classList.remove('hidden');
-  document.getElementById('growth-reset-btn').classList.add('hidden');
+  renderGrowthTimer();
 }
 
 function updateGrowthDisplay() {
   if (!growthStartTime || !selectedDino || !selectedDino.growthData) return;
 
-  const stages = selectedDino.growthData.stages;
-  const elapsedSeconds = (Date.now() - growthStartTime) / 1000;
+  const gd = selectedDino.growthData;
+  const stages = gd.stages;
+  const timerElapsedSecs = (Date.now() - growthStartTime) / 1000;
 
-  let totalRemainingFromStage = 0;
-  for (let i = growthStartStageIndex; i < stages.length; i++) {
-    totalRemainingFromStage += stages[i].durationSeconds;
-  }
-  const adjustedTotal = totalRemainingFromStage / growthMultiplier;
-  const remaining = Math.max(0, adjustedTotal - elapsedSeconds);
-  const progress = Math.min(1, elapsedSeconds / adjustedTotal);
+  const vanillaOffsetMins = percentToVanillaMinutes(stages, growthStartPercent);
+  const vanillaElapsedMins = (timerElapsedSecs * growthMultiplier) / 60;
+  const totalVanillaMins = vanillaOffsetMins + vanillaElapsedMins;
 
-  document.getElementById('growth-elapsed').textContent = formatDuration(Math.floor(elapsedSeconds));
-  document.getElementById('growth-remaining').textContent = formatDuration(Math.ceil(remaining));
+  const vanillaRemainingMins = Math.max(0, gd.totalMinutes - totalVanillaMins);
+  const realRemainingSecs = (vanillaRemainingMins * 60) / growthMultiplier;
+
+  const totalRealSecs = ((gd.totalMinutes - vanillaOffsetMins) * 60) / growthMultiplier;
+  const progress = Math.min(1, timerElapsedSecs / totalRealSecs);
+
+  document.getElementById('growth-elapsed').textContent = formatDuration(Math.floor(timerElapsedSecs));
+  document.getElementById('growth-remaining').textContent = formatDuration(Math.ceil(realRemainingSecs));
   document.getElementById('growth-fill').style.width = `${progress * 100}%`;
 
-  const etaDate = new Date(Date.now() + remaining * 1000);
+  const etaDate = new Date(Date.now() + realRemainingSecs * 1000);
   document.getElementById('growth-eta').textContent = etaDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-  let accumulated = 0;
-  let currentStageIdx = stages.length;
-  for (let i = growthStartStageIndex; i < stages.length; i++) {
-    const stageDuration = stages[i].durationSeconds / growthMultiplier;
-    if (elapsedSeconds < accumulated + stageDuration) {
-      currentStageIdx = i;
-      break;
-    }
-    accumulated += stageDuration;
-  }
+  const currentStageIdx = vanillaMinutesToStage(stages, totalVanillaMins);
 
   document.querySelectorAll('.growth-stage-card').forEach((card, i) => {
     card.classList.toggle('active-stage', i === currentStageIdx);
-    card.classList.toggle('completed-stage', i < growthStartStageIndex || (i < currentStageIdx && i >= growthStartStageIndex));
+    card.classList.toggle('completed-stage', i < currentStageIdx);
   });
 
-  if (remaining <= 0) {
+  if (realRemainingSecs <= 0) {
     stopGrowthTimer();
     document.getElementById('growth-remaining').textContent = 'ADULT!';
     document.getElementById('growth-remaining').classList.add('growth-complete');
     document.getElementById('growth-reset-btn').classList.remove('hidden');
+    document.getElementById('growth-start-btn').classList.add('hidden');
+    document.getElementById('growth-progress').classList.remove('hidden');
   }
 }
 
 document.getElementById('growth-start-btn').addEventListener('click', startGrowthTimer);
 document.getElementById('growth-reset-btn').addEventListener('click', resetGrowthTimer);
+document.getElementById('growth-multiplier').addEventListener('change', () => {
+  if (!growthStartTime) renderGrowthTimer();
+});
+document.getElementById('growth-percent').addEventListener('input', () => {
+  if (!growthStartTime) renderGrowthTimer();
+});
 
 // --- ZONE DATA ---
 async function loadZoneData() {

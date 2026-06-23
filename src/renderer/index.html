@@ -165,20 +165,25 @@
     <!-- STATS TAB -->
     <div id="tab-stats" class="tab-content">
       <div id="stats-dino-info">
-        <p class="hint-box">Select a dinosaur above to see its base stats</p>
+        <p class="hint-box">Select a dinosaur above to see its stats</p>
       </div>
+
       <div id="growth-timer" class="hidden">
-        <h3>Growth Timer</h3>
+        <div id="growth-header">
+          <h3>Growth Timer</h3>
+          <span id="growth-total-time"></span>
+        </div>
         <div id="growth-stages"></div>
         <div id="growth-controls">
           <div id="growth-multiplier-row">
-            <label for="growth-multiplier">Server:</label>
-            <input type="number" id="growth-multiplier" value="1" min="0.1" max="10" step="0.1">
+            <label for="growth-multiplier">Growth Rate:</label>
+            <input type="number" id="growth-multiplier" value="1" min="1" max="5" step="0.05">
             <span>x</span>
           </div>
-          <div id="growth-stage-select-row">
-            <label for="growth-stage-select">From:</label>
-            <select id="growth-stage-select"></select>
+          <div id="growth-percent-row">
+            <label for="growth-percent">Growth:</label>
+            <input type="number" id="growth-percent" value="0" min="0" max="99" step="1">
+            <span>%</span>
           </div>
           <button id="growth-start-btn" class="btn">Start</button>
           <button id="growth-reset-btn" class="btn hidden">Reset</button>
@@ -186,14 +191,14 @@
         <div id="growth-progress" class="hidden">
           <div class="growth-row">
             <span class="growth-label">Elapsed</span>
-            <span id="growth-elapsed">00:00:00</span>
+            <span id="growth-elapsed">00:00</span>
           </div>
           <div class="growth-row">
             <span class="growth-label">Remaining</span>
-            <span id="growth-remaining">--:--:--</span>
+            <span id="growth-remaining">--:--</span>
           </div>
           <div class="growth-row">
-            <span class="growth-label">ETA</span>
+            <span class="growth-label">Estimated Time</span>
             <span id="growth-eta">--:--</span>
           </div>
           <div id="growth-bar-container">

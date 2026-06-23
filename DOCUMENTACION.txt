@@ -66,20 +66,34 @@ juego ni lee su memoria.
       Pteranodon, Beipiaosaurus, Troodon).
 
 2.3 MUTATION BUILDER (Guia de mutaciones)
-    - Base de datos de dinosaurios con sus stats base (HP, daño, velocidad,
-      stamina).
     - Recomendaciones de las 16 mutaciones ordenadas de la 1a a la 16a
-      para cada dinosaurio.
-    - Selector de dinosaurio con filtro por tier (Low, Mid, High).
+      para cada dinosaurio (disponible para dinos con lista completa).
+    - Selector global de dinosaurio compartido con el tab Stats.
 
-2.4 DINO STATS Y HP TRACKER
-    - Muestra los stats base del dinosaurio seleccionado.
-    - Slider manual de HP para llevar un seguimiento aproximado de tu vida
-      (util en servers que no muestran barras de salud).
-    - Barra de color que cambia segun el nivel: verde (>60%), naranja
-      (30-60%), rojo (<30%).
+2.4 DINO STATS POR ETAPA DE CRECIMIENTO
+    - Tabla comparativa de stats por etapa de crecimiento para el dino
+      seleccionado: Hatchling, Juvenile, Adult (100%), Prime (87.5%).
+    - Stats mostrados por etapa: HP/Weight (kg), Sprint (km/h), Bite Force.
+    - Columna Prime resaltada en verde (pico de stats a 87.5% de crecimiento).
+    - Badge de habilidad especial por especie (Ambush, Pounce, etc.).
+    - Datos verificados de Evrima Quick Guide (build 0.21.321).
+    - HP = peso en kg (1 kg = 1 HP, mecanica real del juego).
+    - Velocidades: sprint maximo. Prime = pico si se logra estatus Prime.
 
-2.5 CONTROLES DEL OVERLAY
+2.5 GROWTH TIMER
+    - Temporizador de crecimiento para el dino seleccionado.
+    - 4 etapas reales del juego: Hatchling (0-24%), Juvenile (25-49%),
+      Sub-Adult (50-74%), Elder (75-100%).
+    - Input de porcentaje de crecimiento actual (0-99%): el timer calcula
+      automaticamente en que etapa se encuentra y cuanto tiempo resta.
+    - La etapa actual se resalta en verde; las completadas se atenuan.
+    - Growth Rate x1 a x5 (paso 0.05): ajusta los tiempos segun el
+      multiplicador del servidor donde se juegue.
+    - Muestra: tiempo transcurrido, tiempo restante, hora estimada de llegada.
+    - Barra de progreso visual.
+    - Boton Reset para reiniciar sin cambiar de dino.
+
+2.6 CONTROLES DEL OVERLAY
     - F9:  Ocultar/mostrar la ventana del overlay.
     - F10: Activar modo click-through (los clicks pasan al juego, no al
            overlay). Se indica con un badge rojo "CLICK-THROUGH".
@@ -321,6 +335,56 @@ PENDIENTE PARA FUTURAS VERSIONES:
   - Soporte para otros mapas cuando The Isle los añada
   - Historial de posiciones (trail/rastro en el mapa)
   - Integracion con APIs de servidores si se hacen publicas
+
+
+========================================
+ VERSION 0.2.0 - Stats por etapa y Growth Timer
+ Fecha: 2026-06-23
+ Mapa soportado: Gateway v0.21+
+ Build del juego: Evrima 0.21.321
+========================================
+
+CAMBIOS PRINCIPALES:
+  [x] Datos de todos los dinosaurios actualizados con fuente verificada
+      (Evrima Quick Guide, build 0.21.321, publicada el 23 dic 2025).
+  [x] Nuevo modelo de datos en dinos.json: stats por etapa de crecimiento
+      (hatchling, juvenile, adult, prime) con weight, speed, biteForce.
+  [x] Eliminado HP tracker (reemplazado por tabla de stats por etapa).
+  [x] Tabla comparativa de stats con columna Prime resaltada en verde.
+  [x] Badge de habilidad especial por especie.
+  [x] Growth Timer completamente rediseñado:
+        - 4 etapas reales del juego (Hatchling, Juvenile, Sub-Adult, Elder).
+        - Input de porcentaje de crecimiento actual en vez de selector de etapa.
+        - Etapas mapeadas a rangos fijos: Hatch 0-24%, Juv 25-49%,
+          SubAd 50-74%, Elder 75-100%.
+        - Growth Rate (x1 a x5, paso 0.05) en vez de "Server multiplier".
+        - Calculo correcto: cada etapa tiene distinta duracion aunque cubra
+          siempre el mismo 25% de crecimiento.
+        - Tiempo restante actualizado al cambiar porcentaje o growth rate.
+        - "Estimated Time" en vez de "ETA".
+
+DINOSAURIOS (20 species del roster 0.21, excluidos Austroraptor y Kentrosaurus):
+  Carnivoros (10): Tyrannosaurus, Deinosuchus, Allosaurus, Ceratosaurus,
+                   Carnotaurus, Dilophosaurus, Omniraptor, Herrerasaurus,
+                   Pteranodon, Troodon.
+  Herbivoros (8):  Triceratops, Stegosaurus, Diabloceratops, Maiasaura,
+                   Tenontosaurus, Pachycephalosaurus, Dryosaurus, Hypsilophodon.
+  Omnivoros (2):   Gallimimus, Beipiaosaurus.
+
+NOTA SOBRE DATOS:
+  - HP = peso en kg (mecanica real del juego: 1 kg = 1 HP).
+  - Velocidades = sprint maximo por etapa.
+  - Prime = stats pico a 87.5% de crecimiento si se logro estatus Prime.
+  - Adult = stats a 100% (Frail, crecimiento normal sin Prime).
+  - Tiempos de crecimiento: tiempo real a 1x multiplicador vanilla.
+  - Allosaurus: desglose SubAd/Elder estimado (total 10h confirmado,
+    etapas individuales no documentadas en la fuente).
+
+LIMITACIONES CONOCIDAS:
+  - El estado de prime list no se guarda entre sesiones.
+  - Faltan listas de mutaciones para la mayoria de dinos.
+  - Las coordenadas requieren copia manual al clipboard.
+  - Stats sujetos a cambio en hotfixes posteriores al 0.21.321.
 
 
 ================================================================================

@@ -527,10 +527,79 @@ body {
 }
 
 /* Stats */
-#tab-stats h3 {
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.stats-header h3 {
   font-size: 13px;
   color: #50c878;
-  margin-bottom: 8px;
+  margin: 0;
+}
+
+.tier-label {
+  color: #888;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.ability-badge {
+  font-size: 9px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  background: rgba(52, 152, 219, 0.15);
+  color: #3498db;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin-bottom: 10px;
+}
+
+.stats-table th,
+.stats-table td {
+  padding: 5px 6px;
+  text-align: center;
+  border-bottom: 1px solid rgba(80, 200, 120, 0.08);
+}
+
+.stats-table th {
+  font-size: 10px;
+  font-weight: 600;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stats-table th.prime-col {
+  color: #50c878;
+}
+
+.stats-table td {
+  font-family: 'Consolas', monospace;
+  font-size: 11px;
+  color: #ccc;
+}
+
+.stats-table td.prime-col {
+  color: #50c878;
+  font-weight: 700;
+}
+
+.stat-row-label {
+  text-align: left !important;
+  font-family: 'Segoe UI', sans-serif !important;
+  color: #888 !important;
+  font-size: 10px !important;
+  white-space: nowrap;
 }
 
 .stat-bar {
@@ -546,32 +615,6 @@ body {
   transition: width 0.3s;
 }
 
-.dino-stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  margin-bottom: 12px;
-}
-
-.stat-card {
-  padding: 8px;
-  background: rgba(30, 30, 40, 0.6);
-  border-radius: 4px;
-  text-align: center;
-}
-
-.stat-card .label {
-  font-size: 10px;
-  color: #888;
-  text-transform: uppercase;
-}
-
-.stat-card .value {
-  font-size: 15px;
-  font-weight: 700;
-  color: #50c878;
-}
-
 /* Growth Timer */
 #growth-timer {
   margin-top: 12px;
@@ -583,55 +626,64 @@ body {
   display: none;
 }
 
-#growth-timer h3 {
-  font-size: 13px;
-  color: #50c878;
+#growth-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 8px;
 }
 
+#growth-header h3 {
+  font-size: 13px;
+  color: #50c878;
+  margin: 0;
+}
+
+#growth-total-time {
+  font-family: 'Consolas', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: #e0e0e0;
+  background: rgba(80, 200, 120, 0.1);
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+
 #growth-stages {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
   margin-bottom: 8px;
 }
 
 .growth-stage-card {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 4px 8px;
+  gap: 2px;
+  padding: 6px 4px;
   background: rgba(30, 30, 40, 0.5);
   border-radius: 4px;
-  font-size: 11px;
-  border-left: 3px solid rgba(100, 100, 120, 0.3);
+  font-size: 10px;
+  border-bottom: 2px solid rgba(100, 100, 120, 0.3);
   transition: border-color 0.3s, background 0.3s;
+  text-align: center;
 }
 
 .growth-stage-card.active-stage {
-  border-left-color: #50c878;
+  border-bottom-color: #50c878;
   background: rgba(80, 200, 120, 0.08);
 }
 
 .growth-stage-card.completed-stage {
   opacity: 0.5;
-  border-left-color: rgba(80, 200, 120, 0.4);
+  border-bottom-color: rgba(80, 200, 120, 0.4);
 }
 
 .stage-name {
   font-weight: 600;
   color: #ccc;
-  min-width: 65px;
-}
-
-.stage-arrow {
-  color: #555;
   font-size: 10px;
-}
-
-.stage-target {
-  color: #999;
-  flex: 1;
 }
 
 .stage-duration {
@@ -649,7 +701,7 @@ body {
 }
 
 #growth-multiplier-row,
-#growth-stage-select-row {
+#growth-percent-row {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -668,17 +720,15 @@ body {
   text-align: center;
 }
 
-#growth-stage-select {
+#growth-percent {
+  width: 50px;
   padding: 4px 6px;
   background: rgba(30, 30, 40, 0.9);
   color: #e0e0e0;
   border: 1px solid rgba(80, 200, 120, 0.3);
   border-radius: 4px;
   font-size: 11px;
-}
-
-#growth-stage-select option {
-  background: #1e1e28;
+  text-align: center;
 }
 
 #growth-progress {
