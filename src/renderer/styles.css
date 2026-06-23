@@ -131,21 +131,13 @@ body {
   display: none;
 }
 
-#dino-diet-icon {
-  font-size: 13px;
-}
-
-#dino-name-label {
-  color: #50c878;
-  font-weight: 600;
-}
-
 #dino-tier-badge {
-  font-size: 9px;
-  padding: 1px 5px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
   border-radius: 3px;
-  background: rgba(80, 200, 120, 0.15);
-  color: #888;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 /* Tab content */

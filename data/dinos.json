@@ -114,7 +114,7 @@
     {
       "name": "Ceratosaurus",
       "diet": "carnivore",
-      "tier": "Mid",
+      "tier": "High",
       "ability": "Bacteria",
       "stats": {
         "hatchling": { "weight": 2.2, "speed": 8.8, "biteForce": 0.17 },
@@ -151,7 +151,7 @@
     {
       "name": "Carnotaurus",
       "diet": "carnivore",
-      "tier": "Mid",
+      "tier": "High",
       "ability": "Charge",
       "stats": {
         "hatchling": { "weight": 4.9, "speed": 14.7, "biteForce": 0.03 },
@@ -188,7 +188,7 @@
     {
       "name": "Dilophosaurus",
       "diet": "carnivore",
-      "tier": "Low-Mid",
+      "tier": "Mid",
       "ability": "Hallucinations",
       "stats": {
         "hatchling": { "weight": 1.4, "speed": 8.2, "biteForce": 0.11 },
@@ -225,7 +225,7 @@
     {
       "name": "Omniraptor",
       "diet": "carnivore",
-      "tier": "Low-Mid",
+      "tier": "Mid",
       "ability": "Pounce",
       "stats": {
         "adult": { "weight": 395, "speed": 46.8, "biteForce": 65 },
@@ -372,7 +372,7 @@
     {
       "name": "Triceratops",
       "diet": "herbivore",
-      "tier": "High",
+      "tier": "Apex",
       "ability": "Spar",
       "stats": {
         "hatchling": { "weight": 4.7, "speed": 5.4, "biteForce": 1 },
@@ -409,7 +409,7 @@
     {
       "name": "Stegosaurus",
       "diet": "herbivore",
-      "tier": "High",
+      "tier": "Apex",
       "ability": "Tail Swing",
       "stats": {
         "hatchling": { "weight": 5.8, "speed": 5.7, "biteForce": 0.04 },
@@ -480,7 +480,7 @@
     {
       "name": "Maiasaura",
       "diet": "herbivore",
-      "tier": "Mid",
+      "tier": "High",
       "ability": "Bipedal/Quadrupedal",
       "stats": {
         "hatchling": { "weight": 101.25, "speed": 38.9, "biteForce": 1.6 },
@@ -516,7 +516,7 @@
     {
       "name": "Tenontosaurus",
       "diet": "herbivore",
-      "tier": "Mid",
+      "tier": "High",
       "ability": "Tail Slam",
       "stats": {
         "hatchling": { "weight": 1.03, "speed": 5.7, "biteForce": 0.04 },
@@ -552,7 +552,7 @@
     {
       "name": "Pachycephalosaurus",
       "diet": "herbivore",
-      "tier": "Low-Mid",
+      "tier": "Mid",
       "ability": "Fractures",
       "stats": {
         "adult": { "weight": 500, "speed": 41.8, "biteForce": 30 },
@@ -587,7 +587,7 @@
     {
       "name": "Dryosaurus",
       "diet": "herbivore",
-      "tier": "Low",
+      "tier": "Low-Mid",
       "ability": "Dodge",
       "stats": {
         "adult": { "weight": 130, "speed": 45, "biteForce": 20 },
@@ -659,7 +659,7 @@
     {
       "name": "Gallimimus",
       "diet": "omnivore",
-      "tier": "Low-Mid",
+      "tier": "Mid",
       "ability": "Group Buffs",
       "stats": {
         "hatchling": { "weight": 0.5, "speed": 24.6, "biteForce": 0.03 },

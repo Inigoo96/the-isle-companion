@@ -298,7 +298,7 @@ function populateDinoSelect() {
   allDinos.forEach(dino => {
     const opt = document.createElement('option');
     opt.value = dino.name;
-    opt.textContent = `${dino.name} (${dino.tier})`;
+    opt.textContent = dino.name;
     select.appendChild(opt);
   });
 
@@ -463,6 +463,14 @@ document.getElementById('prime-reset').addEventListener('click', () => {
 });
 
 // --- DINO INDICATOR ---
+const TIER_COLORS = {
+  'Apex':    { bg: 'rgba(231,76,60,0.2)',   color: '#e74c3c' },
+  'High':    { bg: 'rgba(230,126,34,0.2)',  color: '#e67e22' },
+  'Mid':     { bg: 'rgba(241,196,15,0.2)',  color: '#f1c40f' },
+  'Low-Mid': { bg: 'rgba(52,152,219,0.2)',  color: '#3498db' },
+  'Low':     { bg: 'rgba(120,120,120,0.2)', color: '#888' }
+};
+
 function updateDinoIndicator() {
   const indicator = document.getElementById('dino-indicator');
   if (!selectedDino) {
@@ -470,9 +478,11 @@ function updateDinoIndicator() {
     return;
   }
   indicator.classList.remove('hidden');
-  document.getElementById('dino-diet-icon').textContent = selectedDino.diet === 'carnivore' ? '\u{1F969}' : '\u{1F33F}';
-  document.getElementById('dino-name-label').textContent = selectedDino.name;
-  document.getElementById('dino-tier-badge').textContent = selectedDino.tier;
+  const badge = document.getElementById('dino-tier-badge');
+  badge.textContent = selectedDino.tier;
+  const style = TIER_COLORS[selectedDino.tier] || TIER_COLORS['Low'];
+  badge.style.background = style.bg;
+  badge.style.color = style.color;
 }
 
 // --- GROWTH TIMER ---
