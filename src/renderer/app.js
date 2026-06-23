@@ -89,10 +89,9 @@ function updateZoomDisplay() {
 
 function resizeCanvas() {
   const rect = canvas.getBoundingClientRect();
-  const size = Math.min(rect.width, rect.height);
-  if (size > 0) {
-    canvas.width = size;
-    canvas.height = size;
+  if (rect.width > 0 && rect.height > 0) {
+    canvas.width = rect.width;
+    canvas.height = rect.height;
   }
   clampPan();
   drawMap();
