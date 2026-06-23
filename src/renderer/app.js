@@ -348,23 +348,49 @@ document.getElementById('hp-slider').addEventListener('input', (e) => {
   else fill.style.background = 'linear-gradient(90deg, #e74c3c, #c0392b)';
 });
 
-// --- PATROL ZONES ---
-const patrolChecks = document.querySelectorAll('.patrol-checklist input');
-const patrolFill = document.getElementById('patrol-fill');
-const patrolText = document.getElementById('patrol-text');
+// --- PRIME LIST ---
+const PRIME_NEEDED = 5;
+const primeChecks = document.querySelectorAll('.prime-task input');
+const primeFill = document.getElementById('prime-fill');
+const primeCount = document.getElementById('prime-count');
+const primeStatus = document.getElementById('prime-status');
 
-function updatePatrolProgress() {
-  const checked = document.querySelectorAll('.patrol-checklist input:checked').length;
-  const total = patrolChecks.length;
-  patrolFill.style.width = `${(checked / total) * 100}%`;
-  patrolText.textContent = `${checked} / ${total}`;
+const defaultTasks = ['no-spasms', 'no-infertile'];
+
+function updatePrimeProgress() {
+  const checked = document.querySelectorAll('.prime-task input:checked').length;
+  const isPrime = checked >= PRIME_NEEDED;
+  primeFill.style.width = `${Math.min(checked / PRIME_NEEDED, 1) * 100}%`;
+  primeFill.classList.toggle('complete', isPrime);
+  primeCount.textContent = `${checked} / ${PRIME_NEEDED}`;
+  primeStatus.textContent = isPrime ? 'PRIME' : 'NOT PRIME';
+  primeStatus.className = isPrime ? 'prime-achieved' : 'prime-not-yet';
+
+  document.querySelectorAll('.prime-task').forEach(task => {
+    const cb = task.querySelector('input');
+    const taskId = task.dataset.task;
+    const isDefault = defaultTasks.includes(taskId);
+    const isLost = isDefault && !cb.checked;
+
+    task.classList.remove('lost', 'locked');
+    cb.disabled = false;
+
+    if (isLost) {
+      task.classList.add('lost');
+      cb.disabled = true;
+    } else if (isPrime) {
+      cb.disabled = true;
+      if (!cb.checked) task.classList.add('locked');
+    }
+  });
 }
 
-patrolChecks.forEach(cb => cb.addEventListener('change', updatePatrolProgress));
+primeChecks.forEach(cb => cb.addEventListener('change', updatePrimeProgress));
+updatePrimeProgress();
 
-document.getElementById('patrol-reset').addEventListener('click', () => {
-  patrolChecks.forEach(cb => { cb.checked = false; });
-  updatePatrolProgress();
+document.getElementById('prime-reset').addEventListener('click', () => {
+  primeChecks.forEach((cb, i) => { cb.checked = i < 2; });
+  updatePrimeProgress();
 });
 
 // --- ZONE DATA ---

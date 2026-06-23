@@ -46,19 +46,31 @@ juego ni lee su memoria.
     - Mapa totalmente responsive: se ajusta al tamaño de la ventana.
     - Tamaño minimo de ventana: 280x350 px.
 
-2.2 MUTATION BUILDER (Guia de mutaciones)
+2.2 PRIME LIST (Sistema de mutaciones Prime)
+    - Tracker interactivo de las 9 tareas del sistema Prime.
+    - Diseñado para que jugadores nuevos entiendan el sistema facilmente.
+    - Barra de progreso visual con contador X/5 y badge PRIME/NOT PRIME.
+    - 4 categorias con colores: Active by Default (gris), Diet & Birth
+      (amarillo), Exploration (azul), Breeding (morado).
+    - Descripcion clara de cada tarea con tips estrategicos.
+    - 2 tareas activas por defecto al empezar (Never Muscle Spasms,
+      Never Infertile).
+    - Feedback visual para tareas perdidas: si se desmarca una tarea por
+      defecto, se muestra en rojo tachado y se bloquea permanentemente
+      (irrecuperable en ese run).
+    - Bloqueo al llegar a Prime: al completar 5/5, todas las tareas se
+      bloquean. Las completadas quedan visibles, las no completadas se
+      muestran apagadas.
+    - Boton Reset para simular un nuevo dinosaurio.
+    - Nota sobre especies con mecanicas especiales (Deinosuchus,
+      Pteranodon, Beipiaosaurus, Troodon).
+
+2.3 MUTATION BUILDER (Guia de mutaciones)
     - Base de datos de dinosaurios con sus stats base (HP, daño, velocidad,
       stamina).
     - Recomendaciones de las 16 mutaciones ordenadas de la 1a a la 16a
       para cada dinosaurio.
     - Selector de dinosaurio con filtro por tier (Low, Mid, High).
-
-2.3 PATROL ZONE TRACKER
-    - Checklist manual para marcar las zonas de patrulla completadas.
-    - Incluye: MZ (Murder Zone), Sanctuaries 1-3, Perfect Diet,
-      Patrol Zones 1-5.
-    - Barra de progreso visual que muestra cuantas llevas.
-    - Boton de reset para empezar de nuevo con un dino nuevo.
 
 2.4 DINO STATS Y HP TRACKER
     - Muestra los stats base del dinosaurio seleccionado.
@@ -281,9 +293,13 @@ FUNCIONALIDADES INCLUIDAS:
   [x] Toolbar compacta: capas a la izquierda, zoom a la derecha
   [x] Mapa responsive que se ajusta al tamaño de la ventana
   [x] Atajos globales F9 (mostrar/ocultar) y F10 (click-through)
+  [x] Prime List: tracker de 9 tareas con progreso 0/5
+  [x] Prime List: 4 categorias con colores (default, diet, exploration, breeding)
+  [x] Prime List: feedback visual para tareas perdidas (rojo, tachado, bloqueado)
+  [x] Prime List: bloqueo total al alcanzar Prime (5/5)
+  [x] Prime List: tips estrategicos y descripciones para novatos
   [x] Selector de dinosaurios con stats base
   [x] Guia de 16 mutaciones recomendadas por dino
-  [x] Patrol Zone tracker con checklist y barra de progreso
   [x] HP tracker manual con slider y barra de color
   [x] Interfaz completamente en ingles
   [x] Repositorio publico en GitHub
@@ -294,15 +310,17 @@ DINOSAURIOS DISPONIBLES:
 
 LIMITACIONES CONOCIDAS:
   - Los stats de los dinos son aproximados, necesitan verificacion
-  - El estado de patrol zones no se guarda entre sesiones
+  - El estado de prime list y otras tabs no se guarda entre sesiones
   - Faltan muchos dinosaurios del juego
+  - Las coordenadas requieren copia manual al clipboard (no hay forma
+    automatica desde el cliente sin leer memoria del juego)
 
 PENDIENTE PARA FUTURAS VERSIONES:
   - Todos los dinosaurios del juego con stats actualizados
-  - Persistencia de datos (guardar patrol zones, ultimo dino, posicion)
+  - Persistencia de datos entre sesiones (prime list, posicion, etc.)
   - Soporte para otros mapas cuando The Isle los añada
-  - Sistema de alertas para zonas de patrulla
   - Historial de posiciones (trail/rastro en el mapa)
+  - Integracion con APIs de servidores si se hacen publicas
 
 
 ================================================================================

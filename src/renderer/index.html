@@ -19,8 +19,8 @@
     <!-- Tab navigation -->
     <div id="tabs">
       <button class="tab active" data-tab="map">Map</button>
+      <button class="tab" data-tab="prime">Prime List</button>
       <button class="tab" data-tab="mutations">Mutations</button>
-      <button class="tab" data-tab="patrol">Patrol Zones</button>
       <button class="tab" data-tab="stats">Stats</button>
     </div>
 
@@ -57,26 +57,102 @@
       <div id="mutations-list"></div>
     </div>
 
-    <!-- PATROL ZONES TAB -->
-    <div id="tab-patrol" class="tab-content">
-      <h3>Patrol Zone Tracker</h3>
-      <div class="patrol-checklist">
-        <label class="patrol-item"><input type="checkbox" data-zone="mz"> <span>MZ (Murder Zone)</span></label>
-        <label class="patrol-item"><input type="checkbox" data-zone="sanc1"> <span>Sanctuary 1</span></label>
-        <label class="patrol-item"><input type="checkbox" data-zone="sanc2"> <span>Sanctuary 2</span></label>
-        <label class="patrol-item"><input type="checkbox" data-zone="sanc3"> <span>Sanctuary 3</span></label>
-        <label class="patrol-item"><input type="checkbox" data-zone="perfect-diet"> <span>Perfect Diet</span></label>
-        <label class="patrol-item"><input type="checkbox" data-zone="patrol1"> <span>Patrol Zone 1</span></label>
-        <label class="patrol-item"><input type="checkbox" data-zone="patrol2"> <span>Patrol Zone 2</span></label>
-        <label class="patrol-item"><input type="checkbox" data-zone="patrol3"> <span>Patrol Zone 3</span></label>
-        <label class="patrol-item"><input type="checkbox" data-zone="patrol4"> <span>Patrol Zone 4</span></label>
-        <label class="patrol-item"><input type="checkbox" data-zone="patrol5"> <span>Patrol Zone 5</span></label>
+    <!-- PRIME LIST TAB -->
+    <div id="tab-prime" class="tab-content">
+      <div id="prime-header">
+        <div id="prime-progress">
+          <div id="prime-bar"><div id="prime-fill"></div></div>
+          <span id="prime-count">0 / 5</span>
+        </div>
+        <span id="prime-status" class="prime-not-yet">NOT PRIME</span>
       </div>
-      <div id="patrol-progress">
-        <div id="patrol-bar"><div id="patrol-fill"></div></div>
-        <span id="patrol-text">0 / 10</span>
+      <p id="prime-info">Complete <strong>5 of 9 tasks</strong> before reaching 75% growth to unlock Prime mutations and superior nesting genetics.</p>
+
+      <div class="prime-category">
+        <div class="category-label default">Active by Default</div>
+        <label class="prime-task" data-task="no-spasms">
+          <input type="checkbox" checked>
+          <div class="task-body">
+            <span class="task-name">Never Muscle Spasms</span>
+            <span class="task-desc">Don't eat a player of your same species (cannibalism). Lost permanently unless you have the Cannibal mutation equipped.</span>
+          </div>
+        </label>
+        <label class="prime-task" data-task="no-infertile">
+          <input type="checkbox" checked>
+          <div class="task-body">
+            <span class="task-name">Never Infertile</span>
+            <span class="task-desc">Keep at least 1 nutrient above zero at all times. Lost if all 3 nutrient bars hit 0 simultaneously.</span>
+          </div>
+        </label>
       </div>
-      <button id="patrol-reset" class="btn">Reset</button>
+
+      <div class="prime-category">
+        <div class="category-label diet">Diet &amp; Birth</div>
+        <label class="prime-task" data-task="perfect-diet">
+          <input type="checkbox">
+          <div class="task-body">
+            <span class="task-name">Perfect Diet</span>
+            <span class="task-desc">Have at least 1% of all 3 nutrients active at the same time.</span>
+            <span class="task-tip">Carnivores: eat organs (heart, intestines, lungs). Herbivores: eat mushrooms at Sanctuaries.</span>
+          </div>
+        </label>
+        <label class="prime-task" data-task="born-egg">
+          <input type="checkbox">
+          <div class="task-body">
+            <span class="task-name">Born from an Egg</span>
+            <span class="task-desc">Hatch from another player's nest instead of spawning from the menu. Requires an invite.</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="prime-category">
+        <div class="category-label exploration">Exploration</div>
+        <label class="prime-task" data-task="visit-sanc">
+          <input type="checkbox">
+          <div class="task-body">
+            <span class="task-name">Visit a Sanctuary</span>
+            <span class="task-desc">Enter any Sanctuary zone (yellow on Map tab). You usually spawn ~5 min from one. Best done as a juvenile for safe food.</span>
+          </div>
+        </label>
+        <label class="prime-task" data-task="visit-2mz">
+          <input type="checkbox">
+          <div class="task-body">
+            <span class="task-name">Visit 2 Migration Zones</span>
+            <span class="task-desc">Enter 2 different MZ areas (green on Map tab).</span>
+          </div>
+        </label>
+        <label class="prime-task" data-task="visit-4pz">
+          <input type="checkbox">
+          <div class="task-body">
+            <span class="task-name">Visit 4 Patrol Zones</span>
+            <span class="task-desc">Enter 4 different PZ areas (red on Map tab). Only recommended if you spawn in central zones like South Plains or West Rails.</span>
+          </div>
+        </label>
+        <label class="prime-task" data-task="visit-mmz">
+          <input type="checkbox">
+          <div class="task-body">
+            <span class="task-name">Visit the MMZ</span>
+            <span class="task-desc">Enter the Massive Migration Zone (only 1 active at a time). Usually south Delta area — go deep into the south part to register.</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="prime-category">
+        <div class="category-label breeding">Breeding</div>
+        <label class="prime-task" data-task="raise-baby">
+          <input type="checkbox">
+          <div class="task-body">
+            <span class="task-name">Raise a Baby</span>
+            <span class="task-desc">Nest and grow a baby to 50% growth.</span>
+            <span class="task-tip">Not recommended for getting Prime. Get Prime first, then nest — Prime parents pass 4 mutations instead of 2-3.</span>
+          </div>
+        </label>
+      </div>
+
+      <div id="prime-footer">
+        <span class="prime-note">Some species (Deinosuchus, Pteranodon, Beipiaosaurus, Troodon) have adjusted tasks due to unique mechanics.</span>
+        <button id="prime-reset" class="btn">Reset All</button>
+      </div>
     </div>
 
     <!-- STATS TAB -->
