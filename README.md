@@ -96,13 +96,36 @@ the-isle-companion/
 
 ## Roadmap
 
-- [ ] Imagen real del mapa Gateway como fondo del minimapa
-- [ ] Todos los dinosaurios del juego con stats verificados
+### Completado
+- [x] Imagen real del mapa Gateway como fondo del minimapa
+- [x] Calibracion exacta de coordenadas del mapa
+- [x] Mutation Builder con guia de 16 mutaciones
+- [x] Prime List (Patrol Zone Tracker) con progreso visual
+- [x] Dino Stats y HP Tracker
+- [x] Zonas interactivas en el mapa (MZ, Sanctuaries, Patrol Zones)
+
+### Fase 1 — Selector de especie + Growth Timer
+- [ ] Selector global de especie: al elegir dino, adaptar Prime List, Stats y Timer
+- [ ] Calculadora de crecimiento: countdown por stage (Hatchling → Juvenile → Sub-Adult → Adult)
+- [ ] Tiempos de las 18+ especies jugables con soporte para multiplicador de servidor
+- [ ] Guia de dieta por especie y stage de crecimiento
+
+### Fase 2 — Datos completos y persistencia
+- [ ] Todos los dinosaurios del juego con stats verificados (28 especies)
 - [ ] Persistencia de datos entre sesiones (patrol zones, ultimo dino, posicion)
-- [ ] Calibracion exacta de coordenadas del mapa
+- [ ] Historial de runs/vidas pasadas (dino, mutaciones conseguidas, causa de muerte)
+
+### Fase 3 — Mapa avanzado
+- [ ] Sistema de tiles (gdal2tiles) para carga eficiente del mapa por zoom
+- [ ] Capas con filtros toggle: Sanctuaries, MZ, rios, patrol zones
 - [ ] Historial de posiciones (trail/rastro en el mapa)
-- [ ] Sistema de alertas para patrol zones
 - [ ] Soporte para futuros mapas
+
+### Fase 4 — Modo Pack (multijugador)
+- [ ] Servidor WebSocket ligero para sincronizacion de posiciones
+- [ ] Sistema de salas con codigo (ej: PACK-77X)
+- [ ] Compartir posicion en tiempo real con amigos en el mapa
+- [ ] Indicadores visuales de compañeros de pack
 
 ## Licencia
 
