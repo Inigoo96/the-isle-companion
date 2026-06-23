@@ -2,63 +2,63 @@ const TUTORIAL_KEY = 'tic_tutorial_v1';
 
 const STEPS = [
   {
-    title: '¡Bienvenido a The Isle Companion!',
-    desc: 'Un overlay de escritorio para jugar mejor en The Isle Evrima. Te explicamos todo en 2 minutos.',
+    title: 'Welcome to The Isle Companion!',
+    desc: 'A desktop overlay to help you play The Isle Evrima. Quick tour — 2 minutes.',
     target: null,
     tab: null,
   },
   {
-    title: 'Selector de dinosaurio',
-    desc: 'Selecciona tu especie aquí. Las mutaciones recomendadas, stats y growth timer se adaptan automáticamente a tu dino.',
+    title: 'Dinosaur Selector',
+    desc: 'Pick your species here. Recommended mutations, stats and the growth timer all update automatically for the selected dino.',
     target: '#global-dino-bar',
     tab: null,
     autoSelect: true,
   },
   {
-    title: 'Mapa — tu posición en tiempo real',
-    desc: 'Copia las coordenadas in-game (Alt+C por defecto). El overlay las detecta automáticamente y muestra tu posición sobre el mapa de Gateway.',
+    title: 'Map — Your Position in Real Time',
+    desc: 'Copy your in-game coordinates (Alt+C by default). The overlay detects them automatically and shows your position on the Gateway map.',
     target: '#map-container',
     tab: 'map',
   },
   {
-    title: 'Capas del mapa',
-    desc: 'Activa o desactiva zonas: Patrol Zones (rojo), Migration Zones (verde) y Sanctuaries (amarillo). Úsalas para planear tu ruta al Prime.',
+    title: 'Map Layers',
+    desc: 'Toggle zones on and off: Patrol Zones (red), Migration Zones (green) and Sanctuaries (yellow). Use them to plan your route to Prime.',
     target: '#map-toolbar',
     tab: 'map',
   },
   {
-    title: 'Prime List — el camino al Prime',
-    desc: 'Completa 5 de estas 10 tareas antes del 75% de growth para desbloquear mutaciones Prime y mejor genética de nesting. Márcalas según las vayas cumpliendo.',
+    title: 'Prime List — The Road to Prime',
+    desc: 'Complete 5 of these 10 tasks before reaching 75% growth to unlock Prime mutations and superior nesting genetics. Check them off as you go.',
     target: '#prime-header',
     tab: 'prime',
   },
   {
-    title: 'Mutaciones recomendadas',
-    desc: 'Las 14 mejores mutaciones para tu dino, ordenadas por prioridad. Con etiquetas: Slot 2 exclusivo, situacional o desbloqueable por lifestyle.',
+    title: 'Recommended Mutations',
+    desc: 'The 14 best mutations for your dino, ranked by priority. Tagged as Slot 2 exclusive, situational or lifestyle-unlockable.',
     target: '#mutations-list',
     tab: 'mutations',
   },
   {
-    title: 'Stats por etapa de crecimiento',
-    desc: 'Peso/HP, velocidad y fuerza de mordida de tu dino en cada stage: Hatchling, Juvenile, Adult y Prime.',
+    title: 'Stats by Growth Stage',
+    desc: 'Weight/HP, speed and bite force for your dino at each stage: Hatchling, Juvenile, Adult and Prime.',
     target: '#stats-dino-info',
     tab: 'stats',
   },
   {
     title: 'Growth Timer',
-    desc: 'Introduce el multiplicador de crecimiento del servidor y tu % actual de growth. Pulsa Start y el timer cuenta el tiempo hasta cada etapa.',
+    desc: 'Set the server growth multiplier and your current growth %. Hit Start and the timer counts down to each stage.',
     target: '#growth-controls',
     tab: 'stats',
   },
   {
-    title: 'Controles del overlay',
-    desc: 'F9 oculta y muestra el overlay. F10 activa el modo click-through: los clics pasan al juego sin que el overlay interfiera.',
+    title: 'Overlay Controls',
+    desc: 'F9 hides and shows the overlay. F10 enables click-through mode — clicks pass to the game without closing the overlay.',
     target: '#titlebar',
     tab: null,
   },
   {
-    title: '¡Todo listo para jugar!',
-    desc: 'Selecciona tu dino, copia las coordenadas en el juego y empieza a trackear tu run. ¡Buena suerte!',
+    title: 'Ready to Play!',
+    desc: 'Select your dino, copy coordinates in-game and start tracking your run. Good luck!',
     target: null,
     tab: null,
   },
@@ -89,13 +89,13 @@ class Tutorial {
       <div id="tut-card">
         <div id="tut-top">
           <span id="tut-counter"></span>
-          <button id="tut-skip">Saltar guía ✕</button>
+          <button id="tut-skip">Skip guide x</button>
         </div>
         <h3 id="tut-title"></h3>
         <p id="tut-desc"></p>
         <div id="tut-nav">
-          <button id="tut-prev" class="tut-btn tut-secondary">← Anterior</button>
-          <button id="tut-next" class="tut-btn tut-primary">Siguiente →</button>
+          <button id="tut-prev" class="tut-btn tut-secondary">Back</button>
+          <button id="tut-next" class="tut-btn tut-primary">Next</button>
         </div>
       </div>
     `;
@@ -130,7 +130,7 @@ class Tutorial {
       document.getElementById('tut-title').textContent = s.title;
       document.getElementById('tut-desc').textContent = s.desc;
       document.getElementById('tut-prev').style.visibility = index === 0 ? 'hidden' : 'visible';
-      document.getElementById('tut-next').textContent = isLast ? '¡Empezar a jugar!' : 'Siguiente →';
+      document.getElementById('tut-next').textContent = isLast ? 'Start playing!' : 'Next';
       this._placeSpot(s.target);
     });
   }
