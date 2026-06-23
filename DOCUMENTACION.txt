@@ -47,11 +47,12 @@ juego ni lee su memoria.
     - Tamaño minimo de ventana: 280x350 px.
 
 2.2 PRIME LIST (Sistema de mutaciones Prime)
-    - Tracker interactivo de las 9 tareas del sistema Prime.
+    - Tracker interactivo de las 10 tareas del sistema Prime.
     - Diseñado para que jugadores nuevos entiendan el sistema facilmente.
     - Barra de progreso visual con contador X/5 y badge PRIME/NOT PRIME.
-    - 4 categorias con colores: Active by Default (gris), Diet & Birth
-      (amarillo), Exploration (azul), Breeding (morado).
+    - 5 categorias con colores: Active by Default (gris), Diet & Birth
+      (amarillo), Exploration (azul), Breeding (morado),
+      Special Species (verde).
     - Descripcion clara de cada tarea con tips estrategicos.
     - 2 tareas activas por defecto al empezar (Never Muscle Spasms,
       Never Infertile).
@@ -62,8 +63,9 @@ juego ni lee su memoria.
       bloquean. Las completadas quedan visibles, las no completadas se
       muestran apagadas.
     - Boton Reset para simular un nuevo dinosaurio.
-    - Nota sobre especies con mecanicas especiales (Deinosuchus,
-      Pteranodon, Beipiaosaurus, Troodon).
+    - Task "Playing a Special Species": Deinosuchus, Pteranodon,
+      Beipiaosaurus y Troodon tienen requisitos Prime ajustados por
+      mecanicas unicas.
 
 2.3 MUTATION BUILDER (Guia de mutaciones)
     - Lista de 14 mutaciones priorizadas por dino, ordenadas de mas a menos
@@ -432,6 +434,43 @@ FUENTE DE DATOS:
   - Estadisticas reales del juego (Evrima Quick Guide 0.21.321).
   - Analisis de rol por dino (peso, velocidad, mecanica especial, rivals).
   - Consideraciones de "Entomb" (dificultad para maxear las 14 slots).
+
+LIMITACIONES CONOCIDAS:
+  - El estado de prime list no se guarda entre sesiones.
+  - Las coordenadas requieren copia manual al clipboard.
+  - Listas de mutaciones sujetas a revision en futuras versiones del juego.
+
+
+========================================
+ VERSION 0.4.0 - Pulido UI y fixes
+ Fecha: 2026-06-23
+ Mapa soportado: Gateway v0.21+
+ Build del juego: Evrima 0.21.321
+========================================
+
+CAMBIOS PRINCIPALES:
+  [x] Selector de dinosaurio: eliminado el tier entre parentesis del
+      dropdown (solo nombre). Indicador lateral muestra unicamente el
+      badge de tier, coloreado por nivel:
+        Apex (rojo), High (naranja), Mid (amarillo),
+        Low-Mid (azul), Low (gris).
+  [x] Tiers corregidos en dinos.json segun peso prime (umbral ~9.000 kg
+      para Apex, ~1.500 kg para High, ~500 kg para Mid, ~100 kg para
+      Low-Mid):
+        Trike/Stego: High → Apex
+        Cera/Carno: Mid → High
+        Maiasaura/Tenonto: Mid → High
+        Diloph/Omniraptor/Pachy/Gallimimus: Low-Mid → Mid
+        Dryosaurus: Low → Low-Mid
+  [x] Ventana: ratio forzado 5:6 (ancho:alto) al redimensionar mediante
+      setAspectRatio(). minHeight ajustado a 336 (280 * 1.2).
+  [x] Mapa: corregida distorsion horizontal al redimensionar a tamaño
+      pequeño. resizeCanvas usaba Math.min(w,h) creando un canvas
+      cuadrado internamente que el CSS estiraba al ancho completo.
+      Ahora canvas.width/height = dimensiones reales del contenedor.
+  [x] Prime List: task "Playing a Special Species" sustituye la nota
+      de texto al pie. Nueva categoria "Special Species" (verde).
+      Contador actualizado de 5/9 a 5/10.
 
 LIMITACIONES CONOCIDAS:
   - El estado de prime list no se guarda entre sesiones.
