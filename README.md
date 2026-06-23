@@ -52,6 +52,22 @@ Para modo desarrollo (con DevTools):
 npm run dev
 ```
 
+## Distribucion (Windows)
+
+Genera instalador NSIS + portable en la carpeta `dist/`:
+
+```bash
+npm run dist
+```
+
+Para solo verificar que el build es correcto sin generar instalador (mas rapido):
+
+```bash
+npm run dist:dir
+```
+
+El instalador permite elegir la carpeta de instalacion y crea acceso directo en el escritorio.
+
 ### Controles
 
 | Tecla | Accion |
@@ -142,4 +158,4 @@ the-isle-companion/
 
 ## Licencia
 
-MIT
+[MIT](LICENSE) — Copyright (c) 2026 Íñigo

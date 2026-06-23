@@ -1,18 +1,50 @@
 {
   "name": "the-isle-companion",
-  "version": "0.1.0",
-  "description": "The Isle Companion - Overlay de apoyo: minimapa, mutations, patrol zones, dino stats",
+  "version": "0.4.0",
+  "description": "The Isle Companion - Overlay de escritorio: minimapa, dino stats, mutations, growth timer",
   "main": "src/main.js",
+  "license": "MIT",
+  "author": "Íñigo",
   "scripts": {
     "start": "electron .",
-    "dev": "electron . --dev"
+    "dev": "electron . --dev",
+    "dist": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder",
+    "dist:dir": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --dir"
   },
-  "author": "inigo",
-  "license": "MIT",
+  "build": {
+    "appId": "io.github.inigoo96.the-isle-companion",
+    "productName": "The Isle Companion",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**",
+      "data/**",
+      "assets/**",
+      "package.json"
+    ],
+    "asar": true,
+    "afterPack": "scripts/afterPack.js",
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  },
   "allowScripts": {
     "electron": true
   },
   "devDependencies": {
-    "electron": "^35.7.5"
+    "@electron/fuses": "^1.8.0",
+    "cross-env": "^10.1.0",
+    "electron": "^35.7.5",
+    "electron-builder": "^25.1.8"
   }
 }

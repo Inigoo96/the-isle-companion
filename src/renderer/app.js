@@ -137,8 +137,8 @@ function drawMap() {
     const glowSize = Math.max(8, 20 / zoom);
 
     const gradient = ctx.createRadialGradient(px, py, 0, px, py, glowSize);
-    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.7)');
-    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    gradient.addColorStop(0, 'rgba(0, 212, 255, 0.75)');
+    gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
     ctx.fillStyle = gradient;
     ctx.beginPath();
     ctx.arc(px, py, glowSize, 0, Math.PI * 2);
