@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>The Isle Companion</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Title bar for dragging -->
+    <div id="titlebar">
+      <span class="title">The Isle Companion</span>
+      <div class="controls">
+        <span id="click-through-badge" class="badge hidden">CLICK-THROUGH</span>
+        <span class="hint">F9 ocultar | F10 click-through</span>
+      </div>
+    </div>
+
+    <!-- Tab navigation -->
+    <div id="tabs">
+      <button class="tab active" data-tab="map">Mapa</button>
+      <button class="tab" data-tab="mutations">Mutations</button>
+      <button class="tab" data-tab="patrol">Patrol Zones</button>
+      <button class="tab" data-tab="stats">Stats</button>
+    </div>
+
+    <!-- MAP TAB -->
+    <div id="tab-map" class="tab-content active">
+      <div id="map-container">
+        <canvas id="minimap"></canvas>
+        <div id="coords-display">
+          <span id="coord-x">X: ---</span>
+          <span id="coord-y">Y: ---</span>
+          <span id="coord-z">Z: ---</span>
+        </div>
+        <div id="no-coords" class="hint-box">
+          Copia tus coordenadas en el juego para ver tu posición en el mapa
+        </div>
+      </div>
+    </div>
+
+    <!-- MUTATIONS TAB -->
+    <div id="tab-mutations" class="tab-content">
+      <div id="dino-selector">
+        <select id="dino-select">
+          <option value="">-- Selecciona dinosaurio --</option>
+        </select>
+      </div>
+      <div id="mutations-list"></div>
+    </div>
+
+    <!-- PATROL ZONES TAB -->
+    <div id="tab-patrol" class="tab-content">
+      <h3>Patrol Zone Tracker</h3>
+      <div class="patrol-checklist">
+        <label class="patrol-item"><input type="checkbox" data-zone="mz"> <span>MZ (Murder Zone)</span></label>
+        <label class="patrol-item"><input type="checkbox" data-zone="sanc1"> <span>Sanctuary 1</span></label>
+        <label class="patrol-item"><input type="checkbox" data-zone="sanc2"> <span>Sanctuary 2</span></label>
+        <label class="patrol-item"><input type="checkbox" data-zone="sanc3"> <span>Sanctuary 3</span></label>
+        <label class="patrol-item"><input type="checkbox" data-zone="perfect-diet"> <span>Perfect Diet</span></label>
+        <label class="patrol-item"><input type="checkbox" data-zone="patrol1"> <span>Patrol Zone 1</span></label>
+        <label class="patrol-item"><input type="checkbox" data-zone="patrol2"> <span>Patrol Zone 2</span></label>
+        <label class="patrol-item"><input type="checkbox" data-zone="patrol3"> <span>Patrol Zone 3</span></label>
+        <label class="patrol-item"><input type="checkbox" data-zone="patrol4"> <span>Patrol Zone 4</span></label>
+        <label class="patrol-item"><input type="checkbox" data-zone="patrol5"> <span>Patrol Zone 5</span></label>
+      </div>
+      <div id="patrol-progress">
+        <div id="patrol-bar"><div id="patrol-fill"></div></div>
+        <span id="patrol-text">0 / 10</span>
+      </div>
+      <button id="patrol-reset" class="btn">Reset</button>
+    </div>
+
+    <!-- STATS TAB -->
+    <div id="tab-stats" class="tab-content">
+      <div id="stats-dino-info">
+        <p class="hint-box">Selecciona un dinosaurio en la pestaña Mutations para ver sus stats base</p>
+      </div>
+      <div id="hp-tracker" class="hidden">
+        <h3>HP Tracker manual</h3>
+        <div class="stat-bar-container">
+          <label>HP actual (%):</label>
+          <input type="range" id="hp-slider" min="0" max="100" value="100">
+          <div class="stat-bar"><div id="hp-fill" class="fill hp"></div></div>
+          <span id="hp-value">100%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

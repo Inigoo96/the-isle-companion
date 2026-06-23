@@ -1,0 +1,18 @@
+{
+  "name": "the-isle-companion",
+  "version": "0.1.0",
+  "description": "The Isle Companion - Overlay de apoyo: minimapa, mutations, patrol zones, dino stats",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev"
+  },
+  "author": "inigo",
+  "license": "MIT",
+  "allowScripts": {
+    "electron": true
+  },
+  "devDependencies": {
+    "electron": "^35.0.0"
+  }
+}

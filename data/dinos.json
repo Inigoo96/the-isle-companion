@@ -1,0 +1,73 @@
+{
+  "carnivores": [
+    {
+      "name": "Carnotaurus",
+      "tier": "Mid",
+      "baseStats": { "hp": 2800, "damage": 120, "speed": 42, "stamina": 100 },
+      "recommendedMutations": [
+        "Thick Hide", "Speed Burst", "Iron Stomach", "Night Vision",
+        "Enhanced Stamina", "Bone Break", "Bleed Resistance", "Pack Mentality",
+        "Scent Range", "Water Efficiency", "Healing Factor", "Tough Scales",
+        "Adrenaline", "Deep Breath", "Sharp Claws", "Apex Predator"
+      ]
+    },
+    {
+      "name": "Utahraptor",
+      "tier": "Low-Mid",
+      "baseStats": { "hp": 1200, "damage": 80, "speed": 50, "stamina": 120 },
+      "recommendedMutations": [
+        "Speed Burst", "Night Vision", "Enhanced Stamina", "Bleed",
+        "Scent Range", "Pack Mentality", "Thick Hide", "Water Efficiency",
+        "Iron Stomach", "Healing Factor", "Adrenaline", "Sharp Claws",
+        "Deep Breath", "Bleed Resistance", "Bone Break", "Apex Predator"
+      ]
+    },
+    {
+      "name": "Allosaurus",
+      "tier": "Mid-High",
+      "baseStats": { "hp": 4500, "damage": 200, "speed": 35, "stamina": 90 },
+      "recommendedMutations": [
+        "Thick Hide", "Bone Break", "Bleed", "Enhanced Stamina",
+        "Night Vision", "Healing Factor", "Iron Stomach", "Scent Range",
+        "Pack Mentality", "Tough Scales", "Speed Burst", "Water Efficiency",
+        "Adrenaline", "Deep Breath", "Sharp Claws", "Apex Predator"
+      ]
+    },
+    {
+      "name": "Ceratosaurus",
+      "tier": "Low-Mid",
+      "baseStats": { "hp": 2000, "damage": 100, "speed": 38, "stamina": 95 },
+      "recommendedMutations": [
+        "Thick Hide", "Bleed", "Night Vision", "Enhanced Stamina",
+        "Speed Burst", "Iron Stomach", "Scent Range", "Healing Factor",
+        "Pack Mentality", "Water Efficiency", "Bone Break", "Tough Scales",
+        "Adrenaline", "Deep Breath", "Bleed Resistance", "Sharp Claws"
+      ]
+    }
+  ],
+  "herbivores": [
+    {
+      "name": "Stegosaurus",
+      "tier": "Mid-High",
+      "baseStats": { "hp": 6000, "damage": 250, "speed": 28, "stamina": 80 },
+      "recommendedMutations": [
+        "Thick Hide", "Tough Scales", "Healing Factor", "Enhanced Stamina",
+        "Bleed Resistance", "Bone Break", "Iron Stomach", "Water Efficiency",
+        "Speed Burst", "Pack Mentality", "Scent Range", "Night Vision",
+        "Adrenaline", "Deep Breath", "Fortified", "Apex Herbivore"
+      ]
+    },
+    {
+      "name": "Tenontosaurus",
+      "tier": "Low",
+      "baseStats": { "hp": 1800, "damage": 60, "speed": 40, "stamina": 110 },
+      "recommendedMutations": [
+        "Speed Burst", "Enhanced Stamina", "Thick Hide", "Healing Factor",
+        "Night Vision", "Scent Range", "Water Efficiency", "Iron Stomach",
+        "Bleed Resistance", "Pack Mentality", "Tough Scales", "Deep Breath",
+        "Adrenaline", "Fortified", "Bone Break", "Apex Herbivore"
+      ]
+    }
+  ],
+  "_note": "Stats are approximate and will need updating with actual game values. Mutations are suggestions - adjust per playstyle."
+}

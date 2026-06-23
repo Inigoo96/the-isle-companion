@@ -1,0 +1,257 @@
+================================================================================
+  THE ISLE COMPANION - DOCUMENTACION TECNICA DEL PROYECTO
+  Autor: Inigo
+  Inicio del proyecto: 2026-06-23
+================================================================================
+
+
+========================================
+ 1. QUE ES THE ISLE COMPANION
+========================================
+
+The Isle Companion es una aplicacion de escritorio que funciona como overlay
+(ventana superpuesta) sobre el juego The Isle. Su proposito es proporcionar
+herramientas de informacion y seguimiento que el juego no ofrece de forma
+nativa, sin modificar ni acceder al proceso del juego en ningun momento.
+
+La palabra "companion" (compañero/acompañante) es el termino estandar en la
+industria del gaming para aplicaciones que acompañan a un juego proporcionando
+informacion adicional. Ejemplos conocidos: Destiny Companion App, Fallout
+Pip-Boy App, Overwolf overlays.
+
+IMPORTANTE: Esta aplicacion NO es un cheat ni un mod que modifica el juego.
+Solo lee el portapapeles del sistema (clipboard) cuando el jugador copia sus
+coordenadas desde el juego, y muestra informacion de referencia (stats,
+mutations, zonas). No interactua con el proceso del juego, no lee su memoria,
+y no viola los terminos de servicio ni el anticheat (EasyAntiCheat).
+
+
+========================================
+ 2. FINALIDAD Y FUNCIONALIDADES
+========================================
+
+2.1 MINIMAPA CON POSICION DEL JUGADOR
+    - Muestra un mapa del mundo del juego con grid y puntos cardinales.
+    - El jugador copia sus coordenadas in-game al clipboard.
+    - La app detecta las coordenadas automaticamente y muestra la posicion
+      en el mapa con un punto verde luminoso.
+    - No requiere interaccion manual: basta con copiar coords en el juego.
+
+2.2 MUTATION BUILDER (Guia de mutaciones)
+    - Base de datos de dinosaurios con sus stats base (HP, daño, velocidad,
+      stamina).
+    - Recomendaciones de las 16 mutaciones ordenadas de la 1a a la 16a
+      para cada dinosaurio.
+    - Selector de dinosaurio con filtro por tier (Low, Mid, High).
+
+2.3 PATROL ZONE TRACKER
+    - Checklist manual para marcar las zonas de patrulla completadas.
+    - Incluye: MZ (Murder Zone), Sanctuaries 1-3, Perfect Diet,
+      Patrol Zones 1-5.
+    - Barra de progreso visual que muestra cuantas llevas.
+    - Boton de reset para empezar de nuevo con un dino nuevo.
+
+2.4 DINO STATS Y HP TRACKER
+    - Muestra los stats base del dinosaurio seleccionado.
+    - Slider manual de HP para llevar un seguimiento aproximado de tu vida
+      (util en servers que no muestran barras de salud).
+    - Barra de color que cambia segun el nivel: verde (>60%), naranja
+      (30-60%), rojo (<30%).
+
+2.5 CONTROLES DEL OVERLAY
+    - F9:  Ocultar/mostrar la ventana del overlay.
+    - F10: Activar modo click-through (los clicks pasan al juego, no al
+           overlay). Se indica con un badge rojo "CLICK-THROUGH".
+    - La barra de titulo se puede arrastrar para mover la ventana.
+    - La ventana es redimensionable.
+
+
+========================================
+ 3. TECNOLOGIAS UTILIZADAS
+========================================
+
+3.1 ELECTRON v35.7.5
+    - Framework para crear aplicaciones de escritorio usando tecnologias web.
+    - Permite crear ventanas transparentes, always-on-top, y con
+      click-through, necesario para funcionar como overlay sobre el juego.
+    - Basado en Chromium (renderizado web) + Node.js (logica de sistema).
+    - Licencia: MIT.
+    - Web: https://www.electronjs.org/
+
+3.2 NODE.JS v24.17.0
+    - Entorno de ejecucion JavaScript del lado del servidor/sistema.
+    - Electron lo usa internamente para acceder a APIs del sistema
+      operativo (clipboard, ventanas, atajos de teclado globales).
+    - Web: https://nodejs.org/
+
+3.3 HTML5 + CSS3 + JavaScript (vanilla)
+    - No se usa ningun framework frontend (React, Vue, etc.).
+    - HTML5: Estructura de la interfaz (pestañas, formularios, canvas).
+    - CSS3: Estilos visuales, tema oscuro transparente, animaciones.
+    - JavaScript vanilla: Toda la logica de la UI (tabs, mapa canvas,
+      gestion de datos, eventos).
+    - Canvas API: Renderizado del minimapa (grid, posicion del jugador).
+
+3.4 GIT v2.54.0
+    - Control de versiones del codigo fuente.
+    - Repositorio local en C:\Users\inigo\Projects\isle-companion\.
+
+3.5 VS CODE v1.125.1
+    - Editor de codigo para desarrollo.
+
+
+========================================
+ 4. ARQUITECTURA DEL PROYECTO
+========================================
+
+4.1 ESTRUCTURA DE ARCHIVOS
+
+    isle-companion/
+    ├── package.json              Configuracion npm y dependencias
+    ├── DOCUMENTACION.txt         Este archivo
+    ├── src/
+    │   ├── main.js               Proceso principal de Electron
+    │   │                         (ventana, clipboard, atajos globales)
+    │   ├── preload.js            Puente seguro entre Node.js y la UI
+    │   │                         (expone isleAPI al renderer)
+    │   └── renderer/
+    │       ├── index.html        Estructura de la interfaz
+    │       ├── styles.css        Estilos del overlay (tema oscuro)
+    │       └── app.js            Logica de la UI (tabs, mapa, dinos)
+    ├── data/
+    │   └── dinos.json            Base de datos de dinosaurios y mutations
+    ├── assets/
+    │   └── maps/                 (para futuras imagenes de mapas)
+    └── node_modules/             Dependencias (no se versiona)
+
+4.2 PROCESO PRINCIPAL (main.js)
+    - Crea la ventana del overlay con propiedades especiales:
+      transparent, frameless, alwaysOnTop, resizable.
+    - Monitoriza el clipboard cada 500ms buscando coordenadas del juego.
+    - Registra atajos globales (F9, F10) que funcionan incluso cuando
+      el juego tiene el foco.
+    - Parsea coordenadas con regex: X[:\s]*(-?[\d.]+)\s*Y[:\s]*...
+
+4.3 PRELOAD (preload.js)
+    - Usa contextBridge de Electron para exponer una API segura
+      (isleAPI) al proceso renderer.
+    - Solo expone dos canales: coordinates-update y click-through-changed.
+    - Patron de seguridad: contextIsolation=true, nodeIntegration=false.
+
+4.4 RENDERER (app.js)
+    - Sistema de pestañas manual (sin librerias).
+    - Mapa renderizado en Canvas 2D con grid, cardinales y punto del jugador.
+    - Carga datos de dinos.json via fetch.
+    - Patrol tracker con checkboxes y barra de progreso.
+    - HP tracker con slider range.
+
+4.5 COMUNICACION ENTRE PROCESOS
+    main.js (Node) --[ipcMain]--> preload.js --[contextBridge]--> app.js (Browser)
+    El flujo: clipboard -> parseo en main -> IPC send -> renderer actualiza UI.
+
+
+========================================
+ 5. COMO FUNCIONA LA DETECCION DE
+    COORDENADAS
+========================================
+
+1. El jugador esta en The Isle y usa la funcion del juego para copiar
+   sus coordenadas al portapapeles (clipboard del sistema).
+
+2. El proceso principal (main.js) lee el clipboard cada 500ms.
+
+3. Si el contenido cambio, intenta parsearlo con una expresion regular
+   que busca el patron "X: numero Y: numero Z: numero".
+
+4. Si el parseo tiene exito, envia las coordenadas al renderer via IPC.
+
+5. El renderer convierte las coordenadas del juego a pixeles del canvas
+   usando los limites del mapa (MAP_BOUNDS) y dibuja un punto verde
+   con efecto de brillo (glow) en la posicion correspondiente.
+
+NOTA: Las coordenadas MAP_BOUNDS estan puestas como aproximacion inicial.
+Necesitan calibrarse con valores reales del mapa Gateway copiando coords
+en las esquinas conocidas del mapa.
+
+
+========================================
+ 6. COMO EJECUTAR LA APLICACION
+========================================
+
+Prerequisitos:
+  - Node.js v24+ instalado
+  - Dependencias instaladas (npm install)
+
+Comandos:
+  cd C:\Users\inigo\Projects\isle-companion
+  npm start              # Modo normal
+  npm run dev            # Modo desarrollo (abre DevTools)
+
+Para usar como overlay:
+  1. Pon The Isle en modo "Borderless Windowed" (no fullscreen exclusivo).
+  2. Ejecuta la app.
+  3. Arrastra la ventana a la posicion deseada.
+  4. Pulsa F10 para activar click-through cuando estes jugando.
+  5. Pulsa F9 para ocultar/mostrar.
+
+
+================================================================================
+ HISTORIAL DE VERSIONES
+================================================================================
+
+
+========================================
+ VERSION 0.1.0 - The Isle: Gateway
+ Fecha: 2026-06-23
+ Mapa soportado: Gateway v0.21+
+========================================
+
+FUNCIONALIDADES INCLUIDAS:
+  [x] Overlay transparente con drag y resize
+  [x] Minimapa con grid y posicion via clipboard
+  [x] Atajos globales F9 (mostrar/ocultar) y F10 (click-through)
+  [x] Selector de dinosaurios con stats base
+  [x] Guia de 16 mutaciones recomendadas por dino
+  [x] Patrol Zone tracker con checklist y barra de progreso
+  [x] HP tracker manual con slider y barra de color
+  [x] Base de datos inicial: Carnotaurus, Utahraptor, Allosaurus,
+      Ceratosaurus, Stegosaurus, Tenontosaurus
+
+DINOSAURIOS DISPONIBLES:
+  Carnivoros: Carnotaurus, Utahraptor, Allosaurus, Ceratosaurus
+  Herbivoros: Stegosaurus, Tenontosaurus
+
+LIMITACIONES CONOCIDAS:
+  - El mapa no tiene imagen de fondo (solo grid)
+  - Las coordenadas MAP_BOUNDS son aproximadas, necesitan calibracion
+  - Los stats de los dinos son aproximados, necesitan verificacion
+  - El estado de patrol zones no se guarda entre sesiones
+  - Faltan muchos dinosaurios del juego
+
+PENDIENTE PARA FUTURAS VERSIONES:
+  - Imagen real del mapa Gateway como fondo del minimap
+  - Todos los dinosaurios del juego con stats actualizados
+  - Persistencia de datos (guardar patrol zones, ultimo dino, posicion)
+  - Calibracion exacta de coordenadas del mapa
+  - Soporte para otros mapas cuando The Isle los añada
+  - Sistema de alertas para zonas de patrulla
+  - Historial de posiciones (trail/rastro en el mapa)
+
+
+================================================================================
+ NOTAS PARA FUTURAS VERSIONES DE THE ISLE
+================================================================================
+
+Cada vez que The Isle lance un update que cambie el mapa, las zonas, los
+dinosaurios o el sistema de mutations, se debe:
+
+  1. Actualizar data/dinos.json con nuevos dinos/stats/mutations.
+  2. Recalibrar MAP_BOUNDS si el mapa cambia de tamaño.
+  3. Actualizar la imagen del mapa si se añade una.
+  4. Actualizar la lista de Patrol Zones si cambian.
+  5. Documentar los cambios aqui con una nueva seccion de version.
+
+El formato del historial es:
+  VERSION X.Y.Z - The Isle: [Nombre del mapa/update]
+  Fecha: YYYY-MM-DD
+  Mapa soportado: [version del mapa]
