@@ -19,11 +19,10 @@ industria del gaming para aplicaciones que acompañan a un juego proporcionando
 informacion adicional. Ejemplos conocidos: Destiny Companion App, Fallout
 Pip-Boy App, Overwolf overlays.
 
-IMPORTANTE: Esta aplicacion NO es un cheat ni un mod que modifica el juego.
-Solo lee el portapapeles del sistema (clipboard) cuando el jugador copia sus
-coordenadas desde el juego, y muestra informacion de referencia (stats,
-mutations, zonas). No interactua con el proceso del juego, no lee su memoria,
-y no viola los terminos de servicio ni el anticheat (EasyAntiCheat).
+La aplicacion solo lee el portapapeles del sistema (clipboard) cuando el
+jugador copia sus coordenadas desde el juego, y muestra informacion de
+referencia (stats, mutations, zonas). No interactua con el proceso del
+juego ni lee su memoria.
 
 
 ========================================
@@ -31,11 +30,14 @@ y no viola los terminos de servicio ni el anticheat (EasyAntiCheat).
 ========================================
 
 2.1 MINIMAPA CON POSICION DEL JUGADOR
-    - Muestra un mapa del mundo del juego con grid y puntos cardinales.
+    - Muestra la imagen real del mapa Gateway (descargada de Vulnona) como
+      fondo del minimapa.
     - El jugador copia sus coordenadas in-game al clipboard.
-    - La app detecta las coordenadas automaticamente y muestra la posicion
-      en el mapa con un punto verde luminoso.
+    - La app detecta las coordenadas automaticamente cada 500ms y muestra
+      la posicion en el mapa con un punto verde luminoso con efecto glow.
     - No requiere interaccion manual: basta con copiar coords en el juego.
+    - Los limites del mapa (MAP_BOUNDS) estan calibrados con datos reales
+      extraidos de Vulnona (data_1.txt del mapa Gateway_v0.21).
 
 2.2 MUTATION BUILDER (Guia de mutaciones)
     - Base de datos de dinosaurios con sus stats base (HP, daño, velocidad,
@@ -94,10 +96,14 @@ y no viola los terminos de servicio ni el anticheat (EasyAntiCheat).
 
 3.4 GIT v2.54.0
     - Control de versiones del codigo fuente.
-    - Repositorio local en C:\Users\inigo\Projects\isle-companion\.
+    - Repositorio: https://github.com/Inigoo96/the-isle-companion
 
 3.5 VS CODE v1.125.1
     - Editor de codigo para desarrollo.
+
+3.6 GITHUB CLI v2.95.0
+    - Herramienta de linea de comandos para gestionar repositorios GitHub.
+    - Usada para crear el repositorio remoto y hacer push.
 
 
 ========================================
@@ -106,9 +112,11 @@ y no viola los terminos de servicio ni el anticheat (EasyAntiCheat).
 
 4.1 ESTRUCTURA DE ARCHIVOS
 
-    isle-companion/
+    the-isle-companion/
     ├── package.json              Configuracion npm y dependencias
     ├── DOCUMENTACION.txt         Este archivo
+    ├── README.md                 Documentacion publica del repositorio
+    ├── .gitignore                Exclusiones de git (node_modules, dist)
     ├── src/
     │   ├── main.js               Proceso principal de Electron
     │   │                         (ventana, clipboard, atajos globales)
@@ -121,7 +129,10 @@ y no viola los terminos de servicio ni el anticheat (EasyAntiCheat).
     ├── data/
     │   └── dinos.json            Base de datos de dinosaurios y mutations
     ├── assets/
-    │   └── maps/                 (para futuras imagenes de mapas)
+    │   └── maps/
+    │       └── gateway.webp      Imagen real del mapa Gateway (1.7 MB)
+    ├── .agents/
+    │   └── skills/               Skills de autoskills (buenas practicas)
     └── node_modules/             Dependencias (no se versiona)
 
 4.2 PROCESO PRINCIPAL (main.js)
@@ -130,7 +141,11 @@ y no viola los terminos de servicio ni el anticheat (EasyAntiCheat).
     - Monitoriza el clipboard cada 500ms buscando coordenadas del juego.
     - Registra atajos globales (F9, F10) que funcionan incluso cuando
       el juego tiene el foco.
-    - Parsea coordenadas con regex: X[:\s]*(-?[\d.]+)\s*Y[:\s]*...
+    - Parsea coordenadas con regex que maneja el formato real del juego:
+      "11,178.131, -290,055.002, 29,481.892" (comas como separador de
+      miles Y como delimitador de ejes). La clave del parseo es que el
+      delimitador entre valores es ", " (coma+espacio) mientras que el
+      separador de miles es "," seguido de 3 digitos sin espacio.
 
 4.3 PRELOAD (preload.js)
     - Usa contextBridge de Electron para exponer una API segura
@@ -140,7 +155,8 @@ y no viola los terminos de servicio ni el anticheat (EasyAntiCheat).
 
 4.4 RENDERER (app.js)
     - Sistema de pestañas manual (sin librerias).
-    - Mapa renderizado en Canvas 2D con grid, cardinales y punto del jugador.
+    - Mapa renderizado en Canvas 2D con imagen real de Gateway como fondo
+      y punto del jugador con efecto glow.
     - Carga datos de dinos.json via fetch.
     - Patrol tracker con checkboxes y barra de progreso.
     - HP tracker con slider range.
@@ -151,27 +167,61 @@ y no viola los terminos de servicio ni el anticheat (EasyAntiCheat).
 
 
 ========================================
- 5. COMO FUNCIONA LA DETECCION DE
-    COORDENADAS
+ 5. SISTEMA DE COORDENADAS Y PROYECCION
 ========================================
 
-1. El jugador esta en The Isle y usa la funcion del juego para copiar
-   sus coordenadas al portapapeles (clipboard del sistema).
+5.1 SISTEMA DE COORDENADAS DE THE ISLE
 
-2. El proceso principal (main.js) lee el clipboard cada 500ms.
+    The Isle (rama Evrima) usa Unreal Engine 5 con sistema Left-Handed Z-Up:
+      - Eje X: Norte-Sur (latitud). Valores negativos = mas al norte.
+      - Eje Y: Este-Oeste (longitud). Valores negativos = mas al oeste.
+      - Eje Z: Altitud respecto al nivel base.
+      - Unidades: centimetros (cm).
 
-3. Si el contenido cambio, intenta parsearlo con una expresion regular
-   que busca el patron "X: numero Y: numero Z: numero".
+5.2 FORMATO DEL CLIPBOARD
 
-4. Si el parseo tiene exito, envia las coordenadas al renderer via IPC.
+    El juego copia coordenadas al portapapeles en este formato:
+      "77,205.416, 273,836.631, 21,962.142"
 
-5. El renderer convierte las coordenadas del juego a pixeles del canvas
-   usando los limites del mapa (MAP_BOUNDS) y dibuja un punto verde
-   con efecto de brillo (glow) en la posicion correspondiente.
+    ATENCION: Las comas se usan TANTO como separador de miles COMO
+    delimitador entre ejes. No se puede hacer un simple split(',').
+    El delimitador real es ", " (coma + espacio), mientras que el
+    separador de miles es "," seguido de exactamente 3 digitos.
 
-NOTA: Las coordenadas MAP_BOUNDS estan puestas como aproximacion inicial.
-Necesitan calibrarse con valores reales del mapa Gateway copiando coords
-en las esquinas conocidas del mapa.
+    Regex utilizada: (-?[\d,]+(?:\.\d+)?),\s+(-?[\d,]+(?:\.\d+)?),\s+(...)
+    Despues se eliminan las comas de miles: match.replace(/,/g, '')
+
+5.3 LIMITES DEL MAPA (MAP_BOUNDS)
+
+    Extraidos de Vulnona (data_1.txt del mapa Gateway_v0.21):
+      - X (N-S): min = -607 / max = 509  (en unidades Vulnona)
+      - Y (E-W): min = -505 / max = 607  (en unidades Vulnona)
+
+    Conversion a coordenadas del juego (multiplicar por 1000):
+      - xMin = -607,000 / xMax = 509,000
+      - yMin = -505,000 / yMax = 607,000
+
+5.4 PROYECCION A PIXELES DEL CANVAS
+
+    Los ejes del juego NO coinciden con los ejes de la pantalla:
+      - Game Y (Este-Oeste) → Pantalla X (horizontal)
+      - Game X (Norte-Sur)  → Pantalla Y (vertical)
+
+    Formulas:
+      pixelX = (gameY - yMin) / (yMax - yMin) * anchoCanvas
+      pixelY = (gameX - xMin) / (xMax - xMin) * altoCanvas
+
+    No se invierte el eje Y de pantalla porque la imagen del mapa de
+    Vulnona ya tiene el norte (xMin) en la parte superior.
+
+5.5 FLUJO COMPLETO
+
+    1. Jugador copia coordenadas en The Isle → clipboard del SO.
+    2. main.js lee el clipboard cada 500ms.
+    3. Si el contenido cambio, lo parsea con regex (maneja comas de miles).
+    4. Envia {x, y, z} al renderer via IPC.
+    5. app.js proyecta (gameY → pixelX, gameX → pixelY) sobre el canvas.
+    6. Dibuja punto verde con glow en la posicion calculada.
 
 
 ========================================
@@ -183,7 +233,7 @@ Prerequisitos:
   - Dependencias instaladas (npm install)
 
 Comandos:
-  cd C:\Users\inigo\Projects\isle-companion
+  cd C:\Users\inigo\Projects\the-isle-companion
   npm start              # Modo normal
   npm run dev            # Modo desarrollo (abre DevTools)
 
@@ -208,34 +258,34 @@ Para usar como overlay:
 
 FUNCIONALIDADES INCLUIDAS:
   [x] Overlay transparente con drag y resize
-  [x] Minimapa con grid y posicion via clipboard
+  [x] Minimapa con imagen real del mapa Gateway (Vulnona, 1.7 MB webp)
+  [x] Deteccion automatica de coordenadas via clipboard (cada 500ms)
+  [x] Parseo correcto del formato del juego (comas como miles+delimitador)
+  [x] Proyeccion calibrada: ejes UE5 mapeados a pixeles del canvas
+  [x] MAP_BOUNDS reales extraidos de Vulnona data_1.txt
   [x] Atajos globales F9 (mostrar/ocultar) y F10 (click-through)
   [x] Selector de dinosaurios con stats base
   [x] Guia de 16 mutaciones recomendadas por dino
   [x] Patrol Zone tracker con checklist y barra de progreso
   [x] HP tracker manual con slider y barra de color
-  [x] Base de datos inicial: Carnotaurus, Utahraptor, Allosaurus,
-      Ceratosaurus, Stegosaurus, Tenontosaurus
+  [x] Repositorio publico en GitHub
 
 DINOSAURIOS DISPONIBLES:
   Carnivoros: Carnotaurus, Utahraptor, Allosaurus, Ceratosaurus
   Herbivoros: Stegosaurus, Tenontosaurus
 
 LIMITACIONES CONOCIDAS:
-  - El mapa no tiene imagen de fondo (solo grid)
-  - Las coordenadas MAP_BOUNDS son aproximadas, necesitan calibracion
   - Los stats de los dinos son aproximados, necesitan verificacion
   - El estado de patrol zones no se guarda entre sesiones
   - Faltan muchos dinosaurios del juego
 
 PENDIENTE PARA FUTURAS VERSIONES:
-  - Imagen real del mapa Gateway como fondo del minimap
   - Todos los dinosaurios del juego con stats actualizados
   - Persistencia de datos (guardar patrol zones, ultimo dino, posicion)
-  - Calibracion exacta de coordenadas del mapa
   - Soporte para otros mapas cuando The Isle los añada
   - Sistema de alertas para zonas de patrulla
   - Historial de posiciones (trail/rastro en el mapa)
+  - Integracion con Leaflet.js para zoom y navegacion avanzada del mapa
 
 
 ================================================================================

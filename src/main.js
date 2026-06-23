@@ -32,14 +32,15 @@ function createOverlay() {
 }
 
 function parseIsleCoordinates(text) {
-  // The Isle formats: "X: -123456.78 Y: 987654.32 Z: 1234.56"
-  // or variations like "X:-123456.78 Y:987654.32 Z:1234.56"
-  const match = text.match(/X[:\s]*(-?[\d.]+)\s*Y[:\s]*(-?[\d.]+)\s*Z[:\s]*(-?[\d.]+)/i);
+  // The Isle copies coords as: "11,178.131, -290,055.002, 29,481.892"
+  // Commas are used BOTH as thousands separators AND as value delimiters.
+  // Key: delimiter is ", " (comma + space), thousands separator is "," + 3 digits (no space).
+  const match = text.match(/(-?[\d,]+(?:\.\d+)?),\s+(-?[\d,]+(?:\.\d+)?),\s+(-?[\d,]+(?:\.\d+)?)/);
   if (match) {
     return {
-      x: parseFloat(match[1]),
-      y: parseFloat(match[2]),
-      z: parseFloat(match[3])
+      x: parseFloat(match[1].replace(/,/g, '')),
+      y: parseFloat(match[2].replace(/,/g, '')),
+      z: parseFloat(match[3].replace(/,/g, ''))
     };
   }
   return null;

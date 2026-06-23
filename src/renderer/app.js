@@ -6,12 +6,14 @@ let dinoData = null;
 let currentCoords = null;
 let selectedDino = null;
 
-// Gateway map bounds (approximate, will need calibration with real coords)
+// Gateway map bounds (from Vulnona data_1.txt, converted to game units *1000)
+// UE5 coords: X = North-South, Y = East-West, Z = altitude
+// Projection: Game Y → Screen X, Game X → Screen Y (inverted)
 const MAP_BOUNDS = {
-  minX: -400000,
-  maxX: 400000,
-  minY: -400000,
-  maxY: 400000
+  xMin: -607000,
+  xMax: 509000,
+  yMin: -505000,
+  yMax: 607000
 };
 
 // --- TABS ---
@@ -29,6 +31,14 @@ document.querySelectorAll('.tab').forEach(tab => {
 const canvas = document.getElementById('minimap');
 const ctx = canvas.getContext('2d');
 
+const mapImage = new Image();
+let mapLoaded = false;
+mapImage.onload = () => {
+  mapLoaded = true;
+  resizeCanvas();
+};
+mapImage.src = '../../assets/maps/gateway.webp';
+
 function resizeCanvas() {
   const container = canvas.parentElement;
   const size = Math.min(container.clientWidth, 360);
@@ -43,68 +53,44 @@ function drawMap() {
 
   ctx.clearRect(0, 0, w, h);
 
-  // Background grid
-  ctx.strokeStyle = 'rgba(80, 200, 120, 0.1)';
-  ctx.lineWidth = 1;
-  const gridSize = w / 10;
-  for (let i = 0; i <= 10; i++) {
-    ctx.beginPath();
-    ctx.moveTo(i * gridSize, 0);
-    ctx.lineTo(i * gridSize, h);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(0, i * gridSize);
-    ctx.lineTo(w, i * gridSize);
-    ctx.stroke();
+  if (mapLoaded) {
+    ctx.drawImage(mapImage, 0, 0, w, h);
+  } else {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = '#666';
+    ctx.font = '12px Segoe UI';
+    ctx.textAlign = 'center';
+    ctx.fillText('Cargando mapa...', w / 2, h / 2);
   }
-
-  // Center crosshair
-  ctx.strokeStyle = 'rgba(80, 200, 120, 0.2)';
-  ctx.beginPath();
-  ctx.moveTo(w / 2, 0);
-  ctx.lineTo(w / 2, h);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(0, h / 2);
-  ctx.lineTo(w, h / 2);
-  ctx.stroke();
-
-  // Cardinal directions
-  ctx.fillStyle = 'rgba(80, 200, 120, 0.5)';
-  ctx.font = '11px Segoe UI';
-  ctx.textAlign = 'center';
-  ctx.fillText('N', w / 2, 14);
-  ctx.fillText('S', w / 2, h - 4);
-  ctx.textAlign = 'left';
-  ctx.fillText('W', 4, h / 2 + 4);
-  ctx.textAlign = 'right';
-  ctx.fillText('E', w - 4, h / 2 + 4);
 
   // Player position
   if (currentCoords) {
-    const px = ((currentCoords.x - MAP_BOUNDS.minX) / (MAP_BOUNDS.maxX - MAP_BOUNDS.minX)) * w;
-    const py = ((currentCoords.y - MAP_BOUNDS.minY) / (MAP_BOUNDS.maxY - MAP_BOUNDS.minY)) * h;
+    // UE5 axis mapping: Game Y (E-W) → Screen X, Game X (N-S) → Screen Y
+    // No inversion needed: vulnona image has xMin (north) at top already
+    const px = ((currentCoords.y - MAP_BOUNDS.yMin) / (MAP_BOUNDS.yMax - MAP_BOUNDS.yMin)) * w;
+    const py = ((currentCoords.x - MAP_BOUNDS.xMin) / (MAP_BOUNDS.xMax - MAP_BOUNDS.xMin)) * h;
 
-    // Glow effect
-    const gradient = ctx.createRadialGradient(px, py, 0, px, py, 16);
-    gradient.addColorStop(0, 'rgba(80, 200, 120, 0.5)');
+    // Outer glow
+    const gradient = ctx.createRadialGradient(px, py, 0, px, py, 20);
+    gradient.addColorStop(0, 'rgba(80, 200, 120, 0.6)');
     gradient.addColorStop(1, 'rgba(80, 200, 120, 0)');
     ctx.fillStyle = gradient;
     ctx.beginPath();
-    ctx.arc(px, py, 16, 0, Math.PI * 2);
+    ctx.arc(px, py, 20, 0, Math.PI * 2);
     ctx.fill();
 
     // Player dot
     ctx.fillStyle = '#50c878';
     ctx.beginPath();
-    ctx.arc(px, py, 5, 0, Math.PI * 2);
+    ctx.arc(px, py, 6, 0, Math.PI * 2);
     ctx.fill();
 
     // White border
     ctx.strokeStyle = '#fff';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.arc(px, py, 5, 0, Math.PI * 2);
+    ctx.arc(px, py, 6, 0, Math.PI * 2);
     ctx.stroke();
 
     document.getElementById('no-coords').style.display = 'none';
