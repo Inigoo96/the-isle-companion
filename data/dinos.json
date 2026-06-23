@@ -20,7 +20,22 @@
           { "name": "Elder", "minutes": 610 }
         ]
       },
-      "recommendedMutations": []
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Osteophagic", "tags": ["desb"] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Hydro-regenerative", "tags": [] },
+        { "name": "Nocturnal", "tags": [] }
+      ]
     },
     {
       "name": "Deinosuchus",
@@ -42,7 +57,22 @@
           { "name": "Elder", "minutes": 650 }
         ]
       },
-      "recommendedMutations": []
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Hydrodynamic", "tags": [] },
+        { "name": "Submerged Optical Retention", "tags": [] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Reabsorption", "tags": [] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Wader", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Featherweight", "tags": ["situ"] }
+      ]
     },
     {
       "name": "Allosaurus",
@@ -65,10 +95,20 @@
         ]
       },
       "recommendedMutations": [
-        "Thick Hide", "Bone Break", "Bleed", "Enhanced Stamina",
-        "Night Vision", "Healing Factor", "Iron Stomach", "Scent Range",
-        "Pack Mentality", "Tough Scales", "Speed Burst", "Water Efficiency",
-        "Adrenaline", "Deep Breath", "Sharp Claws", "Apex Predator"
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Augmented Tapetum", "tags": ["desb"] },
+        { "name": "Hydro-regenerative", "tags": [] },
+        { "name": "Featherweight", "tags": [] }
       ]
     },
     {
@@ -92,10 +132,20 @@
         ]
       },
       "recommendedMutations": [
-        "Thick Hide", "Bleed", "Night Vision", "Enhanced Stamina",
-        "Speed Burst", "Iron Stomach", "Scent Range", "Healing Factor",
-        "Pack Mentality", "Water Efficiency", "Bone Break", "Tough Scales",
-        "Adrenaline", "Deep Breath", "Bleed Resistance", "Sharp Claws"
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Augmented Tapetum", "tags": ["desb"] },
+        { "name": "Hydro-regenerative", "tags": [] },
+        { "name": "Nocturnal", "tags": [] }
       ]
     },
     {
@@ -119,10 +169,20 @@
         ]
       },
       "recommendedMutations": [
-        "Thick Hide", "Speed Burst", "Iron Stomach", "Night Vision",
-        "Enhanced Stamina", "Bone Break", "Bleed Resistance", "Pack Mentality",
-        "Scent Range", "Water Efficiency", "Healing Factor", "Tough Scales",
-        "Adrenaline", "Deep Breath", "Sharp Claws", "Apex Predator"
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Multichambered Lungs", "tags": ["desb"] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Featherweight", "tags": [] },
+        { "name": "Hydro-regenerative", "tags": [] }
       ]
     },
     {
@@ -145,7 +205,22 @@
           { "name": "Elder", "minutes": 160 }
         ]
       },
-      "recommendedMutations": []
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Featherweight", "tags": [] },
+        { "name": "Multichambered Lungs", "tags": ["desb"] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Augmented Tapetum", "tags": ["desb"] },
+        { "name": "Efficient Digestion", "tags": [] }
+      ]
     },
     {
       "name": "Omniraptor",
@@ -165,7 +240,22 @@
           { "name": "Elder", "minutes": 150 }
         ]
       },
-      "recommendedMutations": []
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Reinforced Tendons", "tags": ["desb"] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Augmented Tapetum", "tags": ["desb"] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Featherweight", "tags": [] }
+      ]
     },
     {
       "name": "Herrerasaurus",
@@ -187,7 +277,22 @@
           { "name": "Elder", "minutes": 140 }
         ]
       },
-      "recommendedMutations": []
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Reinforced Tendons", "tags": ["desb"] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Featherweight", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Augmented Tapetum", "tags": ["desb"] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Hydro-regenerative", "tags": [] }
+      ]
     },
     {
       "name": "Pteranodon",
@@ -208,7 +313,22 @@
           { "name": "Elder", "minutes": 120 }
         ]
       },
-      "recommendedMutations": []
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Reinforced Tendons", "tags": ["desb"] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Submerged Optical Retention", "tags": [] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Reabsorption", "tags": [] },
+        { "name": "Featherweight", "tags": ["situ"] }
+      ]
     },
     {
       "name": "Troodon",
@@ -230,7 +350,22 @@
           { "name": "Elder", "minutes": 70 }
         ]
       },
-      "recommendedMutations": []
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Augmented Tapetum", "tags": ["desb"] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Nocturnal", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Reinforced Tendons", "tags": ["desb"] },
+        { "name": "Featherweight", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] }
+      ]
     }
   ],
   "herbivores": [
@@ -254,7 +389,22 @@
           { "name": "Elder", "minutes": 850 }
         ]
       },
-      "recommendedMutations": []
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Tactile Endurance", "tags": ["s2"] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Xerocole Adaptation", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Barometric Sensitivity", "tags": [] },
+        { "name": "Hydro-regenerative", "tags": ["situ"] },
+        { "name": "Enlarged Meniscus", "tags": ["situ"] }
+      ]
     },
     {
       "name": "Stegosaurus",
@@ -276,10 +426,20 @@
         ]
       },
       "recommendedMutations": [
-        "Thick Hide", "Tough Scales", "Healing Factor", "Enhanced Stamina",
-        "Bleed Resistance", "Bone Break", "Iron Stomach", "Water Efficiency",
-        "Speed Burst", "Pack Mentality", "Scent Range", "Night Vision",
-        "Adrenaline", "Deep Breath", "Fortified", "Apex Herbivore"
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Tactile Endurance", "tags": ["s2"] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Xerocole Adaptation", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Barometric Sensitivity", "tags": [] },
+        { "name": "Hydro-regenerative", "tags": ["situ"] },
+        { "name": "Enlarged Meniscus", "tags": ["situ"] }
       ]
     },
     {
@@ -300,7 +460,22 @@
           { "name": "Elder", "minutes": 190 }
         ]
       },
-      "recommendedMutations": []
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Tactile Endurance", "tags": ["s2"] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Xerocole Adaptation", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Barometric Sensitivity", "tags": [] },
+        { "name": "Enlarged Meniscus", "tags": ["situ"] }
+      ]
     },
     {
       "name": "Maiasaura",
@@ -321,7 +496,22 @@
           { "name": "Elder", "minutes": 150 }
         ]
       },
-      "recommendedMutations": []
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Tactile Endurance", "tags": ["s2"] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Xerocole Adaptation", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Barometric Sensitivity", "tags": [] },
+        { "name": "Hydro-regenerative", "tags": ["situ"] },
+        { "name": "Enlarged Meniscus", "tags": ["situ"] }
+      ]
     },
     {
       "name": "Tenontosaurus",
@@ -343,10 +533,20 @@
         ]
       },
       "recommendedMutations": [
-        "Speed Burst", "Enhanced Stamina", "Thick Hide", "Healing Factor",
-        "Night Vision", "Scent Range", "Water Efficiency", "Iron Stomach",
-        "Bleed Resistance", "Pack Mentality", "Tough Scales", "Deep Breath",
-        "Adrenaline", "Fortified", "Bone Break", "Apex Herbivore"
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Tactile Endurance", "tags": ["s2"] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Xerocole Adaptation", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Barometric Sensitivity", "tags": [] },
+        { "name": "Enlarged Meniscus", "tags": ["situ"] }
       ]
     },
     {
@@ -367,7 +567,22 @@
           { "name": "Elder", "minutes": 160 }
         ]
       },
-      "recommendedMutations": []
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Tactile Endurance", "tags": ["s2"] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Enlarged Meniscus", "tags": [] },
+        { "name": "Xerocole Adaptation", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Barometric Sensitivity", "tags": [] }
+      ]
     },
     {
       "name": "Dryosaurus",
@@ -387,7 +602,22 @@
           { "name": "Elder", "minutes": 110 }
         ]
       },
-      "recommendedMutations": []
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Reinforced Tendons", "tags": ["desb"] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Xerocole Adaptation", "tags": [] },
+        { "name": "Enlarged Meniscus", "tags": [] },
+        { "name": "Featherweight", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Multichambered Lungs", "tags": ["desb"] }
+      ]
     },
     {
       "name": "Hypsilophodon",
@@ -407,7 +637,22 @@
           { "name": "Elder", "minutes": 40 }
         ]
       },
-      "recommendedMutations": []
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Reinforced Tendons", "tags": ["desb"] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Enlarged Meniscus", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Xerocole Adaptation", "tags": [] },
+        { "name": "Featherweight", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Multichambered Lungs", "tags": ["desb"] }
+      ]
     }
   ],
   "omnivores": [
@@ -430,7 +675,22 @@
           { "name": "Elder", "minutes": 120 }
         ]
       },
-      "recommendedMutations": []
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Multichambered Lungs", "tags": ["desb"] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Featherweight", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Enlarged Meniscus", "tags": [] },
+        { "name": "Xerocole Adaptation", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Barometric Sensitivity", "tags": [] }
+      ]
     },
     {
       "name": "Beipiaosaurus",
@@ -450,7 +710,22 @@
           { "name": "Elder", "minutes": 90 }
         ]
       },
-      "recommendedMutations": []
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Hydrodynamic", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Wader", "tags": [] },
+        { "name": "Reabsorption", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Submerged Optical Retention", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Enlarged Meniscus", "tags": ["situ"] }
+      ]
     }
   ]
 }

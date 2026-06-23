@@ -3,6 +3,7 @@
 // ============================================================
 
 let dinoData = null;
+let mutationsData = null;
 let zoneData = null;
 let currentCoords = null;
 let selectedDino = null;
@@ -280,6 +281,15 @@ async function loadDinoData() {
   }
 }
 
+async function loadMutationsData() {
+  try {
+    const resp = await fetch('../../data/mutations.json');
+    mutationsData = await resp.json();
+  } catch (e) {
+    console.error('Failed to load mutations data:', e);
+  }
+}
+
 function populateDinoSelect() {
   const select = document.getElementById('dino-select');
   const allDinos = [...(dinoData.carnivores || []), ...(dinoData.herbivores || []), ...(dinoData.omnivores || [])];
@@ -311,10 +321,34 @@ function renderMutations() {
     return;
   }
 
-  selectedDino.recommendedMutations.forEach((mut, i) => {
+  const muts = selectedDino.recommendedMutations;
+  if (!muts || muts.length === 0) {
+    container.innerHTML = '<div class="hint-box">No mutation data available</div>';
+    return;
+  }
+
+  const TAG_LABELS = { s2: 'Slot 2', desb: 'Unlock', situ: 'Situ' };
+
+  muts.forEach((mut, i) => {
+    const name = mut.name || mut;
+    const tags = mut.tags || [];
+    const info = mutationsData ? mutationsData[name] : null;
+
+    const tagsHtml = tags.map(t =>
+      `<span class="mut-tag mut-tag-${t}">${TAG_LABELS[t] || t}</span>`
+    ).join('');
+    const effectHtml = info ? `<span class="mut-effect">${info.effect}</span>` : '';
+
     const div = document.createElement('div');
     div.className = 'mutation-item';
-    div.innerHTML = `<span class="mutation-number">${i + 1}</span><span class="mutation-name">${mut}</span>`;
+    div.innerHTML = `
+      <span class="mutation-number">${i + 1}</span>
+      <div class="mutation-body">
+        <div class="mutation-name-row">
+          <span class="mutation-name">${name}</span>${tagsHtml}
+        </div>
+        ${effectHtml}
+      </div>`;
     container.appendChild(div);
   });
 }
@@ -623,5 +657,6 @@ document.getElementById('toggle-sanctuaries').addEventListener('change', drawMap
 
 // --- INIT ---
 loadDinoData();
+loadMutationsData();
 loadZoneData();
 renderMutations();
