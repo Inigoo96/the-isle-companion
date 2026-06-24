@@ -86,20 +86,23 @@ El instalador permite elegir la carpeta de instalacion y crea acceso directo en 
 ## Estructura del proyecto
 
 ```
-the-isle-companion/
-├── src/
-│   ├── main.js              # Proceso principal Electron (ventana, clipboard, atajos)
-│   ├── preload.js            # Puente seguro Node.js <-> UI
-│   └── renderer/
-│       ├── index.html         # Interfaz (tabs, mapa, formularios)
-│       ├── styles.css         # Tema oscuro transparente
-│       └── app.js             # Logica UI (mapa canvas, dinos, patrol tracker)
-├── data/
-│   └── dinos.json             # Base de datos de dinosaurios, stats y mutations
-├── assets/
-│   └── maps/                  # Imagenes de mapas (pendiente)
-├── DOCUMENTACION.txt          # Documentacion tecnica detallada
-└── package.json
+the-isle-companion/               ← monorepo
+├── overlay/                      # App Electron (overlay de escritorio)
+│   ├── src/
+│   │   ├── main.js               # Proceso principal (ventana, clipboard, atajos)
+│   │   ├── preload.js            # Puente seguro Node.js <-> UI
+│   │   └── renderer/
+│   │       ├── index.html        # Interfaz (tabs, mapa, formularios)
+│   │       ├── styles.css        # Tema oscuro transparente
+│   │       └── app.js            # Logica UI
+│   └── package.json
+├── backend/                      # API Spring Boot (multi-tenant)
+│   ├── src/main/java/…           # Entidades, repositorios, servicios, endpoints
+│   ├── src/main/resources/
+│   │   ├── db/migration/         # Migraciones Flyway (V1, V2…)
+│   │   └── seed/                 # JSONs para seed de catalogos
+│   └── README.md                 # Documentacion del backend
+└── README.md
 ```
 
 ## Dinosaurios disponibles (v0.2.0)

@@ -22,26 +22,31 @@ CREATE DATABASE isle_companion;
 
 | Variable | Por defecto | Descripción |
 |---|---|---|
-| `DB_URL` | `jdbc:postgresql://localhost:5432/isle_companion` | URL de conexión |
+| `DB_URL` | `jdbc:postgresql://localhost:5432/isle_companion?stringtype=unspecified` | URL de conexión |
 | `DB_USER` | `postgres` | Usuario de PostgreSQL |
 | `DB_PASSWORD` | `admin` | Contraseña |
 
-Los valores por defecto funcionan en local sin configurar nada extra.
+Los valores por defecto funcionan en local sin configurar nada extra. El parámetro `stringtype=unspecified` es necesario para que el driver JDBC de PostgreSQL haga cast implícito de strings a tipos enum nativos.
 
 ### 3. Levantar
 
 ```bash
 cd backend
-
-# Con Maven instalado:
 mvn spring-boot:run
-
-# Sin Maven (usa el wrapper incluido):
-./mvnw spring-boot:run        # Linux/Mac
-mvnw.cmd spring-boot:run      # Windows
 ```
 
 El servidor arranca en `http://localhost:8080`.
+
+### 4. Seed automático
+
+Al arrancar por primera vez, `CatalogSeeder` carga automáticamente los catálogos desde `src/main/resources/seed/`:
+
+- `mutations.json` → tabla `mutations` (42 registros)
+- `dinos.json` → tablas `dinos`, `dino_stats`, `dino_growth_stages`, `dino_mutations` (20 dinos)
+- `zones.json` → tabla `zones` (72 zonas: patrol, migration, sanctuary)
+- Hardcodeado → tabla `prime_tasks` (10 tareas)
+
+El seeder comprueba si la tabla ya tiene datos antes de insertar, por lo que es seguro reiniciar el servidor.
 
 ## Endpoints disponibles (Nivel 1)
 
@@ -63,6 +68,7 @@ Las migraciones están en `src/main/resources/db/migration/`. Flyway las aplica 
 
 ## Próximos pasos
 
-- Autenticación Steam OpenID (Nivel 1 — cuentas de jugador)
-- Panel admin React + Vite
-- RCON / datos en vivo (Nivel 2)
+- [x] Seed automático de catálogos (mutations, dinos, zones, prime_tasks)
+- [ ] Autenticación Steam OpenID (cuentas de jugador)
+- [ ] Panel admin React + Vite
+- [ ] RCON / datos en vivo (Nivel 2)
