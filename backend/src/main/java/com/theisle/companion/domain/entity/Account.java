@@ -1,5 +1,6 @@
 package com.theisle.companion.domain.entity;
 
+import com.theisle.companion.domain.enums.AccountStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -31,6 +32,10 @@ public class Account {
 
     private OffsetDateTime lastLoginAt;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private AccountStatus status = AccountStatus.PENDING;
+
     public UUID getId() { return id; }
     public String getSteamId() { return steamId; }
     public String getDisplayName() { return displayName; }
@@ -46,4 +51,6 @@ public class Account {
     public void setPrefs(String prefs) { this.prefs = prefs; }
     public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
     public void setLastLoginAt(OffsetDateTime lastLoginAt) { this.lastLoginAt = lastLoginAt; }
+    public AccountStatus getStatus() { return status; }
+    public void setStatus(AccountStatus status) { this.status = status; }
 }

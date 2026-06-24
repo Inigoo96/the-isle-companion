@@ -6,6 +6,7 @@ import com.theisle.companion.domain.entity.Account;
 import com.theisle.companion.domain.entity.Dino;
 import com.theisle.companion.domain.entity.Server;
 import com.theisle.companion.domain.entity.ServerAllowedDino;
+import com.theisle.companion.domain.enums.AccountStatus;
 import com.theisle.companion.domain.repository.AccountRepository;
 import com.theisle.companion.domain.repository.DinoRepository;
 import com.theisle.companion.domain.repository.ServerAllowedDinoRepository;
@@ -16,6 +17,8 @@ import com.theisle.companion.dto.ServerSummaryDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +36,7 @@ public class ServerService {
     private final AccountRepository accountRepo;
     private final DinoRepository dinoRepo;
     private final ObjectMapper objectMapper;
+    private final String superAdminSteamId;
 
     @PersistenceContext
     private EntityManager em;
@@ -41,12 +45,23 @@ public class ServerService {
                          ServerAllowedDinoRepository allowedDinoRepo,
                          AccountRepository accountRepo,
                          DinoRepository dinoRepo,
-                         ObjectMapper objectMapper) {
-        this.serverRepo      = serverRepo;
-        this.allowedDinoRepo = allowedDinoRepo;
-        this.accountRepo     = accountRepo;
-        this.dinoRepo        = dinoRepo;
-        this.objectMapper    = objectMapper;
+                         ObjectMapper objectMapper,
+                         @Value("${app.super-admin-steam-id}") String superAdminSteamId) {
+        this.serverRepo        = serverRepo;
+        this.allowedDinoRepo   = allowedDinoRepo;
+        this.accountRepo       = accountRepo;
+        this.dinoRepo          = dinoRepo;
+        this.objectMapper      = objectMapper;
+        this.superAdminSteamId = superAdminSteamId;
+    }
+
+    private void requireActive(String steamId) {
+        if (superAdminSteamId.equals(steamId)) return;
+        accountRepo.findBySteamId(steamId).ifPresent(a -> {
+            if (a.getStatus() != AccountStatus.ACTIVE) {
+                throw new AccessDeniedException("Account not approved to manage servers");
+            }
+        });
     }
 
     public ServerDto getBySlug(String slug) {
@@ -69,6 +84,7 @@ public class ServerService {
 
     @Transactional
     public ServerDto create(String steamId, ServerRequest req) {
+        requireActive(steamId);
         if (serverRepo.existsBySlug(req.slug())) {
             throw new IllegalArgumentException("Slug already in use: " + req.slug());
         }
@@ -94,6 +110,7 @@ public class ServerService {
 
     @Transactional
     public ServerDto update(String steamId, String slug, ServerRequest req) {
+        requireActive(steamId);
         Server server = serverRepo.findBySlugAndOwnerWithDinos(slug, steamId)
                 .orElseThrow(() -> new EntityNotFoundException("Server not found: " + slug));
 
@@ -108,6 +125,7 @@ public class ServerService {
 
     @Transactional
     public void delete(String steamId, String slug) {
+        requireActive(steamId);
         Server server = serverRepo.findBySlugAndOwnerWithDinos(slug, steamId)
                 .orElseThrow(() -> new EntityNotFoundException("Server not found: " + slug));
         allowedDinoRepo.deleteByServerId(server.getId());

@@ -2,6 +2,7 @@ package com.theisle.companion.controller;
 
 import com.theisle.companion.domain.entity.Account;
 import com.theisle.companion.domain.repository.AccountRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +16,12 @@ import java.util.Map;
 public class AccountController {
 
     private final AccountRepository accountRepo;
+    private final String superAdminSteamId;
 
-    public AccountController(AccountRepository accountRepo) {
+    public AccountController(AccountRepository accountRepo,
+                             @Value("${app.super-admin-steam-id}") String superAdminSteamId) {
         this.accountRepo = accountRepo;
+        this.superAdminSteamId = superAdminSteamId;
     }
 
     @GetMapping
@@ -29,7 +33,9 @@ public class AccountController {
         return ResponseEntity.ok(Map.of(
                 "steamId",     account.getSteamId(),
                 "displayName", account.getDisplayName() != null ? account.getDisplayName() : "",
-                "avatarUrl",   account.getAvatarUrl()   != null ? account.getAvatarUrl()   : ""
+                "avatarUrl",   account.getAvatarUrl()   != null ? account.getAvatarUrl()   : "",
+                "status",      account.getStatus().name(),
+                "superAdmin",  superAdminSteamId.equals(account.getSteamId())
         ));
     }
 }

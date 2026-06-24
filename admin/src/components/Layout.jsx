@@ -13,8 +13,9 @@ export default function Layout({ children }) {
   }
 
   const links = [
-    { to: '/',           label: 'Dashboard' },
-    { to: '/servers/new', label: '+ New Server' },
+    { to: '/',             label: 'Dashboard' },
+    { to: '/servers/new',  label: '+ New Server' },
+    ...(user?.superAdmin ? [{ to: '/super-admin', label: 'Accounts' }] : []),
   ];
 
   return (
