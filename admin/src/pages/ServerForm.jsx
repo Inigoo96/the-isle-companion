@@ -100,7 +100,7 @@ export default function ServerForm() {
 
         <div className={styles.field} style={{ maxWidth: 200 }}>
           <label>Growth Multiplier</label>
-          <input type="number" min="0.1" max="100" step="0.1"
+          <input type="number" min="0.05" max="100" step="0.05"
             value={form.growthMultiplier}
             onChange={e => set('growthMultiplier', e.target.value)} required />
         </div>
