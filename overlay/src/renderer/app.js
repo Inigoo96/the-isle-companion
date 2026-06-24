@@ -665,8 +665,39 @@ document.getElementById('toggle-patrol').addEventListener('change', drawMap);
 document.getElementById('toggle-migration').addEventListener('change', drawMap);
 document.getElementById('toggle-sanctuaries').addEventListener('change', drawMap);
 
+// --- STEAM AUTH ---
+const BACKEND = 'http://localhost:8080';
+
+function getToken()        { return localStorage.getItem('isle_token'); }
+function getDisplayName()  { return localStorage.getItem('isle_display_name'); }
+
+function updateAuthUI() {
+  const name = getDisplayName();
+  const loginBtn  = document.getElementById('steam-login-btn');
+  const steamUser = document.getElementById('steam-user');
+  if (name) {
+    loginBtn.classList.add('hidden');
+    steamUser.textContent = name;
+    steamUser.classList.remove('hidden');
+  } else {
+    loginBtn.classList.remove('hidden');
+    steamUser.classList.add('hidden');
+  }
+}
+
+document.getElementById('steam-login-btn').addEventListener('click', () => {
+  window.isleAPI.steamLogin();
+});
+
+window.isleAPI.onAuthSuccess(({ token, displayName }) => {
+  localStorage.setItem('isle_token', token);
+  localStorage.setItem('isle_display_name', displayName);
+  updateAuthUI();
+});
+
 // --- INIT ---
 loadDinoData();
 loadMutationsData();
 loadZoneData();
 renderMutations();
+updateAuthUI();

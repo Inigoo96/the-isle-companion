@@ -125,6 +125,27 @@ body {
   display: none;
 }
 
+.steam-btn {
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: #1b2838;
+  color: #c7d5e0;
+  border: 1px solid #4c6b8a;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+.steam-btn:hover { background: #2a475e; }
+.steam-btn.hidden { display: none; }
+
+.steam-user {
+  font-size: 10px;
+  color: #4fc3f7;
+  font-weight: 600;
+}
+.steam-user.hidden { display: none; }
+
 /* ============================================================
    TABS
    ============================================================ */

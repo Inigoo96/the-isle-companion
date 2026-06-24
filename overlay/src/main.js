@@ -1,4 +1,4 @@
-const { app, BrowserWindow, globalShortcut, ipcMain, clipboard } = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain, clipboard, shell } = require('electron');
 const path = require('path');
 
 let overlayWindow = null;
@@ -62,6 +62,31 @@ function startClipboardWatch() {
     }
   }, 500);
 }
+
+const BACKEND = 'http://localhost:8080';
+
+ipcMain.handle('open-steam-login', () => {
+  const authWin = new BrowserWindow({
+    width: 800,
+    height: 600,
+    title: 'Login with Steam',
+    webPreferences: { contextIsolation: true, nodeIntegration: false }
+  });
+
+  authWin.loadURL(`${BACKEND}/auth/steam`);
+
+  authWin.webContents.on('did-navigate', (_e, url) => {
+    const parsed = new URL(url);
+    if (parsed.pathname === '/auth/done' && parsed.searchParams.has('token')) {
+      const token       = parsed.searchParams.get('token');
+      const displayName = parsed.searchParams.get('displayName') || '';
+      if (overlayWindow) {
+        overlayWindow.webContents.send('auth-success', { token, displayName });
+      }
+      authWin.close();
+    }
+  });
+});
 
 app.whenReady().then(() => {
   createOverlay();

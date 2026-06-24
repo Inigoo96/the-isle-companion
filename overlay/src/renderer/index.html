@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self'; font-src 'self'; connect-src 'self'">
+        content="default-src 'self'; img-src 'self' data: https:; script-src 'self'; style-src 'self'; font-src 'self'; connect-src 'self' http://localhost:8080">
   <title>The Isle Companion</title>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -15,6 +15,8 @@
       <div class="controls">
         <span id="click-through-badge" class="badge hidden">CLICK-THROUGH</span>
         <span class="hint">F9 hide | F10 click-through</span>
+        <button id="steam-login-btn" class="steam-btn" title="Login with Steam">Steam</button>
+        <span id="steam-user" class="steam-user hidden"></span>
       </div>
     </div>
 

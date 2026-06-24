@@ -38,4 +38,12 @@ public class Account {
     public String getPrefs() { return prefs; }
     public OffsetDateTime getCreatedAt() { return createdAt; }
     public OffsetDateTime getLastLoginAt() { return lastLoginAt; }
+
+    public void setId(UUID id) { this.id = id; }
+    public void setSteamId(String steamId) { this.steamId = steamId; }
+    public void setDisplayName(String displayName) { this.displayName = displayName; }
+    public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
+    public void setPrefs(String prefs) { this.prefs = prefs; }
+    public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
+    public void setLastLoginAt(OffsetDateTime lastLoginAt) { this.lastLoginAt = lastLoginAt; }
 }
