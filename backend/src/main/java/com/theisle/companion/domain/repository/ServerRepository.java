@@ -37,4 +37,6 @@ public interface ServerRepository extends JpaRepository<Server, UUID> {
     Optional<Server> findBySlugAndOwnerWithDinos(@Param("slug") String slug, @Param("steamId") String steamId);
 
     boolean existsBySlug(String slug);
+
+    List<Server> findAllByOrderByNameAsc();
 }

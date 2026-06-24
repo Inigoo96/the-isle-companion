@@ -12,6 +12,7 @@ import com.theisle.companion.domain.repository.ServerAllowedDinoRepository;
 import com.theisle.companion.domain.repository.ServerRepository;
 import com.theisle.companion.dto.ServerDto;
 import com.theisle.companion.dto.ServerRequest;
+import com.theisle.companion.dto.ServerSummaryDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
@@ -52,6 +53,12 @@ public class ServerService {
         Server server = serverRepo.findBySlugWithDinos(slug)
                 .orElseThrow(() -> new EntityNotFoundException("Server not found: " + slug));
         return toDto(server);
+    }
+
+    public List<ServerSummaryDto> listAll() {
+        return serverRepo.findAllByOrderByNameAsc().stream()
+                .map(s -> new ServerSummaryDto(s.getSlug(), s.getName(), s.getGrowthMultiplier()))
+                .toList();
     }
 
     public List<ServerDto> listByOwner(String steamId) {

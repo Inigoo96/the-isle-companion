@@ -62,7 +62,8 @@ El seeder comprueba si la tabla ya tiene datos antes de insertar, por lo que es 
 | GET | `/mutations` | Catálogo de mutaciones |
 | GET | `/zones` | Zonas del mapa por categoría |
 | GET | `/prime-tasks` | Tareas prime ordenadas |
-| GET | `/servers/{slug}` | Config pública de un servidor |
+| GET | `/servers` | Lista de todos los servidores (slug, name, growthMultiplier) |
+| GET | `/servers/{slug}` | Config completa de un servidor (incluye dinos permitidos) |
 | GET | `/actuator/health` | Estado del backend |
 
 ### Autenticación Steam OpenID

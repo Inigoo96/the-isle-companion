@@ -742,7 +742,6 @@ body {
   margin-bottom: 8px;
 }
 
-#growth-multiplier-row,
 #growth-percent-row {
   display: flex;
   align-items: center;
@@ -751,16 +750,27 @@ body {
   color: var(--text-dim);
 }
 
-#growth-multiplier,
 #growth-percent {
-  width: 50px;
-  padding: 4px 6px;
+  width: 52px;
+  padding: 6px 6px;
   background: var(--bg-surface-2);
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: 4px;
-  font-size: 11px;
+  font-size: 12px;
   text-align: center;
+  font-family: 'Consolas', monospace;
+}
+
+#growth-reset-btn {
+  background: rgba(210, 80, 40, 0.12);
+  color: #e06040;
+  border-color: rgba(210, 80, 40, 0.35);
+}
+
+#growth-reset-btn:hover {
+  background: rgba(210, 80, 40, 0.25);
+  box-shadow: 0 0 6px rgba(210, 80, 40, 0.4);
 }
 
 #growth-progress {
@@ -919,3 +929,52 @@ body {
   color: var(--text);
   border-color: var(--border-bright);
 }
+
+/* ============================================================
+   SERVER SELECTOR BAR
+   ============================================================ */
+#server-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  background: rgba(var(--accent-rgb), 0.03);
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.server-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+#server-select {
+  flex: 1;
+  padding: 3px 6px;
+  background: var(--bg-surface-2);
+  color: var(--text);
+  border: 1px solid var(--border-dim);
+  border-radius: 4px;
+  font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+#server-select option { background: #0e141c; }
+#server-select:focus { outline: none; border-color: var(--border); }
+
+#server-multiplier {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.12);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 5px;
+  white-space: nowrap;
+  text-shadow: 0 0 6px var(--accent-glow);
+}
+#server-multiplier.hidden { display: none; }

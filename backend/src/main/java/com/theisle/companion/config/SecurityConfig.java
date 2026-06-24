@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .requestMatchers("/actuator/health").permitAll()
                 // Server reads are public; /mine and writes require JWT
                 .requestMatchers(HttpMethod.GET, "/servers/mine").authenticated()
-                .requestMatchers(HttpMethod.GET, "/servers/*").permitAll()
+                .requestMatchers(HttpMethod.GET, "/servers", "/servers/*").permitAll()
                 // Everything else requires JWT
                 .anyRequest().authenticated()
             )

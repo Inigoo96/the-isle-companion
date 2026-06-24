@@ -11,6 +11,8 @@ let growthTimerInterval = null;
 let growthStartTime = null;
 let growthStartPercent = 0;
 let growthMultiplier = 1;
+let allDinos = [];
+let currentServer = null;
 
 // Gateway map bounds (from Vulnona data_1.txt, converted to game units *1000)
 // UE5 coords: X = North-South, Y = East-West, Z = altitude
@@ -292,15 +294,8 @@ async function loadMutationsData() {
 
 function populateDinoSelect() {
   const select = document.getElementById('dino-select');
-  const allDinos = [...(dinoData.carnivores || []), ...(dinoData.herbivores || []), ...(dinoData.omnivores || [])];
+  allDinos = [...(dinoData.carnivores || []), ...(dinoData.herbivores || []), ...(dinoData.omnivores || [])];
   allDinos.sort((a, b) => a.name.localeCompare(b.name));
-
-  allDinos.forEach(dino => {
-    const opt = document.createElement('option');
-    opt.value = dino.name;
-    opt.textContent = dino.name;
-    select.appendChild(opt);
-  });
 
   select.addEventListener('change', () => {
     const name = select.value;
@@ -310,6 +305,88 @@ function populateDinoSelect() {
     renderStats();
     renderGrowthTimer();
   });
+
+  renderDinoOptions();
+  window.tutorial?.start();
+}
+
+function renderDinoOptions() {
+  const select = document.getElementById('dino-select');
+  const prevValue = select.value;
+
+  let visible = allDinos;
+  if (currentServer?.allowedDinos?.length > 0) {
+    const allowedNames = new Set(currentServer.allowedDinos.map(d => d.name));
+    visible = allDinos.filter(d => allowedNames.has(d.name));
+  }
+
+  select.innerHTML = '<option value="">-- Select dinosaur --</option>';
+  visible.forEach(dino => {
+    const opt = document.createElement('option');
+    opt.value = dino.name;
+    opt.textContent = dino.name;
+    select.appendChild(opt);
+  });
+
+  if (prevValue && visible.find(d => d.name === prevValue)) {
+    select.value = prevValue;
+  } else if (selectedDino && !visible.find(d => d.name === selectedDino.name)) {
+    selectedDino = null;
+    updateDinoIndicator();
+    renderMutations();
+    renderStats();
+    renderGrowthTimer();
+  }
+}
+
+// --- SERVER SELECTOR ---
+async function loadServers() {
+  try {
+    const resp = await fetch(`${BACKEND}/servers`);
+    if (!resp.ok) return;
+    const servers = await resp.json();
+    const select = document.getElementById('server-select');
+    servers.forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s.slug;
+      opt.textContent = s.name;
+      select.appendChild(opt);
+    });
+    const saved = localStorage.getItem('isle_server_slug');
+    if (saved && servers.find(s => s.slug === saved)) {
+      select.value = saved;
+      await applyServer(saved);
+    }
+  } catch (e) { /* backend not running — overlay works without it */ }
+}
+
+async function applyServer(slug) {
+  if (!slug) {
+    currentServer = null;
+    localStorage.removeItem('isle_server_slug');
+    updateServerBar(null);
+    if (allDinos.length > 0) renderDinoOptions();
+    return;
+  }
+  try {
+    const resp = await fetch(`${BACKEND}/servers/${slug}`);
+    if (!resp.ok) return;
+    currentServer = await resp.json();
+    localStorage.setItem('isle_server_slug', slug);
+    updateServerBar(currentServer);
+    if (allDinos.length > 0) renderDinoOptions();
+    if (!growthStartTime && selectedDino) renderGrowthTimer();
+  } catch (e) { /* silent fail */ }
+}
+
+function updateServerBar(server) {
+  const mult = document.getElementById('server-multiplier');
+  if (server) {
+    mult.textContent = `×${server.growthMultiplier}`;
+    mult.classList.remove('hidden');
+  } else {
+    mult.classList.add('hidden');
+  }
 }
 
 function renderMutations() {
@@ -539,7 +616,7 @@ function renderGrowthTimer() {
 
   container.classList.remove('hidden');
   const gd = selectedDino.growthData;
-  const multiplier = parseFloat(document.getElementById('growth-multiplier').value) || 1;
+  const multiplier = parseFloat(currentServer?.growthMultiplier) || 1;
   const percent = parseFloat(document.getElementById('growth-percent').value) || 0;
   const currentStageIdx = getStageAtPercent(percent);
 
@@ -569,14 +646,13 @@ function renderGrowthTimer() {
 function startGrowthTimer() {
   if (!selectedDino || !selectedDino.growthData) return;
 
-  growthMultiplier = parseFloat(document.getElementById('growth-multiplier').value) || 1;
+  growthMultiplier = parseFloat(currentServer?.growthMultiplier) || 1;
   growthStartPercent = parseFloat(document.getElementById('growth-percent').value) || 0;
   growthStartTime = Date.now();
 
   document.getElementById('growth-progress').classList.remove('hidden');
   document.getElementById('growth-start-btn').classList.add('hidden');
   document.getElementById('growth-reset-btn').classList.remove('hidden');
-  document.getElementById('growth-multiplier').disabled = true;
   document.getElementById('growth-percent').disabled = true;
 
   growthTimerInterval = setInterval(updateGrowthDisplay, 1000);
@@ -589,9 +665,7 @@ function stopGrowthTimer() {
     growthTimerInterval = null;
   }
   growthStartTime = null;
-  const multiplierInput = document.getElementById('growth-multiplier');
   const percentInput = document.getElementById('growth-percent');
-  if (multiplierInput) multiplierInput.disabled = false;
   if (percentInput) percentInput.disabled = false;
 }
 
@@ -643,9 +717,6 @@ function updateGrowthDisplay() {
 
 document.getElementById('growth-start-btn').addEventListener('click', startGrowthTimer);
 document.getElementById('growth-reset-btn').addEventListener('click', resetGrowthTimer);
-document.getElementById('growth-multiplier').addEventListener('change', () => {
-  if (!growthStartTime) renderGrowthTimer();
-});
 document.getElementById('growth-percent').addEventListener('input', () => {
   if (!growthStartTime) renderGrowthTimer();
 });
@@ -695,9 +766,26 @@ window.isleAPI.onAuthSuccess(({ token, displayName }) => {
   updateAuthUI();
 });
 
+document.getElementById('server-select').addEventListener('change', e => {
+  applyServer(e.target.value);
+});
+
+async function refreshProfile() {
+  const token = getToken();
+  if (!token) return;
+  try {
+    const resp = await fetch(`${BACKEND}/me`, { headers: { Authorization: `Bearer ${token}` } });
+    if (!resp.ok) return;
+    const { displayName } = await resp.json();
+    if (displayName) { localStorage.setItem('isle_display_name', displayName); updateAuthUI(); }
+  } catch (e) { /* silent */ }
+}
+
 // --- INIT ---
 loadDinoData();
 loadMutationsData();
 loadZoneData();
+loadServers();
 renderMutations();
 updateAuthUI();
+refreshProfile();

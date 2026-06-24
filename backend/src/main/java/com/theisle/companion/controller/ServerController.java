@@ -2,6 +2,7 @@ package com.theisle.companion.controller;
 
 import com.theisle.companion.dto.ServerDto;
 import com.theisle.companion.dto.ServerRequest;
+import com.theisle.companion.dto.ServerSummaryDto;
 import com.theisle.companion.service.ServerService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,11 @@ public class ServerController {
 
     public ServerController(ServerService service) {
         this.service = service;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ServerSummaryDto>> listAll() {
+        return ResponseEntity.ok(service.listAll());
     }
 
     @GetMapping("/{slug}")

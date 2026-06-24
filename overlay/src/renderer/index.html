@@ -20,6 +20,15 @@
       </div>
     </div>
 
+    <!-- Server selector -->
+    <div id="server-bar">
+      <span class="server-label">Server</span>
+      <select id="server-select">
+        <option value="">— None —</option>
+      </select>
+      <span id="server-multiplier" class="hidden"></span>
+    </div>
+
     <!-- Tab navigation -->
     <div id="tabs">
       <button class="tab active" data-tab="map">Map</button>
@@ -187,14 +196,9 @@
         </div>
         <div id="growth-stages"></div>
         <div id="growth-controls">
-          <div id="growth-multiplier-row">
-            <label for="growth-multiplier">Growth Rate:</label>
-            <input type="number" id="growth-multiplier" value="1" min="1" max="5" step="0.05">
-            <span>x</span>
-          </div>
           <div id="growth-percent-row">
             <label for="growth-percent">Growth:</label>
-            <input type="number" id="growth-percent" value="0" min="0" max="99" step="1">
+            <input type="number" id="growth-percent" value="25" min="0" max="99" step="1">
             <span>%</span>
           </div>
           <button id="growth-start-btn" class="btn">Start</button>

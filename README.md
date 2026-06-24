@@ -17,8 +17,11 @@ Guia de las 16 mutaciones recomendadas para cada dinosaurio, ordenadas de la 1a 
 ### Patrol Zone Tracker
 Checklist para llevar el seguimiento de las zonas completadas: MZ, Sanctuaries, Perfect Diet y Patrol Zones. Barra de progreso visual.
 
-### Dino Stats y HP Tracker
-Stats base de cada dinosaurio (HP, damage, speed, stamina) y un slider manual de HP con barra de color que cambia segun el nivel de vida.
+### Dino Stats y Growth Timer
+Stats base de cada dinosaurio (HP, damage, speed, stamina) y calculadora de crecimiento con countdown por stage. El multiplicador de crecimiento se toma automaticamente del servidor seleccionado.
+
+### Selector de servidor
+Dropdown en el overlay que carga los servidores disponibles desde el backend. Al seleccionar uno, el multiplicador de crecimiento se aplica automaticamente a la calculadora y el selector de dino se filtra para mostrar solo las especies permitidas. La seleccion persiste entre sesiones via localStorage.
 
 ## Requisitos
 
@@ -138,6 +141,8 @@ the-isle-companion/               ← monorepo
 - [x] Backend Spring Boot multi-tenant con seed automatico de catalogos
 - [x] Autenticacion Steam OpenID 2.0 + JWT (overlay y admin panel)
 - [x] Panel admin React + Vite: crear, editar y eliminar servidores
+- [x] Selector de servidor en el overlay (multiplicador automatico + filtro de dinos permitidos)
+- [x] Display name de Steam en lugar del Steam ID (actualizado automaticamente al arrancar)
 
 ### Pendiente — Correccion de datos de dinosaurios
 > **IMPORTANTE:** Los datos actuales de dinos.json necesitan revision. Las fuentes online (XGamingServer, Isle Helper, evrimaquickguide) tienen datos contradictorios entre si. Hay que verificar con datos reales del juego:
