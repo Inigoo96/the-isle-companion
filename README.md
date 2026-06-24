@@ -102,12 +102,12 @@ the-isle-companion/               ← monorepo
 ├── backend/                      # API Spring Boot (multi-tenant)
 │   ├── src/main/java/…           # Entidades, repos, servicios, controladores
 │   ├── src/main/resources/
-│   │   ├── db/migration/         # Migraciones Flyway (V1, V2)
+│   │   ├── db/migration/         # Migraciones Flyway (V1, V2, V3)
 │   │   └── seed/                 # JSONs para seed de catalogos
 │   └── README.md
 ├── admin/                        # Panel de administracion React + Vite
 │   ├── src/
-│   │   ├── pages/                # Login, Dashboard, ServerForm, AuthCallback
+│   │   ├── pages/                # Login, Dashboard, ServerForm, AuthCallback, SuperAdmin, Pending
 │   │   ├── components/           # Layout
 │   │   ├── api.js                # Fetch wrapper con Bearer token
 │   │   └── auth.js               # Helpers de sesion (localStorage)
@@ -143,6 +143,7 @@ the-isle-companion/               ← monorepo
 - [x] Panel admin React + Vite: crear, editar y eliminar servidores
 - [x] Selector de servidor en el overlay (multiplicador automatico + filtro de dinos permitidos)
 - [x] Display name de Steam en lugar del Steam ID (actualizado automaticamente al arrancar)
+- [x] Sistema super-admin: gestion de cuentas con estados PENDING/ACTIVE/BANNED, acceso restringido por Steam ID
 
 ### Pendiente — Correccion de datos de dinosaurios
 > **IMPORTANTE:** Los datos actuales de dinos.json necesitan revision. Las fuentes online (XGamingServer, Isle Helper, evrimaquickguide) tienen datos contradictorios entre si. Hay que verificar con datos reales del juego:

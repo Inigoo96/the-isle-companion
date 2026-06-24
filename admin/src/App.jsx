@@ -11,7 +11,7 @@ import SuperAdmin from './pages/SuperAdmin';
 function Guard({ children, requireSuperAdmin = false }) {
   if (!isAuthenticated()) return <Navigate to="/login" replace />;
   const user = getUser();
-  if (user?.status === 'PENDING' || user?.status === 'BANNED') {
+  if (!user?.superAdmin && (user?.status === 'PENDING' || user?.status === 'BANNED')) {
     return <Navigate to="/pending" replace />;
   }
   if (requireSuperAdmin && !user?.superAdmin) return <Navigate to="/" replace />;

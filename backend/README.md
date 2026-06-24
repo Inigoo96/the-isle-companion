@@ -29,6 +29,7 @@ CREATE DATABASE isle_companion;
 | `JWT_EXPIRATION_DAYS` | `30` | Duración del token JWT |
 | `STEAM_API_KEY` | *(vacío)* | API key de Steam — necesaria para resolver nombre y avatar. Obtener en https://steamcommunity.com/dev/apikey |
 | `APP_BASE_URL` | `http://localhost:8080` | URL pública del backend (usada en el callback de Steam OpenID) |
+| `SUPER_ADMIN_STEAM_ID` | `76561199415486620` | Steam ID del super-administrador de la plataforma |
 
 El parámetro `stringtype=unspecified` en `DB_URL` es necesario para que el driver JDBC haga cast implícito de strings a tipos enum nativos de PostgreSQL.
 
@@ -82,11 +83,23 @@ El parámetro `source` controla el destino tras el login:
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| GET | `/me` | Perfil del usuario autenticado |
+| GET | `/me` | Perfil del usuario autenticado (`steamId`, `displayName`, `avatarUrl`, `status`, `superAdmin`) |
 | GET | `/servers/mine` | Servidores del admin autenticado |
-| POST | `/servers` | Crear servidor |
-| PUT | `/servers/{slug}` | Actualizar servidor (solo el propietario) |
-| DELETE | `/servers/{slug}` | Eliminar servidor (solo el propietario) |
+| POST | `/servers` | Crear servidor (requiere status `ACTIVE`) |
+| PUT | `/servers/{slug}` | Actualizar servidor (requiere status `ACTIVE` + ser propietario) |
+| DELETE | `/servers/{slug}` | Eliminar servidor (requiere status `ACTIVE` + ser propietario) |
+
+### Endpoints de super-admin (requieren JWT del `SUPER_ADMIN_STEAM_ID`)
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| GET | `/admin/accounts` | Lista todos los admins registrados con sus servers y estadísticas |
+| PUT | `/admin/accounts/{steamId}/status` | Cambia el estado de una cuenta (`PENDING` → `ACTIVE` → `BANNED`) |
+
+Body del PUT:
+```json
+{ "status": "ACTIVE" }
+```
 
 ### Body de creación/actualización de servidor
 
@@ -115,6 +128,7 @@ Las migraciones están en `src/main/resources/db/migration/`. Flyway las aplica 
 
 - `V1__initial_schema.sql` — esquema base (accounts, servers, dinos, mutations, zones, prime_tasks)
 - `V2__add_zones.sql` — tabla de zonas del mapa
+- `V3__account_status.sql` — columna `status` en `accounts` (`PENDING`/`ACTIVE`/`BANNED`)
 
 ## Próximos pasos
 
@@ -122,4 +136,7 @@ Las migraciones están en `src/main/resources/db/migration/`. Flyway las aplica 
 - [x] Autenticación Steam OpenID 2.0 + JWT
 - [x] Endpoints de servidor (CRUD multi-tenant)
 - [x] Panel admin React + Vite
+- [x] Sistema de super-admin: gestión de cuentas, estados PENDING/ACTIVE/BANNED
+- [ ] Deploy del admin panel en GitHub Pages con CI/CD
+- [ ] Sistema de notificaciones Discord webhook
 - [ ] RCON / datos en vivo (Nivel 2)
