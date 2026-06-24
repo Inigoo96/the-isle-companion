@@ -2,24 +2,24 @@
    THEME TOKENS — single source of truth
    ============================================================ */
 :root {
-  --accent:        #00d4ff;
-  --accent-rgb:    0, 212, 255;
-  --accent-dim:    #0a7c92;
-  --accent-glow:   rgba(0, 212, 255, 0.40);
+  --accent:        #4B75FF;
+  --accent-rgb:    75, 117, 255;
+  --accent-dim:    #2952c8;
+  --accent-glow:   rgba(75, 117, 255, 0.40);
 
-  --bg:            rgba(10, 14, 20, 0.92);
-  --bg-panel:      rgba(14, 20, 28, 0.96);
-  --bg-surface:    rgba(22, 30, 42, 0.75);
-  --bg-surface-2:  rgba(16, 22, 32, 0.90);
+  --bg:            rgba(8, 10, 22, 0.92);
+  --bg-panel:      rgba(10, 14, 26, 0.96);
+  --bg-surface:    rgba(18, 22, 48, 0.75);
+  --bg-surface-2:  rgba(12, 16, 36, 0.90);
 
   --border:        rgba(var(--accent-rgb), 0.25);
   --border-dim:    rgba(var(--accent-rgb), 0.12);
   --border-bright: rgba(var(--accent-rgb), 0.45);
 
-  --text:          #e6f6ff;
-  --text-mid:      #c0d4de;
-  --text-dim:      #7d93a3;
-  --text-muted:    #445566;
+  --text:          #eef0ff;
+  --text-mid:      #b8c4ea;
+  --text-dim:      #7888b8;
+  --text-muted:    #3c4870;
 }
 
 /* ============================================================
@@ -56,13 +56,18 @@
   box-sizing: border-box;
 }
 
+/* Escalado: a 400px (defecto) = 13px base; crece/decrece con el ancho del overlay */
+html {
+  font-size: clamp(11px, 3.25vw, 18px);
+}
+
 body {
   font-family: 'Rajdhani', 'Segoe UI', sans-serif;
   background: transparent;
   color: var(--text);
   user-select: none;
   overflow: hidden;
-  font-size: 13px;
+  font-size: 1rem;
 }
 
 /* ============================================================
@@ -92,7 +97,7 @@ body {
 }
 
 #titlebar .title {
-  font-size: 13px;
+  font-size: 1em;
   font-weight: 700;
   color: var(--accent);
   letter-spacing: 1.5px;
@@ -108,12 +113,12 @@ body {
 }
 
 .hint {
-  font-size: 10px;
+  font-size: 0.85em;
   color: var(--text-muted);
 }
 
 .badge {
-  font-size: 9px;
+  font-size: 0.8em;
   padding: 2px 6px;
   border-radius: 3px;
   background: #e74c3c;
@@ -126,7 +131,7 @@ body {
 }
 
 .steam-btn {
-  font-size: 9px;
+  font-size: 0.8em;
   padding: 2px 7px;
   border-radius: 3px;
   background: #1b2838;
@@ -140,8 +145,8 @@ body {
 .steam-btn.hidden { display: none; }
 
 .steam-user {
-  font-size: 10px;
-  color: #4fc3f7;
+  font-size: 0.85em;
+  color: #7a9fff;
   font-weight: 600;
 }
 .steam-user.hidden { display: none; }
@@ -162,7 +167,7 @@ body {
   border: none;
   color: var(--text-dim);
   font-family: 'Rajdhani', 'Segoe UI', sans-serif;
-  font-size: 11px;
+  font-size: 0.9em;
   font-weight: 700;
   letter-spacing: 0.8px;
   text-transform: uppercase;
@@ -202,7 +207,7 @@ body {
   border: 1px solid var(--border);
   border-radius: 6px;
   font-family: 'Rajdhani', 'Segoe UI', sans-serif;
-  font-size: 12px;
+  font-size: 0.95em;
   font-weight: 600;
 }
 
@@ -214,7 +219,7 @@ body {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 11px;
+  font-size: 0.9em;
   white-space: nowrap;
 }
 
@@ -223,7 +228,7 @@ body {
 }
 
 #dino-tier-badge {
-  font-size: 10px;
+  font-size: 0.85em;
   font-weight: 700;
   padding: 2px 7px;
   border-radius: 3px;
@@ -273,14 +278,17 @@ body {
 }
 
 #minimap {
-  width: 100%;
   flex: 1;
   min-height: 0;
+  min-width: 0;
+  /* sin width: 100% — el canvas tiene su propio tamaño en píxeles vía JS */
+  display: block;
   border: 1px solid var(--border);
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.4);
   cursor: default;
   box-shadow: inset 0 0 12px rgba(0,0,0,0.5);
+  align-self: stretch;
 }
 
 #zoom-controls {
@@ -296,7 +304,7 @@ body {
   color: var(--accent);
   border: 1px solid var(--border);
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 1.1em;
   font-weight: 700;
   cursor: pointer;
   display: flex;
@@ -310,11 +318,11 @@ body {
   box-shadow: 0 0 6px var(--accent-glow);
 }
 
-.zoom-reset { font-size: 10px; margin-left: 2px; }
+.zoom-reset { font-size: 0.85em; margin-left: 2px; }
 
 #zoom-level {
   font-family: 'Consolas', monospace;
-  font-size: 10px;
+  font-size: 0.85em;
   color: var(--text-dim);
   min-width: 32px;
   text-align: center;
@@ -327,7 +335,7 @@ body {
   display: flex;
   align-items: center;
   gap: 3px;
-  font-size: 10px;
+  font-size: 0.85em;
   color: var(--text-dim);
   cursor: pointer;
   transition: color 0.15s;
@@ -355,7 +363,7 @@ body {
    SHARED COMPONENTS
    ============================================================ */
 .hint-box {
-  font-size: 11px;
+  font-size: 0.9em;
   color: var(--text-dim);
   text-align: center;
   padding: 12px;
@@ -371,7 +379,7 @@ body {
   border: 1px solid var(--border);
   border-radius: 4px;
   font-family: 'Rajdhani', 'Segoe UI', sans-serif;
-  font-size: 11px;
+  font-size: 0.9em;
   font-weight: 700;
   letter-spacing: 0.5px;
   cursor: pointer;
@@ -400,7 +408,7 @@ body {
   padding: 5px 10px;
   background: var(--bg-surface);
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 0.95em;
   border-left: 3px solid rgba(var(--accent-rgb), 0.4);
 }
 
@@ -427,10 +435,10 @@ body {
 }
 
 .mutation-name  { color: var(--text-mid); }
-.mut-effect     { font-size: 10px; color: var(--text-muted); line-height: 1.3; }
+.mut-effect     { font-size: 0.85em; color: var(--text-muted); line-height: 1.55; }
 
 .mut-tag {
-  font-size: 9px;
+  font-size: 0.8em;
   font-weight: 600;
   padding: 1px 4px;
   border-radius: 3px;
@@ -483,13 +491,13 @@ body {
 
 #prime-count {
   font-family: 'Consolas', monospace;
-  font-size: 12px;
+  font-size: 0.95em;
   color: var(--text-dim);
   min-width: 32px;
 }
 
 #prime-status {
-  font-size: 10px;
+  font-size: 0.85em;
   font-weight: 700;
   font-family: 'Rajdhani', sans-serif;
   letter-spacing: 1px;
@@ -506,10 +514,10 @@ body {
 }
 
 #prime-info {
-  font-size: 10px;
+  font-size: 0.85em;
   color: var(--text-muted);
   margin-bottom: 8px;
-  line-height: 1.4;
+  line-height: 1.6;
 }
 
 #prime-info strong { color: var(--text-dim); }
@@ -517,7 +525,7 @@ body {
 .prime-category { margin-bottom: 6px; }
 
 .category-label {
-  font-size: 9px;
+  font-size: 0.8em;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -569,9 +577,9 @@ body {
   min-width: 0;
 }
 
-.task-name  { font-size: 12px; font-weight: 600; color: var(--text-mid); }
-.task-desc  { font-size: 10px; color: var(--text-dim); line-height: 1.3; }
-.task-tip   { font-size: 9px; color: #f1c40f; font-style: italic; line-height: 1.3; }
+.task-name  { font-size: 0.95em; font-weight: 600; color: var(--text-mid); }
+.task-desc  { font-size: 0.85em; color: var(--text-dim); line-height: 1.55; }
+.task-tip   { font-size: 0.8em; color: #f1c40f; font-style: italic; line-height: 1.5; }
 
 #prime-footer {
   display: flex;
@@ -592,16 +600,16 @@ body {
 }
 
 .stats-header h3 {
-  font-size: 14px;
+  font-size: 1.1em;
   color: var(--accent);
   margin: 0;
   text-shadow: 0 0 6px var(--accent-glow);
 }
 
-.tier-label { color: var(--text-dim); font-size: 11px; font-weight: 400; }
+.tier-label { color: var(--text-dim); font-size: 0.9em; font-weight: 400; }
 
 .ability-badge {
-  font-size: 9px;
+  font-size: 0.8em;
   padding: 2px 8px;
   border-radius: 3px;
   background: rgba(52, 152, 219, 0.15);
@@ -613,7 +621,7 @@ body {
 .stats-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 11px;
+  font-size: 0.9em;
   margin-bottom: 10px;
 }
 
@@ -625,7 +633,7 @@ body {
 }
 
 .stats-table th {
-  font-size: 10px;
+  font-size: 0.85em;
   font-weight: 600;
   color: var(--text-dim);
   text-transform: uppercase;
@@ -636,7 +644,7 @@ body {
 
 .stats-table td {
   font-family: 'Consolas', monospace;
-  font-size: 11px;
+  font-size: 0.9em;
   color: var(--text-mid);
 }
 
@@ -646,7 +654,7 @@ body {
   text-align: left !important;
   font-family: 'Rajdhani', 'Segoe UI', sans-serif !important;
   color: var(--text-dim) !important;
-  font-size: 10px !important;
+  font-size: 0.85em !important;
   white-space: nowrap;
 }
 
@@ -682,7 +690,7 @@ body {
 }
 
 #growth-header h3 {
-  font-size: 13px;
+  font-size: 1em;
   color: var(--accent);
   margin: 0;
   text-shadow: 0 0 6px var(--accent-glow);
@@ -690,7 +698,7 @@ body {
 
 #growth-total-time {
   font-family: 'Consolas', monospace;
-  font-size: 12px;
+  font-size: 0.95em;
   font-weight: 700;
   color: var(--text);
   background: rgba(var(--accent-rgb), 0.1);
@@ -714,7 +722,7 @@ body {
   padding: 6px 4px;
   background: var(--bg-surface);
   border-radius: 4px;
-  font-size: 10px;
+  font-size: 0.85em;
   border-bottom: 2px solid rgba(100, 100, 120, 0.3);
   transition: border-color 0.3s, background 0.3s;
   text-align: center;
@@ -731,8 +739,8 @@ body {
   border-bottom-color: rgba(var(--accent-rgb), 0.35);
 }
 
-.stage-name     { font-weight: 600; color: var(--text-mid); font-size: 10px; }
-.stage-duration { font-family: 'Consolas', monospace; font-size: 11px; color: var(--accent); }
+.stage-name     { font-weight: 600; color: var(--text-mid); font-size: 0.85em; }
+.stage-duration { font-family: 'Consolas', monospace; font-size: 0.9em; color: var(--accent); }
 
 #growth-controls {
   display: flex;
@@ -746,7 +754,7 @@ body {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 11px;
+  font-size: 0.9em;
   color: var(--text-dim);
 }
 
@@ -757,7 +765,7 @@ body {
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 0.95em;
   text-align: center;
   font-family: 'Consolas', monospace;
 }
@@ -785,7 +793,7 @@ body {
 .growth-row {
   display: flex;
   justify-content: space-between;
-  font-size: 11px;
+  font-size: 0.9em;
   margin-bottom: 4px;
 }
 
@@ -854,7 +862,7 @@ body {
 }
 
 #tut-counter {
-  font-size: 10px;
+  font-size: 0.85em;
   font-family: 'Rajdhani', sans-serif;
   color: var(--text-dim);
   letter-spacing: 0.05em;
@@ -864,7 +872,7 @@ body {
   background: none;
   border: none;
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: 0.85em;
   font-family: 'Rajdhani', sans-serif;
   cursor: pointer;
   padding: 2px 4px;
@@ -875,7 +883,7 @@ body {
 #tut-skip:hover { color: var(--text-dim); }
 
 #tut-title {
-  font-size: 13px;
+  font-size: 1em;
   font-weight: 700;
   font-family: 'Rajdhani', sans-serif;
   color: var(--accent);
@@ -885,9 +893,9 @@ body {
 }
 
 #tut-desc {
-  font-size: 11px;
+  font-size: 0.9em;
   color: var(--text-mid);
-  line-height: 1.5;
+  line-height: 1.6;
   margin: 0 0 11px;
 }
 
@@ -900,7 +908,7 @@ body {
   flex: 1;
   padding: 6px 8px;
   border-radius: 5px;
-  font-size: 11px;
+  font-size: 0.9em;
   font-family: 'Rajdhani', sans-serif;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -916,7 +924,7 @@ body {
 }
 
 .tut-primary:hover {
-  background: #33ddff;
+  background: #7090ff;
   box-shadow: 0 0 10px var(--accent-glow);
 }
 
@@ -943,7 +951,7 @@ body {
 }
 
 .server-label {
-  font-size: 10px;
+  font-size: 0.85em;
   font-weight: 700;
   color: var(--text-muted);
   letter-spacing: 0.8px;
@@ -959,7 +967,7 @@ body {
   border: 1px solid var(--border-dim);
   border-radius: 4px;
   font-family: 'Rajdhani', 'Segoe UI', sans-serif;
-  font-size: 11px;
+  font-size: 0.9em;
   font-weight: 600;
   cursor: pointer;
 }
@@ -967,7 +975,7 @@ body {
 #server-select:focus { outline: none; border-color: var(--border); }
 
 #server-multiplier {
-  font-size: 10px;
+  font-size: 0.85em;
   font-weight: 700;
   color: var(--accent);
   background: rgba(var(--accent-rgb), 0.12);

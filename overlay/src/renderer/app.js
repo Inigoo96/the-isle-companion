@@ -101,9 +101,27 @@ function resizeCanvas() {
 
 new ResizeObserver(resizeCanvas).observe(canvas);
 
+// Calcula el área de dibujo manteniendo el aspect ratio del mapa dentro del canvas.
+// Devuelve { drawW, drawH, offsetX, offsetY } para usar en imagen y coordenadas.
+function getMapLayout(w, h) {
+  const aspect = mapLoaded
+    ? mapImage.naturalWidth / mapImage.naturalHeight
+    : (MAP_BOUNDS.yMax - MAP_BOUNDS.yMin) / (MAP_BOUNDS.xMax - MAP_BOUNDS.xMin);
+  let drawW, drawH;
+  if (w / h > aspect) {
+    drawH = h;
+    drawW = h * aspect;
+  } else {
+    drawW = w;
+    drawH = w / aspect;
+  }
+  return { drawW, drawH, offsetX: (w - drawW) / 2, offsetY: (h - drawH) / 2 };
+}
+
 function drawMap() {
   const w = canvas.width;
   const h = canvas.height;
+  const { drawW, drawH, offsetX, offsetY } = getMapLayout(w, h);
 
   ctx.clearRect(0, 0, w, h);
   ctx.save();
@@ -115,10 +133,10 @@ function drawMap() {
   ctx.translate(-w / 2, -h / 2);
 
   if (mapLoaded) {
-    ctx.drawImage(mapImage, 0, 0, w, h);
+    ctx.drawImage(mapImage, offsetX, offsetY, drawW, drawH);
   } else {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
-    ctx.fillRect(0, 0, w, h);
+    ctx.fillRect(offsetX, offsetY, drawW, drawH);
   }
 
   if (zoneData) {
@@ -126,21 +144,21 @@ function drawMap() {
     const showMigration = document.getElementById('toggle-migration').checked;
     const showSanc = document.getElementById('toggle-sanctuaries').checked;
 
-    if (showMigration) drawZones(zoneData.migrationZones, 'rgba(0, 230, 118, 0.18)', 'rgba(0, 230, 118, 0.7)', w, h);
-    if (showPatrol) drawZones(zoneData.patrolZones, 'rgba(255, 59, 59, 0.18)', 'rgba(255, 59, 59, 0.7)', w, h);
-    if (showSanc) drawZones(zoneData.sanctuaries, 'rgba(255, 214, 0, 0.22)', 'rgba(255, 214, 0, 0.8)', w, h);
+    if (showMigration) drawZones(zoneData.migrationZones, 'rgba(0, 230, 118, 0.18)', 'rgba(0, 230, 118, 0.7)', drawW, drawH, offsetX, offsetY);
+    if (showPatrol)    drawZones(zoneData.patrolZones,    'rgba(255, 59, 59, 0.18)',  'rgba(255, 59, 59, 0.7)',  drawW, drawH, offsetX, offsetY);
+    if (showSanc)      drawZones(zoneData.sanctuaries,    'rgba(255, 214, 0, 0.22)',  'rgba(255, 214, 0, 0.8)',  drawW, drawH, offsetX, offsetY);
   }
 
   if (currentCoords) {
-    const px = ((currentCoords.y - MAP_BOUNDS.yMin) / (MAP_BOUNDS.yMax - MAP_BOUNDS.yMin)) * w;
-    const py = ((currentCoords.x - MAP_BOUNDS.xMin) / (MAP_BOUNDS.xMax - MAP_BOUNDS.xMin)) * h;
+    const px = offsetX + ((currentCoords.y - MAP_BOUNDS.yMin) / (MAP_BOUNDS.yMax - MAP_BOUNDS.yMin)) * drawW;
+    const py = offsetY + ((currentCoords.x - MAP_BOUNDS.xMin) / (MAP_BOUNDS.xMax - MAP_BOUNDS.xMin)) * drawH;
 
     const dotSize = Math.max(3, 6 / zoom);
     const glowSize = Math.max(8, 20 / zoom);
 
     const gradient = ctx.createRadialGradient(px, py, 0, px, py, glowSize);
-    gradient.addColorStop(0, 'rgba(0, 212, 255, 0.75)');
-    gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
+    gradient.addColorStop(0, 'rgba(75, 117, 255, 0.75)');
+    gradient.addColorStop(1, 'rgba(75, 117, 255, 0)');
     ctx.fillStyle = gradient;
     ctx.beginPath();
     ctx.arc(px, py, glowSize, 0, Math.PI * 2);
@@ -163,24 +181,24 @@ function drawMap() {
   ctx.restore();
 }
 
-function vulnonaToPixel(vx, vy, w, h) {
+function vulnonaToPixel(vx, vy, drawW, drawH, offsetX, offsetY) {
   const gameX = vx * 1000;
   const gameY = vy * 1000;
-  const px = ((gameY - MAP_BOUNDS.yMin) / (MAP_BOUNDS.yMax - MAP_BOUNDS.yMin)) * w;
-  const py = ((gameX - MAP_BOUNDS.xMin) / (MAP_BOUNDS.xMax - MAP_BOUNDS.xMin)) * h;
+  const px = offsetX + ((gameY - MAP_BOUNDS.yMin) / (MAP_BOUNDS.yMax - MAP_BOUNDS.yMin)) * drawW;
+  const py = offsetY + ((gameX - MAP_BOUNDS.xMin) / (MAP_BOUNDS.xMax - MAP_BOUNDS.xMin)) * drawH;
   return [px, py];
 }
 
-function drawZones(zones, fillColor, strokeColor, w, h) {
+function drawZones(zones, fillColor, strokeColor, drawW, drawH, offsetX, offsetY) {
   zones.forEach(zone => {
     ctx.fillStyle = fillColor;
     ctx.strokeStyle = strokeColor;
     ctx.lineWidth = Math.max(0.5, 1 / zoom);
 
     if (zone.type === 'circle') {
-      const [cx, cy] = vulnonaToPixel(zone.center[0], zone.center[1], w, h);
-      const rx = (zone.radius * 1000) / (MAP_BOUNDS.yMax - MAP_BOUNDS.yMin) * w;
-      const ry = (zone.radius * 1000) / (MAP_BOUNDS.xMax - MAP_BOUNDS.xMin) * h;
+      const [cx, cy] = vulnonaToPixel(zone.center[0], zone.center[1], drawW, drawH, offsetX, offsetY);
+      const rx = (zone.radius * 1000) / (MAP_BOUNDS.yMax - MAP_BOUNDS.yMin) * drawW;
+      const ry = (zone.radius * 1000) / (MAP_BOUNDS.xMax - MAP_BOUNDS.xMin) * drawH;
       ctx.beginPath();
       ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
       ctx.fill();
@@ -188,7 +206,7 @@ function drawZones(zones, fillColor, strokeColor, w, h) {
     } else if (zone.type === 'polygon') {
       ctx.beginPath();
       zone.points.forEach((p, i) => {
-        const [px, py] = vulnonaToPixel(p[0], p[1], w, h);
+        const [px, py] = vulnonaToPixel(p[0], p[1], drawW, drawH, offsetX, offsetY);
         if (i === 0) ctx.moveTo(px, py);
         else ctx.lineTo(px, py);
       });
