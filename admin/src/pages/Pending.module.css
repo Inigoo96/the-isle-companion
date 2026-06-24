@@ -55,7 +55,7 @@
 .logoutBtn {
   margin-top: 0.5rem;
   background: transparent;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-dim);
   color: var(--text-dim);
   padding: 0.5rem 1.5rem;
   border-radius: 6px;
@@ -63,8 +63,38 @@
   font-size: 0.85rem;
   transition: border-color 0.15s, color 0.15s;
 }
+.logoutBtn:hover { border-color: var(--danger); color: var(--danger); }
 
-.logoutBtn:hover {
-  border-color: var(--text-dim);
-  color: var(--text);
+.confirmRow {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
+.confirmText {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+.confirmYes {
+  background: rgba(var(--danger-rgb), 0.12);
+  border: 1px solid rgba(var(--danger-rgb), 0.35);
+  border-radius: 6px;
+  color: var(--danger);
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+.confirmYes:hover { background: rgba(var(--danger-rgb), 0.22); }
+.confirmNo {
+  background: none;
+  border: 1px solid var(--border-dim);
+  border-radius: 6px;
+  color: var(--text-dim);
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: border-color 0.15s, color 0.15s;
+}
+.confirmNo:hover { border-color: var(--border); color: var(--text-mid); }

@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import { clearAuth } from '../auth';
 import styles from './Pending.module.css';
 
 export default function Pending() {
+  const [confirming, setConfirming] = useState(false);
+
   function logout() {
     clearAuth();
-    window.location.href = '/login';
+    window.location.href = import.meta.env.BASE_URL + 'login';
   }
 
   return (
@@ -21,7 +24,15 @@ export default function Pending() {
           Your account is awaiting review. The administrator will approve or reject
           your request shortly. You will be notified once a decision has been made.
         </p>
-        <button className={styles.logoutBtn} onClick={logout}>Logout</button>
+        {confirming ? (
+          <div className={styles.confirmRow}>
+            <span className={styles.confirmText}>Log out?</span>
+            <button className={styles.confirmYes} onClick={logout}>Yes, logout</button>
+            <button className={styles.confirmNo} onClick={() => setConfirming(false)}>Cancel</button>
+          </div>
+        ) : (
+          <button className={styles.logoutBtn} onClick={() => setConfirming(true)}>Logout</button>
+        )}
       </div>
     </div>
   );

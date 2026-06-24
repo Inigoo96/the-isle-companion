@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { getUser, clearAuth } from '../auth';
 import styles from './Layout.module.css';
@@ -6,6 +7,7 @@ export default function Layout({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const user = getUser();
+  const [confirming, setConfirming] = useState(false);
 
   function logout() {
     clearAuth();
@@ -46,7 +48,17 @@ export default function Layout({ children }) {
             )}
             <span className={styles.userName}>{user?.displayName}</span>
           </div>
-          <button className={styles.logout} onClick={logout}>Logout</button>
+          {confirming ? (
+            <div className={styles.logoutConfirm}>
+              <span className={styles.logoutQuestion}>Log out?</span>
+              <div className={styles.logoutActions}>
+                <button className={styles.logoutYes} onClick={logout}>Yes</button>
+                <button className={styles.logoutNo} onClick={() => setConfirming(false)}>Cancel</button>
+              </div>
+            </div>
+          ) : (
+            <button className={styles.logout} onClick={() => setConfirming(true)}>Logout</button>
+          )}
         </div>
       </nav>
 

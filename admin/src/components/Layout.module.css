@@ -121,6 +121,46 @@
 }
 .logout:hover { border-color: var(--danger); color: var(--danger); }
 
+.logoutConfirm {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.logoutQuestion {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-align: center;
+}
+.logoutActions {
+  display: flex;
+  gap: 6px;
+}
+.logoutYes {
+  flex: 1;
+  background: rgba(var(--danger-rgb), 0.12);
+  border: 1px solid rgba(var(--danger-rgb), 0.35);
+  border-radius: 6px;
+  color: var(--danger);
+  padding: 5px 0;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+.logoutYes:hover { background: rgba(var(--danger-rgb), 0.22); }
+.logoutNo {
+  flex: 1;
+  background: none;
+  border: 1px solid var(--border-dim);
+  border-radius: 6px;
+  color: var(--text-dim);
+  padding: 5px 0;
+  font-size: 12px;
+  font-weight: 500;
+  transition: border-color 0.15s, color 0.15s;
+}
+.logoutNo:hover { border-color: var(--border); color: var(--text-mid); }
+
 /* Main content */
 .main {
   flex: 1;
