@@ -1,39 +1,60 @@
 # The Isle Companion
 
-Overlay de escritorio para **The Isle** que proporciona herramientas de informacion y seguimiento para mejorar tu experiencia de juego.
+Overlay de escritorio para **The Isle** que proporciona herramientas de información y seguimiento para mejorar tu experiencia de juego.
 
 ![Electron](https://img.shields.io/badge/Electron-35.7.5-47848F?logo=electron&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-24.x-339933?logo=nodedotjs&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3.5-6DB33F?logo=springboot&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-## Funcionalidades
+## Arquitectura del proyecto
 
-### Minimapa con posicion del jugador
-Copia tus coordenadas in-game al clipboard y la app detecta tu posicion automaticamente, mostrandola sobre un mapa con grid y puntos cardinales.
+```
+the-isle-companion/               ← monorepo
+├── overlay/                      # App Electron (overlay de escritorio)
+├── backend/                      # API Spring Boot + PostgreSQL (Railway)
+├── admin/                        # Panel de administración React + Vite (GitHub Pages)
+└── .github/workflows/            # CI/CD — deploy automático del admin panel
+```
+
+## Despliegue en producción
+
+| Componente | Plataforma | URL |
+|---|---|---|
+| Admin Panel | GitHub Pages | `https://inigoo96.github.io/the-isle-companion/` |
+| Backend API | Railway | `https://the-isle-companion-production.up.railway.app` |
+| Base de datos | Railway PostgreSQL | (interna al proyecto Railway) |
+
+El flujo de CI/CD es totalmente automático: cada push a `master` que toque archivos de `admin/` lanza un GitHub Actions workflow que construye y despliega en GitHub Pages. El backend se redespliega en Railway automáticamente si el repo de GitHub está conectado.
+
+## Funcionalidades del overlay
+
+### Minimapa con posición del jugador
+Copia tus coordenadas in-game al clipboard y la app detecta tu posición automáticamente, mostrándola sobre un mapa con grid y puntos cardinales.
 
 ### Mutation Builder
-Guia de las 16 mutaciones recomendadas para cada dinosaurio, ordenadas de la 1a a la 16a. Selector por nombre y tier.
+Guía de las 16 mutaciones recomendadas para cada dinosaurio, ordenadas de la 1ª a la 16ª. Selector por nombre y tier.
 
 ### Patrol Zone Tracker
 Checklist para llevar el seguimiento de las zonas completadas: MZ, Sanctuaries, Perfect Diet y Patrol Zones. Barra de progreso visual.
 
 ### Dino Stats y Growth Timer
-Stats base de cada dinosaurio (HP, damage, speed, stamina) y calculadora de crecimiento con countdown por stage. El multiplicador de crecimiento se toma automaticamente del servidor seleccionado.
+Stats base de cada dinosaurio (HP, damage, speed, stamina) y calculadora de crecimiento con countdown por stage. El multiplicador de crecimiento se toma automáticamente del servidor seleccionado.
 
 ### Selector de servidor
-Dropdown en el overlay que carga los servidores disponibles desde el backend. Al seleccionar uno, el multiplicador de crecimiento se aplica automaticamente a la calculadora y el selector de dino se filtra para mostrar solo las especies permitidas. La seleccion persiste entre sesiones via localStorage.
+Dropdown en el overlay que carga los servidores disponibles desde el backend. Al seleccionar uno, el multiplicador de crecimiento se aplica automáticamente a la calculadora y el selector de dino se filtra para mostrar solo las especies permitidas. La selección persiste entre sesiones via localStorage.
 
-## Requisitos
+## Requisitos (overlay local)
 
 - Windows 10/11
 - [Node.js](https://nodejs.org/) v18+
 - The Isle en modo **Borderless Windowed** (no fullscreen exclusivo)
 
-## Instalacion
+## Instalación
 
 ```bash
 git clone https://github.com/Inigoo96/the-isle-companion.git
-cd the-isle-companion
+cd the-isle-companion/overlay
 npm install
 ```
 
@@ -55,7 +76,7 @@ Para modo desarrollo (con DevTools):
 npm run dev
 ```
 
-## Distribucion (Windows)
+## Distribución (Windows)
 
 Genera instalador NSIS + portable en la carpeta `dist/`:
 
@@ -63,117 +84,88 @@ Genera instalador NSIS + portable en la carpeta `dist/`:
 npm run dist
 ```
 
-Para solo verificar que el build es correcto sin generar instalador (mas rapido):
+Para solo verificar que el build es correcto sin generar instalador (más rápido):
 
 ```bash
 npm run dist:dir
 ```
 
-El instalador permite elegir la carpeta de instalacion y crea acceso directo en el escritorio.
+El instalador permite elegir la carpeta de instalación y crea acceso directo en el escritorio.
 
 ### Controles
 
-| Tecla | Accion |
+| Tecla | Acción |
 |-------|--------|
 | **F9** | Ocultar / mostrar el overlay |
 | **F10** | Activar / desactivar modo click-through |
 
-### Como funciona el mapa
+### Cómo funciona el mapa
 
 1. Abre The Isle en modo Borderless Windowed.
 2. Ejecuta The Isle Companion.
 3. En el juego, copia tus coordenadas al clipboard.
-4. La app las detecta automaticamente y muestra tu posicion en el minimapa.
-5. Pulsa **F10** para que los clicks pasen al juego mientras el overlay esta visible.
+4. La app las detecta automáticamente y muestra tu posición en el minimapa.
+5. Pulsa **F10** para que los clicks pasen al juego mientras el overlay está visible.
 
-## Estructura del proyecto
+## Dinosaurios disponibles (v0.5.0)
 
-```
-the-isle-companion/               ← monorepo
-├── overlay/                      # App Electron (overlay de escritorio)
-│   ├── src/
-│   │   ├── main.js               # Proceso principal (ventana, clipboard, atajos, auth Steam)
-│   │   ├── preload.js            # Puente seguro Node.js <-> UI
-│   │   └── renderer/
-│   │       ├── index.html        # Interfaz (tabs, mapa, formularios)
-│   │       ├── styles.css        # Tema oscuro transparente
-│   │       └── app.js            # Logica UI + login Steam
-│   └── package.json
-├── backend/                      # API Spring Boot (multi-tenant)
-│   ├── src/main/java/…           # Entidades, repos, servicios, controladores
-│   ├── src/main/resources/
-│   │   ├── db/migration/         # Migraciones Flyway (V1, V2, V3)
-│   │   └── seed/                 # JSONs para seed de catalogos
-│   └── README.md
-├── admin/                        # Panel de administracion React + Vite
-│   ├── src/
-│   │   ├── pages/                # Login, Dashboard, ServerForm, AuthCallback, SuperAdmin, Pending
-│   │   ├── components/           # Layout
-│   │   ├── api.js                # Fetch wrapper con Bearer token
-│   │   └── auth.js               # Helpers de sesion (localStorage)
-│   └── README.md
-└── README.md
-```
+**Carnívoros (10):** Tyrannosaurus, Deinosuchus, Allosaurus, Ceratosaurus, Carnotaurus, Dilophosaurus, Omniraptor, Herrerasaurus, Pteranodon, Troodon
 
-## Dinosaurios disponibles (v0.2.0)
+**Herbívoros (8):** Triceratops, Stegosaurus, Diabloceratops, Maiasaura, Tenontosaurus, Pachycephalosaurus, Dryosaurus, Hypsilophodon
 
-**Carnivoros (10):** Tyrannosaurus, Deinosuchus, Allosaurus, Ceratosaurus, Carnotaurus, Dilophosaurus, Omniraptor, Herrerasaurus, Pteranodon, Troodon
+**Omnívoros (2):** Gallimimus, Beipiaosaurus
 
-**Herbivoros (8):** Triceratops, Stegosaurus, Diabloceratops, Maiasaura, Tenontosaurus, Pachycephalosaurus, Dryosaurus, Hypsilophodon
-
-**Omnivoros (2):** Gallimimus, Beipiaosaurus
-
-> **Nota:** Los stats son aproximados y necesitan verificacion con datos reales del juego. Ver seccion "Pendiente" en el Roadmap.
+> **Nota:** Los stats son aproximados y necesitan verificación con datos reales del juego.
 
 ## Roadmap
 
 ### Completado
 - [x] Imagen real del mapa Gateway como fondo del minimapa
-- [x] Calibracion exacta de coordenadas del mapa
-- [x] Mutation Builder con guia de 16 mutaciones
+- [x] Calibración exacta de coordenadas del mapa
+- [x] Mutation Builder con guía de 16 mutaciones
 - [x] Prime List (Patrol Zone Tracker) con progreso visual
 - [x] Dino Stats (HP, Damage, Speed)
 - [x] Zonas interactivas en el mapa (MZ, Sanctuaries, Patrol Zones)
 - [x] Selector global de especie visible en todas las pestañas
 - [x] Growth Timer con countdown por stage y multiplicador de servidor
-- [x] 20 dinosaurios añadidos (10 carnivoros, 8 herbivoros, 2 omnivoros)
-- [x] Eliminado HP Tracker (no accesible desde cliente)
-- [x] Backend Spring Boot multi-tenant con seed automatico de catalogos
-- [x] Autenticacion Steam OpenID 2.0 + JWT (overlay y admin panel)
+- [x] 20 dinosaurios añadidos (10 carnívoros, 8 herbívoros, 2 omnívoros)
+- [x] Backend Spring Boot multi-tenant con seed automático de catálogos
+- [x] Autenticación Steam OpenID 2.0 + JWT (overlay y admin panel)
 - [x] Panel admin React + Vite: crear, editar y eliminar servidores
-- [x] Selector de servidor en el overlay (multiplicador automatico + filtro de dinos permitidos)
-- [x] Display name de Steam en lugar del Steam ID (actualizado automaticamente al arrancar)
-- [x] Sistema super-admin: gestion de cuentas con estados PENDING/ACTIVE/BANNED, acceso restringido por Steam ID
+- [x] Selector de servidor en el overlay (multiplicador automático + filtro de dinos permitidos)
+- [x] Display name de Steam en lugar del Steam ID
+- [x] Sistema super-admin: gestión de cuentas con estados PENDING/ACTIVE/BANNED
+- [x] Deploy del admin panel en GitHub Pages con CI/CD (GitHub Actions)
+- [x] Deploy del backend y base de datos en Railway
 
-### Pendiente — Correccion de datos de dinosaurios
-> **IMPORTANTE:** Los datos actuales de dinos.json necesitan revision. Las fuentes online (XGamingServer, Isle Helper, evrimaquickguide) tienen datos contradictorios entre si. Hay que verificar con datos reales del juego:
-- [ ] **HP**: En The Isle, HP = peso del dino en kg. Los valores actuales son incorrectos para muchos dinos (ej: Rex deberia ser ~12250, Trike ~12500, Croc ~13500, Troodon ~82, Dilo ~997)
-- [ ] **Damage**: Verificar valores de daño base de cada dino con datos reales
-- [ ] **Speed**: Verificar velocidades — las fuentes online no coinciden entre si
-- [ ] **Growth times**: Algunos timers no son correctos — las fuentes dan tiempos muy diferentes (ej: Rex 220min vs 35h segun la fuente). Verificar con gameplay real
-- [ ] **Quitar Bleed**: No es un stat util para el overlay, reemplazar por otro dato mas relevante
-- [ ] **Mutations**: Solo 5 de los 20 dinos tienen lista de mutaciones recomendadas
+### Pendiente — Corrección de datos de dinosaurios
+> **IMPORTANTE:** Los datos actuales de dinos.json necesitan revisión.
+- [ ] **HP**: En The Isle, HP = peso del dino en kg (ej: Rex ~12250, Trike ~12500, Croc ~13500)
+- [ ] **Damage**: Verificar valores de daño base con datos reales
+- [ ] **Speed**: Verificar velocidades (las fuentes online no coinciden)
+- [ ] **Growth times**: Verificar con gameplay real
+- [ ] **Mutations**: Solo 5 de 20 dinos tienen lista de mutaciones recomendadas
 
-### Fase 1.5 — Datos verificados + mejoras
-- [ ] Verificar y corregir todos los stats con datos reales del juego
-- [ ] Guia de dieta por especie y stage de crecimiento
-- [ ] Completar mutaciones recomendadas para los 20 dinos
+### Próximas funcionalidades
+- [ ] Anuncios de servidor (el admin publica mensajes, el overlay los muestra)
+- [ ] Estado del servidor + IP de conexión directa
+- [ ] Eventos programados (visible en el overlay como recordatorio)
+- [ ] Página pública del servidor (URL shareable para Discord)
+- [ ] Sistema de notificaciones Discord webhook (cuando se aprueban/banean cuentas)
 
 ### Fase 2 — Persistencia e historial
-- [ ] Persistencia de datos entre sesiones (patrol zones, ultimo dino, posicion)
+- [ ] Persistencia de datos entre sesiones (patrol zones, último dino, posición)
 - [ ] Historial de runs/vidas pasadas (dino, mutaciones conseguidas, causa de muerte)
 
 ### Fase 3 — Mapa avanzado
-- [ ] Sistema de tiles (gdal2tiles) para carga eficiente del mapa por zoom
-- [ ] Capas con filtros toggle: Sanctuaries, MZ, rios, patrol zones
+- [ ] Sistema de tiles para carga eficiente del mapa por zoom
+- [ ] Capas con filtros toggle: Sanctuaries, MZ, ríos, patrol zones
 - [ ] Historial de posiciones (trail/rastro en el mapa)
-- [ ] Soporte para futuros mapas
 
 ### Fase 4 — Modo Pack (multijugador)
-- [ ] Servidor WebSocket ligero para sincronizacion de posiciones
-- [ ] Sistema de salas con codigo (ej: PACK-77X)
-- [ ] Compartir posicion en tiempo real con amigos en el mapa
-- [ ] Indicadores visuales de compañeros de pack
+- [ ] Servidor WebSocket ligero para sincronización de posiciones
+- [ ] Sistema de salas con código (ej: PACK-77X)
+- [ ] Compartir posición en tiempo real con amigos en el mapa
 
 ## Licencia
 
