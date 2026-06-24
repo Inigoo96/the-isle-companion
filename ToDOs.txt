@@ -1,0 +1,106 @@
+# Proyecto: The Isle Companion — backend multi-tenant (sesión inicial)
+
+## Contexto
+The Isle Companion es una app de escritorio (overlay) para The Isle, rama Evrima, que da
+info al jugador sin tocar el juego (solo lee el portapapeles para las coordenadas). Ya
+existe una versión funcional en Electron + JavaScript vanilla con: overlay transparente
+con click-through, mapa con posición vía clipboard, stats por etapa, mutation builder,
+growth timer y prime list. Los datos viven en JSON locales (dinos.json, mutations.json,
+zones.json).
+
+Nueva dirección: convertirlo en una plataforma multi-tenant para que cada servidor de
+The Isle pueda "integrar" la app y esta se adapte a su configuración. La pieza nueva y
+central es un backend.
+
+## Arquitectura objetivo
+- Overlay (cliente Electron, ya existe) -> Backend (Spring Boot + PostgreSQL, NUEVO, el
+  intermediario) -> opcionalmente los servidores del juego vía RCON (solo lectura, lado
+  servidor).
+- Panel de admin web (React + Vite, NUEVO, más adelante) para que los dueños de servers
+  se registren y configuren su server.
+- Identidad de jugador mediante login con Steam (Steam OpenID).
+- Por qué hace falta el backend intermediario: las credenciales RCON dan control total
+  del servidor (banear, kickear, etc.) y NO pueden ir en una app que se reparte a los
+  jugadores. El backend las guarda cifradas en el lado servidor y al overlay solo le
+  expone datos públicos.
+
+## Límites (definen el alcance — respétalos)
+- La app NO gestiona ni replica el "garage" de dinos ni los comandos propios de cada
+  server: eso es del bot de Discord de cada servidor. La app NUNCA escribe en el juego.
+- La app posee: el overlay + un tracker personal del jugador (su prime list, prefs) +
+  datos globales del juego (catálogo) + config de SOLO LECTURA por servidor.
+- NO guardamos los dinos del jugador (cada server ya los guarda). Si hace falta el dino
+  actual, se lee EN VIVO por RCON; no se persiste.
+- NO parsear Game.ini: el formato cambia entre ramas/versiones/hosts. La config por
+  server la introduce el admin en el panel.
+
+## Dos niveles (orden de construcción)
+- Nivel 1 (PRIMERO, sin RCON, sin secretos): datos globales del juego + config que el
+  admin mete a mano + tracker personal del jugador.
+- Nivel 2 (después, solo servers integrados): datos en vivo por RCON. getplayerdata
+  devuelve, por jugador spawneado, su Steam/EOS ID, el dino actual (DinoClass), Growth %,
+  Health/Stamina/Hunger/Thirst % y Location. Se cruza por el Steam64 del jugador.
+
+## Stack
+- Backend: Spring Boot (Maven) con Spring Web, Spring Data JPA, Spring Security,
+  Validation, Flyway y driver de PostgreSQL. Arquitectura por capas (controllers ->
+  services -> repositories). La API devuelve DTOs, NUNCA expone entidades JPA.
+- Base de datos: PostgreSQL. El esquema viene en el archivo adjunto
+  V1__initial_schema.sql (migración Flyway). Respétalo: usa Flyway con
+  spring.jpa.hibernate.ddl-auto=validate (no generes el esquema con Hibernate).
+- Panel admin: React + Vite (más adelante).
+- Overlay: sigue en Electron + JS vanilla (ya existe, NO reescribir).
+- Coste: proyecto personal, prioriza gratis/barato. Nada de AWS por defecto; el deploy
+  futuro será VPS barato o tiers gratuitos.
+
+## Notas de RCON (contexto para el Nivel 2)
+- Evrima usa un protocolo RCON binario propio (no Source RCON; mcrcon no sirve).
+- getplayerdata = opcode 0x77.
+- No existen comandos de spawn/teleport/heal.
+- Las credenciales RCON van cifradas en la BD, lado servidor, NUNCA en el cliente.
+
+## Modelo de datos
+V1__initial_schema.sql (migración Flyway): enums para conjuntos cerrados; contenido
+global (dinos, dino_stats, dino_growth_stages, mutations, dino_mutations, prime_tasks);
+identidad y tenancy (accounts por steam_id varchar, servers, server_allowed_dinos);
+progreso personal (prime_runs, prime_run_tasks). steam_id es varchar (17 dígitos Steam64
+no caben en entero JS). Dos enums de etapa DISTINTOS: stat_stage vs growth_stage.
+
+V2__add_zones.sql (AÑADIR): tabla zones con enums zone_category (patrol/migration/
+sanctuary) y zone_shape (circle/polygon). Geometría como jsonb:
+  - circle: {center:[x,y], radius:n}
+  - polygon: {points:[[x,y],...]}
+Sin PostGIS (coordenadas del juego, no geo real). UNIQUE(name, category).
+
+## Tarea de esta sesión (acotada)
+1. Reestructurar el repo a monorepo: mover el overlay actual a `overlay/` dejándolo
+   funcional (verifica que sigue arrancando con npm start). Crear `backend/`.
+2. Scaffold del backend Spring Boot en `backend/` con las dependencias de arriba.
+3. Configurar Flyway y colocar V1__initial_schema.sql en
+   backend/src/main/resources/db/migration/. Conexión a PostgreSQL por variables de
+   entorno en application.yml. ddl-auto=validate.
+4. Entidades JPA + repositorios Spring Data que mapeen el esquema.
+5. Endpoints públicos de SOLO LECTURA (sin auth) del Nivel 1, devolviendo DTOs.
+   Rutas planas, sin prefijos /api/v1 ni similares:
+   - GET /dinos         — catálogo completo (stats por etapa, growth stages, mutaciones ordenadas)
+   - GET /mutations     — catálogo de mutaciones
+   - GET /zones         — zonas del mapa agrupadas por categoría
+   - GET /prime-tasks   — tareas prime ordenadas por sort_order
+   - GET /servers/{slug} — config del servidor (growth_multiplier, rules, branding, dinos permitidos)
+   - GET /health        — estado del backend (Spring Actuator)
+6. Endpoint de health y un README del backend explicando cómo levantarlo en local.
+
+## Lo que NO hacer todavía
+- Nada de auth de Steam ni cuentas de jugador (siguiente sesión).
+- Nada de panel admin (siguiente sesión).
+- Nada de RCON / Nivel 2 (siguiente sesión).
+- No tocar la lógica del overlay (solo cambiarlo de carpeta).
+- El seed de los catálogos desde los JSON existentes va en la siguiente sesión; las
+  tablas nacen vacías.
+
+## Cómo trabajar
+- Antes de escribir mucho código, propón un plan corto y espera mi confirmación. Si la
+  tarea es grande, ve por pasos y haz checkpoint conmigo.
+- Código limpio, buenas prácticas, pensado para escalar. Si ves una mejora sobre lo
+  planteado, propónla y pregúntame antes de aplicarla.
+- Conciso y al grano. Si algo es ambiguo, pregunta en vez de asumir.

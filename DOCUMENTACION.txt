@@ -141,10 +141,28 @@ juego ni lee su memoria.
     - Control de versiones del codigo fuente.
     - Repositorio: https://github.com/Inigoo96/the-isle-companion
 
-3.5 VS CODE v1.125.1
-    - Editor de codigo para desarrollo.
+3.5 SPRING BOOT v3.3.5
+    - Framework Java para el backend multi-tenant.
+    - Modulos usados: Web, Data JPA, Security, Validation, Actuator.
+    - Gestia la API REST que sirve datos globales del juego y config por servidor.
 
-3.6 GITHUB CLI v2.95.0
+3.6 POSTGRESQL v18
+    - Base de datos del backend.
+    - Migraciones gestionadas con Flyway (ddl-auto=validate).
+    - Enums nativos de PostgreSQL para conjuntos cerrados (dieta, tier, etc.).
+
+3.7 FLYWAY
+    - Herramienta de migraciones de base de datos.
+    - V1: esquema inicial (dinos, mutaciones, cuentas, servidores, prime runs).
+    - V2: tabla de zonas del mapa con geometria jsonb.
+
+3.8 VS CODE v1.125.1
+    - Editor de codigo para desarrollo del overlay.
+
+3.9 INTELLIJ IDEA
+    - IDE para desarrollo del backend Java/Spring Boot.
+
+3.10 GITHUB CLI v2.95.0
     - Herramienta de linea de comandos para gestionar repositorios GitHub.
     - Usada para crear el repositorio remoto y hacer push.
 
@@ -155,32 +173,50 @@ juego ni lee su memoria.
 
 4.1 ESTRUCTURA DE ARCHIVOS
 
-    the-isle-companion/
-    ├── package.json              Configuracion npm y dependencias
-    ├── DOCUMENTACION.txt         Este archivo
-    ├── README.md                 Documentacion publica del repositorio
-    ├── .gitignore                Exclusiones de git (node_modules, dist)
-    ├── src/
-    │   ├── main.js               Proceso principal de Electron
-    │   │                         (ventana, clipboard, atajos globales)
-    │   ├── preload.js            Puente seguro entre Node.js y la UI
-    │   │                         (expone isleAPI al renderer)
-    │   └── renderer/
-    │       ├── index.html        Estructura de la interfaz
-    │       ├── styles.css        Estilos del overlay (tema oscuro)
-    │       └── app.js            Logica de la UI (tabs, mapa, dinos)
-    ├── data/
-    │   ├── dinos.json            Base de datos de dinosaurios: stats por etapa,
-    │   │                         tiempos de crecimiento, mutaciones recomendadas
-    │   ├── mutations.json        Base de datos de mutaciones: 43 mutaciones con
-    │   │                         efecto y categoria (universal/carnivoro/etc.)
-    │   └── zones.json            Zonas del mapa (PZ, MZ, Sanc) de Vulnona
-    ├── assets/
-    │   └── maps/
-    │       └── gateway.webp      Imagen real del mapa Gateway (1.7 MB)
-    ├── .agents/
-    │   └── skills/               Skills de autoskills (buenas practicas)
-    └── node_modules/             Dependencias (no se versiona)
+    the-isle-companion/               <- Monorepo raiz
+    ├── DOCUMENTACION.txt             Este archivo
+    ├── README.md                     Documentacion publica del repositorio
+    ├── ToDOs.txt                     Tareas y decisiones de arquitectura
+    ├── .gitignore                    Exclusiones de git
+    ├── .claude/settings.json         Permisos y config de Claude Code
+    │
+    ├── overlay/                      App Electron (cliente de escritorio)
+    │   ├── package.json              Configuracion npm y dependencias
+    │   ├── src/
+    │   │   ├── main.js               Proceso principal de Electron
+    │   │   │                         (ventana, clipboard, atajos globales)
+    │   │   ├── preload.js            Puente seguro entre Node.js y la UI
+    │   │   └── renderer/
+    │   │       ├── index.html        Estructura de la interfaz
+    │   │       ├── styles.css        Estilos del overlay (tema oscuro)
+    │   │       └── app.js            Logica de la UI (tabs, mapa, dinos)
+    │   ├── data/
+    │   │   ├── dinos.json            Stats por etapa, growth, mutaciones
+    │   │   ├── mutations.json        43 mutaciones catalogadas
+    │   │   └── zones.json            Zonas del mapa (PZ, MZ, Sanc)
+    │   └── assets/
+    │       └── maps/gateway.webp     Imagen real del mapa Gateway (1.7 MB)
+    │
+    └── backend/                      API REST Spring Boot (backend nuevo)
+        ├── pom.xml                   Dependencias Maven
+        ├── README.md                 Como levantar el backend en local
+        └── src/main/
+            ├── resources/
+            │   ├── application.yml   Config (DB por variables de entorno)
+            │   └── db/migration/
+            │       ├── V1__initial_schema.sql   Esquema base
+            │       └── V2__add_zones.sql         Tabla de zonas
+            └── java/com/theisle/companion/
+                ├── CompanionApplication.java
+                ├── config/           SecurityConfig (publica por ahora)
+                ├── controller/       GameDataController, ServerController
+                ├── service/          GameDataService, ServerService
+                ├── dto/              DTOs (records Java, nunca entidades)
+                └── domain/
+                    ├── enums/        10 enums (UPPERCASE -> lowercase PG)
+                    ├── converter/    LowerCaseEnumConverter + 11 converters
+                    ├── entity/       12 entidades JPA + 5 PKs compuestas
+                    └── repository/   7 repositorios Spring Data
 
 4.2 PROCESO PRINCIPAL (main.js)
     - Crea la ventana del overlay con propiedades especiales:
@@ -275,12 +311,12 @@ juego ni lee su memoria.
  6. COMO EJECUTAR LA APLICACION
 ========================================
 
+--- OVERLAY (Electron) ---
+
 Prerequisitos:
   - Node.js v24+ instalado
-  - Dependencias instaladas (npm install)
 
-Comandos:
-  cd C:\Users\inigo\Projects\the-isle-companion
+Comandos (desde la carpeta overlay/):
   npm start              # Modo normal
   npm run dev            # Modo desarrollo (abre DevTools)
 
@@ -290,6 +326,32 @@ Para usar como overlay:
   3. Arrastra la ventana a la posicion deseada.
   4. Pulsa F10 para activar click-through cuando estes jugando.
   5. Pulsa F9 para ocultar/mostrar.
+
+--- BACKEND (Spring Boot) ---
+
+Prerequisitos:
+  - Java 21+
+  - PostgreSQL (crear BD: CREATE DATABASE isle_companion)
+
+Variables de entorno (opcionales, tienen defaults):
+  DB_URL      = jdbc:postgresql://localhost:5432/isle_companion
+  DB_USER     = postgres
+  DB_PASSWORD = admin
+
+Comandos (desde la carpeta backend/):
+  mvnw.cmd spring-boot:run     # Windows (Maven Wrapper)
+  ./mvnw spring-boot:run       # Linux/Mac
+
+  O desde IntelliJ: abrir backend/ como proyecto Maven,
+  ejecutar CompanionApplication.java con el boton verde.
+
+Endpoints disponibles en http://localhost:8080:
+  GET /dinos          Catalogo completo de dinosaurios
+  GET /mutations      Catalogo de mutaciones
+  GET /zones          Zonas del mapa por categoria
+  GET /prime-tasks    Tareas prime ordenadas
+  GET /servers/{slug} Config de un servidor concreto
+  GET /actuator/health Estado del backend
 
 
 ================================================================================
@@ -346,7 +408,7 @@ PENDIENTE PARA FUTURAS VERSIONES:
   - Persistencia de datos entre sesiones (prime list, posicion, etc.)
   - Soporte para otros mapas cuando The Isle los añada
   - Historial de posiciones (trail/rastro en el mapa)
-  - Integracion con APIs de servidores si se hacen publicas
+  - Integracion con el backend (datos reales del servidor)
 
 
 ========================================
@@ -476,6 +538,45 @@ LIMITACIONES CONOCIDAS:
   - El estado de prime list no se guarda entre sesiones.
   - Las coordenadas requieren copia manual al clipboard.
   - Listas de mutaciones sujetas a revision en futuras versiones del juego.
+
+
+========================================
+ VERSION 0.5.0 - Backend multi-tenant (scaffold Nivel 1)
+ Fecha: 2026-06-24
+ Overlay: sin cambios funcionales
+========================================
+
+CAMBIOS PRINCIPALES:
+  [x] Repo convertido a monorepo: overlay/ y backend/ como modulos separados
+  [x] Overlay movido a overlay/ (sin cambios de logica, sigue arrancando igual)
+  [x] Backend Spring Boot creado en backend/ con Maven
+  [x] PostgreSQL como base de datos (Flyway para migraciones)
+  [x] V1__initial_schema.sql: esquema completo (dinos, mutations, zones,
+      accounts, servers, prime_runs con enums nativos de PostgreSQL)
+  [x] V2__add_zones.sql: tabla zones con geometria jsonb (circle/polygon)
+  [x] 12 entidades JPA con PKs compuestas donde aplica (@EmbeddedId)
+  [x] 10 enums Java (UPPERCASE) con converters automaticos a lowercase PG
+      Solucion elegante: name().toLowerCase() cubre todos los casos incluido
+      DEFAULT -> "default" sin conflicto con la palabra reservada de Java
+  [x] 7 repositorios Spring Data con JPQL optimizado (JOIN FETCH, sin N+1)
+  [x] 8 DTOs como records Java - entidades nunca salen de la capa servicio
+  [x] Endpoints publicos de solo lectura (Nivel 1, sin auth):
+        GET /dinos, /mutations, /zones, /prime-tasks, /servers/{slug}, /health
+  [x] Spring Security configurado en modo stateless/publico (auth en v0.6)
+  [x] PostgreSQL anadido al PATH de usuario (C:\Program Files\PostgreSQL\18\bin)
+  [x] .claude/settings.json con permisos limpios para el monorepo
+
+ARQUITECTURA:
+  - Overlay (Electron) -> Backend (Spring Boot + PostgreSQL)
+  - El backend es el intermediario: guarda credenciales RCON cifradas (Nivel 2)
+    y expone solo datos publicos al overlay
+  - Cada servidor de The Isle puede registrarse como "tenant" con su config
+
+PENDIENTE PARA v0.6.0:
+  - Auth Steam OpenID + cuentas de jugador (prime list persistente)
+  - Seed del catalogo desde los JSON existentes (dinos.json, mutations.json, zones.json)
+  - Panel admin React + Vite para registro de servidores
+  - RCON / datos en vivo (Nivel 2)
 
 
 ================================================================================

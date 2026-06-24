@@ -1,3 +1,24 @@
-node_modules/
-dist/
+# Overlay
+overlay/node_modules/
+overlay/dist/
+
+# Backend
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
 .env
+*.env.local
