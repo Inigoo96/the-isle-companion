@@ -755,7 +755,7 @@ document.getElementById('toggle-migration').addEventListener('change', drawMap);
 document.getElementById('toggle-sanctuaries').addEventListener('change', drawMap);
 
 // --- STEAM AUTH ---
-const BACKEND = 'http://localhost:8080';
+const BACKEND = 'https://the-isle-companion-production.up.railway.app';
 
 function getToken()        { return localStorage.getItem('isle_token'); }
 function getDisplayName()  { return localStorage.getItem('isle_display_name'); }
