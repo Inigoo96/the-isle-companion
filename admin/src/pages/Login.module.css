@@ -3,31 +3,67 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg);
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 40%, rgba(75, 117, 255, 0.07) 0%, transparent 70%),
+    var(--bg);
 }
 
 .card {
-  background: var(--surface);
+  background: var(--bg-surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 48px 40px;
   text-align: center;
-  width: 340px;
+  width: 360px;
+  box-shadow:
+    0 0 0 1px rgba(var(--accent-rgb), 0.06) inset,
+    0 24px 48px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(var(--accent-rgb), 0.06);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.logoMark {
+  width: 36px;
+  height: 36px;
+  background: rgba(var(--accent-rgb), 0.12);
+  border: 1px solid rgba(var(--accent-rgb), 0.3);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--accent);
 }
 
 .title {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
-  color: var(--primary);
-  margin-bottom: 4px;
+  color: var(--text);
+  letter-spacing: -0.02em;
 }
 
 .subtitle {
   color: var(--text-muted);
   margin-bottom: 32px;
-  font-size: 13px;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+.divider {
+  width: 32px;
+  height: 1px;
+  background: var(--border);
+  margin: 0 auto 28px;
 }
 
 .steamBtn {
@@ -36,13 +72,20 @@
   justify-content: center;
   gap: 10px;
   width: 100%;
-  padding: 12px 20px;
+  padding: 11px 20px;
   background: #1b2838;
   border: 1px solid #4c6b8a;
   border-radius: var(--radius);
   color: #c7d5e0;
   font-size: 14px;
   font-weight: 600;
-  transition: background 0.15s;
+  transition: background 0.15s, border-color 0.15s;
 }
-.steamBtn:hover { background: #2a475e; }
+.steamBtn:hover { background: #243447; border-color: #6a96bc; }
+
+.footer {
+  margin-top: 24px;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}

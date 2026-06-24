@@ -13,15 +13,15 @@ export default function Layout({ children }) {
   }
 
   const links = [
-    { to: '/',        label: 'Dashboard' },
-    { to: '/servers', label: 'Servers' },
+    { to: '/',           label: 'Dashboard' },
+    { to: '/servers/new', label: '+ New Server' },
   ];
 
   return (
     <div className={styles.shell}>
       <nav className={styles.sidebar}>
         <div className={styles.logo}>
-          <span className={styles.logoIcon}>🦕</span>
+          <div className={styles.logoMark}>IC</div>
           <span className={styles.logoText}>Isle Admin</span>
         </div>
 
@@ -39,10 +39,12 @@ export default function Layout({ children }) {
         </ul>
 
         <div className={styles.user}>
-          {user?.avatarUrl && (
-            <img src={user.avatarUrl} alt="" className={styles.avatar} />
-          )}
-          <span className={styles.userName}>{user?.displayName}</span>
+          <div className={styles.userRow}>
+            {user?.avatarUrl && (
+              <img src={user.avatarUrl} alt="" className={styles.avatar} />
+            )}
+            <span className={styles.userName}>{user?.displayName}</span>
+          </div>
           <button className={styles.logout} onClick={logout}>Logout</button>
         </div>
       </nav>

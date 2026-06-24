@@ -26,14 +26,15 @@ export default function Dashboard() {
         <Link to="/servers/new" className={styles.btnPrimary}>+ New Server</Link>
       </div>
 
-      <h2 className={styles.sectionTitle}>Your Servers</h2>
+      <p className={styles.sectionTitle}>Your Servers</p>
 
       {loading ? (
         <p className={styles.muted}>Loading…</p>
       ) : servers.length === 0 ? (
         <div className={styles.empty}>
-          <p>You have no servers yet.</p>
-          <Link to="/servers/new" className={styles.btnPrimary}>Create your first server</Link>
+          <p className={styles.emptyTitle}>No servers yet</p>
+          <p className={styles.emptyHint}>Create your first server to start configuring it for your players.</p>
+          <Link to="/servers/new" className={styles.btnPrimary}>+ New Server</Link>
         </div>
       ) : (
         <div className={styles.grid}>

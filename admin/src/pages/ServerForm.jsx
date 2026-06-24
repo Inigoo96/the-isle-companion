@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { api } from '../api';
-import Layout from '../components/Layout';
 import styles from './ServerForm.module.css';
 
 export default function ServerForm() {
@@ -79,7 +78,16 @@ export default function ServerForm() {
 
   return (
     <div>
-      <h1 className={styles.title}>{isEdit ? 'Edit Server' : 'New Server'}</h1>
+      <div className={styles.header}>
+        <div>
+          <div className={styles.breadcrumb}>
+            <Link to="/">Dashboard</Link>
+            <span>/</span>
+            <span>{isEdit ? form.name || slug : 'New Server'}</span>
+          </div>
+          <h1 className={styles.title}>{isEdit ? 'Edit Server' : 'New Server'}</h1>
+        </div>
+      </div>
 
       <form onSubmit={handleSubmit} className={styles.form}>
         {error && <div className={styles.error}>{error}</div>}
@@ -113,7 +121,7 @@ export default function ServerForm() {
         </div>
 
         <div className={styles.field}>
-          <label>Allowed Dinosaurs ({allowedDinos.size} selected — leave empty for all)</label>
+          <label>Allowed Dinosaurs</label>
           <div className={styles.dinoGrid}>
             {allDinos.map(d => (
               <label key={d.id} className={`${styles.dinoChip} ${allowedDinos.has(d.id) ? styles.selected : ''}`}>
@@ -123,6 +131,9 @@ export default function ServerForm() {
               </label>
             ))}
           </div>
+          <p className={styles.dinoCount}>
+            {allowedDinos.size === 0 ? 'All dinosaurs allowed (none selected)' : `${allowedDinos.size} of ${allDinos.length} selected`}
+          </p>
         </div>
 
         <div className={styles.actions}>
