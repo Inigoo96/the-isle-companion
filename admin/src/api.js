@@ -22,7 +22,7 @@ async function request(method, path, body) {
   });
   if (res.status === 401) {
     localStorage.removeItem('isle_admin_token');
-    window.location.href = '/login';
+    window.location.href = (import.meta.env.BASE_URL || '/') + 'login';
     return;
   }
   if (!res.ok) {

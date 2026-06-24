@@ -16,7 +16,7 @@ export default function Login() {
       if (e.origin !== window.location.origin) return;
       if (e.data?.type === 'auth-success') {
         window.removeEventListener('message', onMessage);
-        window.location.href = '/';
+        window.location.href = import.meta.env.BASE_URL || '/';
       }
     }
     window.addEventListener('message', onMessage);
