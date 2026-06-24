@@ -5,8 +5,9 @@ export default function Login() {
     const w = 600, h = 700;
     const left = Math.round((window.screen.width  - w) / 2);
     const top  = Math.round((window.screen.height - h) / 2);
+    const apiBase = import.meta.env.VITE_API_BASE ?? '/api';
     window.open(
-      '/api/auth/steam?source=admin',
+      `${apiBase}/auth/steam?source=admin`,
       'steam-login',
       `width=${w},height=${h},left=${left},top=${top},toolbar=no,menubar=no,resizable=yes`
     );

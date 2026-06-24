@@ -5,6 +5,7 @@ import com.theisle.companion.service.AccountService;
 import com.theisle.companion.service.JwtService;
 import com.theisle.companion.service.SteamOpenIdService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +25,16 @@ public class AuthController {
     private final SteamOpenIdService steamOpenId;
     private final AccountService accountService;
     private final JwtService jwtService;
+    private final String adminUrl;
 
     public AuthController(SteamOpenIdService steamOpenId,
                           AccountService accountService,
-                          JwtService jwtService) {
+                          JwtService jwtService,
+                          @Value("${app.admin-url}") String adminUrl) {
         this.steamOpenId    = steamOpenId;
         this.accountService = accountService;
         this.jwtService     = jwtService;
+        this.adminUrl       = adminUrl;
     }
 
     @GetMapping("/steam")
@@ -54,7 +58,7 @@ public class AuthController {
         String location;
         if ("admin".equals(source)) {
             location = UriComponentsBuilder
-                    .fromHttpUrl("http://localhost:5173/auth/callback")
+                    .fromHttpUrl(adminUrl + "/auth/callback")
                     .queryParam("token", token)
                     .build().toUriString();
         } else {
@@ -74,13 +78,12 @@ public class AuthController {
     public ResponseEntity<String> done(
             jakarta.servlet.http.HttpServletResponse response,
             String token, String displayName) {
-        // Electron intercepta la navegación a esta URL y extrae el token del query param
         String html = """
                 <!DOCTYPE html>
                 <html>
                 <head><meta charset="UTF-8"><title>Login successful</title></head>
                 <body style="font-family:sans-serif;text-align:center;padding:40px;background:#1a1a1a;color:#fff">
-                  <h2>✓ Logged in as %s</h2>
+                  <h2>Logged in as %s</h2>
                   <p>You can close this window.</p>
                 </body>
                 </html>

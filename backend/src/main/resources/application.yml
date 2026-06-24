@@ -32,6 +32,7 @@ server:
 app:
   base-url: ${APP_BASE_URL:http://localhost:8080}
   super-admin-steam-id: ${SUPER_ADMIN_STEAM_ID:76561199415486620}
+  admin-url: ${ADMIN_URL:http://localhost:5173}
 
 jwt:
   secret: ${JWT_SECRET:dev-secret-change-in-production-must-be-256-bits}
