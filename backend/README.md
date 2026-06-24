@@ -69,6 +69,6 @@ Las migraciones están en `src/main/resources/db/migration/`. Flyway las aplica 
 ## Próximos pasos
 
 - [x] Seed automático de catálogos (mutations, dinos, zones, prime_tasks)
-- [ ] Autenticación Steam OpenID (cuentas de jugador)
+- [x] Autenticación Steam OpenID + JWT + creación de cuentas
 - [ ] Panel admin React + Vite
 - [ ] RCON / datos en vivo (Nivel 2)
