@@ -17,16 +17,18 @@ export default function ServerForm() {
   const [saving, setSaving]         = useState(false);
 
   useEffect(() => {
-    api.get('/dinos').then(d => setAllDinos(d));
+    const dinosPromise = api.get('/dinos').then(d => { setAllDinos(d); return d; });
     if (isEdit) {
-      api.get(`/servers/${slug}`).then(s => {
+      Promise.all([dinosPromise, api.get(`/servers/${slug}`)]).then(([dinos, s]) => {
         setForm({
           slug: s.slug,
           name: s.name,
           growthMultiplier: s.growthMultiplier,
           rules: s.rules || ''
         });
-        setAllowed(new Set(s.allowedDinos?.map(d => d.id) || []));
+        // If all dinos are returned it means the server allows all → keep Set empty (= all allowed)
+        const allAllowed = s.allowedDinos?.length === dinos.length;
+        setAllowed(allAllowed ? new Set() : new Set(s.allowedDinos?.map(d => d.id) || []));
       });
     }
   }, [slug]);

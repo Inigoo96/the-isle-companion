@@ -133,31 +133,42 @@ public class ServerService {
     }
 
     private void syncAllowedDinos(Server server, List<Integer> dinoIds) {
-        // Detach old entities from session so their composite keys don't conflict
-        // with the new inserts after the bulk delete.
         new ArrayList<>(server.getAllowedDinos()).forEach(em::detach);
         server.getAllowedDinos().clear();
         allowedDinoRepo.deleteByServerId(server.getId());
 
-        if (dinoIds != null && !dinoIds.isEmpty()) {
+        if (dinoIds != null && !dinoIds.isEmpty() && dinoIds.size() < dinoRepo.count()) {
             List<ServerAllowedDino> entries = dinoRepo.findAllById(dinoIds).stream()
                     .map(d -> new ServerAllowedDino(server, d))
                     .toList();
             allowedDinoRepo.saveAll(entries);
             server.getAllowedDinos().addAll(entries);
         }
+        // All dinos selected (or none specified): leave table empty → means "all allowed"
     }
 
     private ServerDto toDto(Server s) {
-        var allowedDinos = s.getAllowedDinos().stream()
-                .map(ad -> new ServerDto.AllowedDinoDto(
-                        ad.getDino().getId(),
-                        ad.getDino().getName(),
-                        ad.getDino().getDiet().name().toLowerCase(),
-                        ad.getDino().getTier().name().toLowerCase()
-                ))
-                .sorted((a, b) -> a.name().compareTo(b.name()))
-                .toList();
+        List<ServerDto.AllowedDinoDto> allowedDinos;
+        if (s.getAllowedDinos().isEmpty()) {
+            // No rows = all dinos are allowed
+            allowedDinos = dinoRepo.findAllByOrderByNameAsc().stream()
+                    .map(d -> new ServerDto.AllowedDinoDto(
+                            d.getId(), d.getName(),
+                            d.getDiet().name().toLowerCase(),
+                            d.getTier().name().toLowerCase()
+                    ))
+                    .toList();
+        } else {
+            allowedDinos = s.getAllowedDinos().stream()
+                    .map(ad -> new ServerDto.AllowedDinoDto(
+                            ad.getDino().getId(),
+                            ad.getDino().getName(),
+                            ad.getDino().getDiet().name().toLowerCase(),
+                            ad.getDino().getTier().name().toLowerCase()
+                    ))
+                    .sorted((a, b) -> a.name().compareTo(b.name()))
+                    .toList();
+        }
 
         return new ServerDto(
                 s.getSlug(),
