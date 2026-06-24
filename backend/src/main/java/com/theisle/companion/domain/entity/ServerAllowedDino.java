@@ -20,6 +20,14 @@ public class ServerAllowedDino {
     @JoinColumn(name = "dino_id")
     private Dino dino;
 
+    public ServerAllowedDino() {}
+
+    public ServerAllowedDino(Server server, Dino dino) {
+        this.id = new ServerAllowedDinoId(server.getId(), dino.getId());
+        this.server = server;
+        this.dino = dino;
+    }
+
     public ServerAllowedDinoId getId() { return id; }
     public Server getServer() { return server; }
     public Dino getDino() { return dino; }

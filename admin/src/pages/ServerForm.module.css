@@ -1,0 +1,68 @@
+.title { font-size: 24px; font-weight: 700; margin-bottom: 28px; }
+
+.form { display: flex; flex-direction: column; gap: 20px; max-width: 700px; }
+
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.field { display: flex; flex-direction: column; }
+
+.error {
+  background: rgba(231,76,60,0.1);
+  border: 1px solid var(--danger);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  color: var(--danger);
+  font-size: 13px;
+}
+
+.dinoGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.dinoChip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: all 0.15s;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.dinoChip input { display: none; }
+.dinoChip:hover  { border-color: var(--primary); color: var(--text); }
+.dinoChip.selected { background: rgba(0,180,216,0.15); border-color: var(--primary); color: var(--primary); }
+
+.actions { display: flex; gap: 12px; align-items: center; padding-top: 8px; }
+
+.btnPrimary {
+  background: var(--primary); color: #000; border: none;
+  border-radius: var(--radius); padding: 10px 20px;
+  font-weight: 700; font-size: 13px; transition: background 0.15s;
+}
+.btnPrimary:hover:not(:disabled) { background: var(--primary-h); }
+.btnPrimary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btnSecondary {
+  background: none; color: var(--text-muted);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 10px 20px; font-size: 13px; transition: all 0.15s;
+}
+.btnSecondary:hover { border-color: var(--text-muted); color: var(--text); }
+
+.btnDanger {
+  background: none; color: var(--danger);
+  border: 1px solid var(--danger); border-radius: var(--radius);
+  padding: 10px 20px; font-size: 13px; margin-left: auto;
+  transition: all 0.15s;
+}
+.btnDanger:hover { background: rgba(231,76,60,0.1); }

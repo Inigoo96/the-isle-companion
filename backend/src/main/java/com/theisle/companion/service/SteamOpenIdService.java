@@ -28,8 +28,8 @@ public class SteamOpenIdService {
     @Value("${app.base-url}")
     private String baseUrl;
 
-    public String buildAuthUrl() {
-        String callbackUrl = baseUrl + "/auth/steam/callback";
+    public String buildAuthUrl(String source) {
+        String callbackUrl = baseUrl + "/auth/steam/callback?source=" + source;
         return UriComponentsBuilder.fromHttpUrl(STEAM_OPENID_URL)
                 .queryParam("openid.ns",         OPENID_NS)
                 .queryParam("openid.mode",        "checkid_setup")

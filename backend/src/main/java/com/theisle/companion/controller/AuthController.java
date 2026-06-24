@@ -34,9 +34,10 @@ public class AuthController {
     }
 
     @GetMapping("/steam")
-    public ResponseEntity<Void> steamLogin() {
+    public ResponseEntity<Void> steamLogin(
+            @org.springframework.web.bind.annotation.RequestParam(defaultValue = "overlay") String source) {
         return ResponseEntity.status(HttpStatus.FOUND)
-                .location(URI.create(steamOpenId.buildAuthUrl()))
+                .location(URI.create(steamOpenId.buildAuthUrl(source)))
                 .build();
     }
 
@@ -45,18 +46,27 @@ public class AuthController {
         Map<String, String> params = new HashMap<>();
         request.getParameterMap().forEach((k, v) -> params.put(k, v[0]));
 
+        String source  = params.getOrDefault("source", "overlay");
         String steamId = steamOpenId.verify(params);
         Account account = accountService.findOrCreate(steamId);
         String token = jwtService.generate(account.getSteamId(), account.getDisplayName());
 
-        URI successUri = UriComponentsBuilder
-                .fromPath("/auth/done")
-                .queryParam("token", token)
-                .queryParam("displayName", account.getDisplayName())
-                .build().toUri();
+        String location;
+        if ("admin".equals(source)) {
+            location = UriComponentsBuilder
+                    .fromHttpUrl("http://localhost:5173/auth/callback")
+                    .queryParam("token", token)
+                    .build().toUriString();
+        } else {
+            location = UriComponentsBuilder
+                    .fromPath("/auth/done")
+                    .queryParam("token", token)
+                    .queryParam("displayName", account.getDisplayName())
+                    .build().toUri().toString();
+        }
 
         return ResponseEntity.status(HttpStatus.FOUND)
-                .header(HttpHeaders.LOCATION, successUri.toString())
+                .header(HttpHeaders.LOCATION, location)
                 .build();
     }
 

@@ -2,6 +2,7 @@ package com.theisle.companion.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -25,13 +26,16 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Catálogo público
+                // Public catalog
                 .requestMatchers("/dinos", "/mutations", "/zones", "/prime-tasks").permitAll()
                 // Auth flow
                 .requestMatchers("/auth/**").permitAll()
                 // Health
                 .requestMatchers("/actuator/health").permitAll()
-                // Todo lo demás requiere JWT (próximos niveles)
+                // Server reads are public; /mine and writes require JWT
+                .requestMatchers(HttpMethod.GET, "/servers/mine").authenticated()
+                .requestMatchers(HttpMethod.GET, "/servers/*").permitAll()
+                // Everything else requires JWT
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

@@ -42,7 +42,7 @@ public class Server {
     @Column(nullable = false)
     private OffsetDateTime updatedAt;
 
-    @OneToMany(mappedBy = "server", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "server", fetch = FetchType.LAZY)
     private List<ServerAllowedDino> allowedDinos = new ArrayList<>();
 
     public UUID getId() { return id; }
@@ -55,4 +55,14 @@ public class Server {
     public OffsetDateTime getCreatedAt() { return createdAt; }
     public OffsetDateTime getUpdatedAt() { return updatedAt; }
     public List<ServerAllowedDino> getAllowedDinos() { return allowedDinos; }
+
+    public void setId(UUID id) { this.id = id; }
+    public void setOwner(Account owner) { this.owner = owner; }
+    public void setSlug(String slug) { this.slug = slug; }
+    public void setName(String name) { this.name = name; }
+    public void setGrowthMultiplier(BigDecimal growthMultiplier) { this.growthMultiplier = growthMultiplier; }
+    public void setRules(String rules) { this.rules = rules; }
+    public void setBranding(String branding) { this.branding = branding; }
+    public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
+    public void setUpdatedAt(OffsetDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

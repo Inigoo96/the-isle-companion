@@ -35,7 +35,15 @@ public class AccountService {
     @Transactional
     public Account findOrCreate(String steamId) {
         return accountRepo.findBySteamId(steamId)
-                .map(a -> { a.setLastLoginAt(OffsetDateTime.now()); return accountRepo.save(a); })
+                .map(a -> {
+                    a.setLastLoginAt(OffsetDateTime.now());
+                    if (steamApiKey != null && !steamApiKey.isBlank()) {
+                        String[] profile = fetchSteamProfile(steamId);
+                        a.setDisplayName(profile[0]);
+                        if (profile[1] != null) a.setAvatarUrl(profile[1]);
+                    }
+                    return accountRepo.save(a);
+                })
                 .orElseGet(() -> create(steamId));
     }
 

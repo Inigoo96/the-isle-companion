@@ -89,19 +89,26 @@ El instalador permite elegir la carpeta de instalacion y crea acceso directo en 
 the-isle-companion/               ← monorepo
 ├── overlay/                      # App Electron (overlay de escritorio)
 │   ├── src/
-│   │   ├── main.js               # Proceso principal (ventana, clipboard, atajos)
+│   │   ├── main.js               # Proceso principal (ventana, clipboard, atajos, auth Steam)
 │   │   ├── preload.js            # Puente seguro Node.js <-> UI
 │   │   └── renderer/
 │   │       ├── index.html        # Interfaz (tabs, mapa, formularios)
 │   │       ├── styles.css        # Tema oscuro transparente
-│   │       └── app.js            # Logica UI
+│   │       └── app.js            # Logica UI + login Steam
 │   └── package.json
 ├── backend/                      # API Spring Boot (multi-tenant)
-│   ├── src/main/java/…           # Entidades, repositorios, servicios, endpoints
+│   ├── src/main/java/…           # Entidades, repos, servicios, controladores
 │   ├── src/main/resources/
-│   │   ├── db/migration/         # Migraciones Flyway (V1, V2…)
+│   │   ├── db/migration/         # Migraciones Flyway (V1, V2)
 │   │   └── seed/                 # JSONs para seed de catalogos
-│   └── README.md                 # Documentacion del backend
+│   └── README.md
+├── admin/                        # Panel de administracion React + Vite
+│   ├── src/
+│   │   ├── pages/                # Login, Dashboard, ServerForm, AuthCallback
+│   │   ├── components/           # Layout
+│   │   ├── api.js                # Fetch wrapper con Bearer token
+│   │   └── auth.js               # Helpers de sesion (localStorage)
+│   └── README.md
 └── README.md
 ```
 
@@ -128,6 +135,9 @@ the-isle-companion/               ← monorepo
 - [x] Growth Timer con countdown por stage y multiplicador de servidor
 - [x] 20 dinosaurios añadidos (10 carnivoros, 8 herbivoros, 2 omnivoros)
 - [x] Eliminado HP Tracker (no accesible desde cliente)
+- [x] Backend Spring Boot multi-tenant con seed automatico de catalogos
+- [x] Autenticacion Steam OpenID 2.0 + JWT (overlay y admin panel)
+- [x] Panel admin React + Vite: crear, editar y eliminar servidores
 
 ### Pendiente — Correccion de datos de dinosaurios
 > **IMPORTANTE:** Los datos actuales de dinos.json necesitan revision. Las fuentes online (XGamingServer, Isle Helper, evrimaquickguide) tienen datos contradictorios entre si. Hay que verificar con datos reales del juego:
