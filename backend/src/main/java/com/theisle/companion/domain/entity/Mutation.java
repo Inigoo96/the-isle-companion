@@ -24,4 +24,8 @@ public class Mutation {
     public String getName() { return name; }
     public String getEffect() { return effect; }
     public MutationCategory getCategory() { return category; }
+
+    public void setName(String name) { this.name = name; }
+    public void setEffect(String effect) { this.effect = effect; }
+    public void setCategory(MutationCategory category) { this.category = category; }
 }

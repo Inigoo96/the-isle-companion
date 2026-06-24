@@ -1,0 +1,731 @@
+{
+  "carnivores": [
+    {
+      "name": "Tyrannosaurus",
+      "diet": "carnivore",
+      "tier": "Apex",
+      "ability": "Ambush, Crush, Muzzle Swing, Throw",
+      "stats": {
+        "hatchling": { "weight": 4.5, "speed": 11.3, "biteForce": 0.73 },
+        "juvenile": { "weight": 50, "speed": 25.4, "biteForce": 5.95 },
+        "adult": { "weight": 9300, "speed": 29, "biteForce": 699 },
+        "prime": { "weight": 12300, "speed": 33.7, "biteForce": 770 }
+      },
+      "growthData": {
+        "totalMinutes": 2133,
+        "stages": [
+          { "name": "Hatchling", "minutes": 70 },
+          { "name": "Juvenile", "minutes": 613 },
+          { "name": "Sub-Adult", "minutes": 840 },
+          { "name": "Elder", "minutes": 610 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Osteophagic", "tags": ["desb"] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Hydro-regenerative", "tags": [] },
+        { "name": "Nocturnal", "tags": [] }
+      ]
+    },
+    {
+      "name": "Deinosuchus",
+      "diet": "carnivore",
+      "tier": "Apex",
+      "ability": "Lunge",
+      "stats": {
+        "hatchling": { "weight": 4.6, "speed": 5.5, "biteForce": 0.56 },
+        "juvenile": { "weight": 678, "speed": 13.3, "biteForce": 76 },
+        "adult": { "weight": 8000, "speed": 18, "biteForce": 500 },
+        "prime": { "weight": 13500, "speed": 21.4, "biteForce": 550 }
+      },
+      "growthData": {
+        "totalMinutes": 1383,
+        "stages": [
+          { "name": "Hatchling", "minutes": 33 },
+          { "name": "Juvenile", "minutes": 200 },
+          { "name": "Sub-Adult", "minutes": 500 },
+          { "name": "Elder", "minutes": 650 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Hydrodynamic", "tags": [] },
+        { "name": "Submerged Optical Retention", "tags": [] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Reabsorption", "tags": [] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Wader", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Featherweight", "tags": ["situ"] }
+      ]
+    },
+    {
+      "name": "Allosaurus",
+      "diet": "carnivore",
+      "tier": "High",
+      "ability": "Pounce",
+      "stats": {
+        "hatchling": { "weight": 2.4, "speed": 13.8, "biteForce": 5.25 },
+        "juvenile": { "weight": 49.2, "speed": 25.4, "biteForce": 5.52 },
+        "adult": { "weight": 2600, "speed": 39.8, "biteForce": 175 },
+        "prime": { "weight": 3700, "speed": 39, "biteForce": 201 }
+      },
+      "growthData": {
+        "totalMinutes": 600,
+        "stages": [
+          { "name": "Hatchling", "minutes": 60 },
+          { "name": "Juvenile", "minutes": 120 },
+          { "name": "Sub-Adult", "minutes": 200 },
+          { "name": "Elder", "minutes": 220 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Augmented Tapetum", "tags": ["desb"] },
+        { "name": "Hydro-regenerative", "tags": [] },
+        { "name": "Featherweight", "tags": [] }
+      ]
+    },
+    {
+      "name": "Ceratosaurus",
+      "diet": "carnivore",
+      "tier": "High",
+      "ability": "Bacteria",
+      "stats": {
+        "hatchling": { "weight": 2.2, "speed": 8.8, "biteForce": 0.17 },
+        "juvenile": { "weight": 442, "speed": 34.3, "biteForce": 53.3 },
+        "adult": { "weight": 1450, "speed": 40.3, "biteForce": 150 },
+        "prime": { "weight": 1950, "speed": 39.7, "biteForce": 172.5 }
+      },
+      "growthData": {
+        "totalMinutes": 360,
+        "stages": [
+          { "name": "Hatchling", "minutes": 30 },
+          { "name": "Juvenile", "minutes": 60 },
+          { "name": "Sub-Adult", "minutes": 120 },
+          { "name": "Elder", "minutes": 150 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Augmented Tapetum", "tags": ["desb"] },
+        { "name": "Hydro-regenerative", "tags": [] },
+        { "name": "Nocturnal", "tags": [] }
+      ]
+    },
+    {
+      "name": "Carnotaurus",
+      "diet": "carnivore",
+      "tier": "High",
+      "ability": "Charge",
+      "stats": {
+        "hatchling": { "weight": 4.9, "speed": 14.7, "biteForce": 0.03 },
+        "juvenile": { "weight": 496, "speed": 43.4, "biteForce": 53 },
+        "adult": { "weight": 1300, "speed": 49.5, "biteForce": 150 },
+        "prime": { "weight": 1800, "speed": 55.6, "biteForce": 172.5 }
+      },
+      "growthData": {
+        "totalMinutes": 460,
+        "stages": [
+          { "name": "Hatchling", "minutes": 40 },
+          { "name": "Juvenile", "minutes": 90 },
+          { "name": "Sub-Adult", "minutes": 120 },
+          { "name": "Elder", "minutes": 210 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Multichambered Lungs", "tags": ["desb"] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Featherweight", "tags": [] },
+        { "name": "Hydro-regenerative", "tags": [] }
+      ]
+    },
+    {
+      "name": "Dilophosaurus",
+      "diet": "carnivore",
+      "tier": "Mid",
+      "ability": "Hallucinations",
+      "stats": {
+        "hatchling": { "weight": 1.4, "speed": 8.2, "biteForce": 0.11 },
+        "juvenile": { "weight": 179.7, "speed": 46.9, "biteForce": 23 },
+        "adult": { "weight": 700, "speed": 47.5, "biteForce": 85 },
+        "prime": { "weight": 977, "speed": 52.3, "biteForce": 97.75 }
+      },
+      "growthData": {
+        "totalMinutes": 360,
+        "stages": [
+          { "name": "Hatchling", "minutes": 20 },
+          { "name": "Juvenile", "minutes": 60 },
+          { "name": "Sub-Adult", "minutes": 120 },
+          { "name": "Elder", "minutes": 160 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Featherweight", "tags": [] },
+        { "name": "Multichambered Lungs", "tags": ["desb"] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Augmented Tapetum", "tags": ["desb"] },
+        { "name": "Efficient Digestion", "tags": [] }
+      ]
+    },
+    {
+      "name": "Omniraptor",
+      "diet": "carnivore",
+      "tier": "Mid",
+      "ability": "Pounce",
+      "stats": {
+        "adult": { "weight": 395, "speed": 46.8, "biteForce": 65 },
+        "prime": { "weight": 660, "speed": 52.3, "biteForce": 75.75 }
+      },
+      "growthData": {
+        "totalMinutes": 355,
+        "stages": [
+          { "name": "Hatchling", "minutes": 25 },
+          { "name": "Juvenile", "minutes": 60 },
+          { "name": "Sub-Adult", "minutes": 120 },
+          { "name": "Elder", "minutes": 150 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Reinforced Tendons", "tags": ["desb"] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Augmented Tapetum", "tags": ["desb"] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Featherweight", "tags": [] }
+      ]
+    },
+    {
+      "name": "Herrerasaurus",
+      "diet": "carnivore",
+      "tier": "Low-Mid",
+      "ability": "Climb",
+      "stats": {
+        "hatchling": { "weight": 0.27, "speed": 4.8, "biteForce": 0.04 },
+        "juvenile": { "weight": 64.2, "speed": 25.3, "biteForce": 10.9 },
+        "adult": { "weight": 175, "speed": 45, "biteForce": 30 },
+        "prime": { "weight": 225, "speed": 46.8, "biteForce": 34.5 }
+      },
+      "growthData": {
+        "totalMinutes": 325,
+        "stages": [
+          { "name": "Hatchling", "minutes": 25 },
+          { "name": "Juvenile", "minutes": 50 },
+          { "name": "Sub-Adult", "minutes": 110 },
+          { "name": "Elder", "minutes": 140 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Reinforced Tendons", "tags": ["desb"] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Featherweight", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Augmented Tapetum", "tags": ["desb"] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Hydro-regenerative", "tags": [] }
+      ]
+    },
+    {
+      "name": "Pteranodon",
+      "diet": "carnivore",
+      "tier": "Low",
+      "ability": "Flight (18% growth)",
+      "stats": {
+        "hatchling": { "weight": 0.1, "speed": 3.6, "biteForce": 0.01 },
+        "adult": { "weight": 45, "speed": 28.5, "biteForce": 20 },
+        "prime": { "weight": 60, "speed": 31.4, "biteForce": 23 }
+      },
+      "growthData": {
+        "totalMinutes": 270,
+        "stages": [
+          { "name": "Hatchling", "minutes": 20 },
+          { "name": "Juvenile", "minutes": 40 },
+          { "name": "Sub-Adult", "minutes": 90 },
+          { "name": "Elder", "minutes": 120 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Reinforced Tendons", "tags": ["desb"] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Submerged Optical Retention", "tags": [] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Reabsorption", "tags": [] },
+        { "name": "Featherweight", "tags": ["situ"] }
+      ]
+    },
+    {
+      "name": "Troodon",
+      "diet": "carnivore",
+      "tier": "Low",
+      "ability": "Venom",
+      "stats": {
+        "hatchling": { "weight": 0.07, "speed": 13.1, "biteForce": 0.01 },
+        "juvenile": { "weight": 11.1, "speed": 39.8, "biteForce": 2.24 },
+        "adult": { "weight": 60, "speed": 45, "biteForce": 15 },
+        "prime": { "weight": 79.8, "speed": 52.2, "biteForce": 17.25 }
+      },
+      "growthData": {
+        "totalMinutes": 190,
+        "stages": [
+          { "name": "Hatchling", "minutes": 20 },
+          { "name": "Juvenile", "minutes": 40 },
+          { "name": "Sub-Adult", "minutes": 60 },
+          { "name": "Elder", "minutes": 70 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Augmented Tapetum", "tags": ["desb"] },
+        { "name": "Accelerated Prey Drive", "tags": [] },
+        { "name": "Nocturnal", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Hematophagy", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Hemomania", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Hypermetabolic Inanition", "tags": ["s2"] },
+        { "name": "Reinforced Tendons", "tags": ["desb"] },
+        { "name": "Featherweight", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] }
+      ]
+    }
+  ],
+  "herbivores": [
+    {
+      "name": "Triceratops",
+      "diet": "herbivore",
+      "tier": "Apex",
+      "ability": "Spar",
+      "stats": {
+        "hatchling": { "weight": 4.7, "speed": 5.4, "biteForce": 1 },
+        "juvenile": { "weight": 85, "speed": 16.2, "biteForce": 12.6 },
+        "adult": { "weight": 9500, "speed": 23.6, "biteForce": 600 },
+        "prime": { "weight": 12500, "speed": 25.1, "biteForce": 1035 }
+      },
+      "growthData": {
+        "totalMinutes": 1750,
+        "stages": [
+          { "name": "Hatchling", "minutes": 60 },
+          { "name": "Juvenile", "minutes": 200 },
+          { "name": "Sub-Adult", "minutes": 640 },
+          { "name": "Elder", "minutes": 850 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Tactile Endurance", "tags": ["s2"] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Xerocole Adaptation", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Barometric Sensitivity", "tags": [] },
+        { "name": "Hydro-regenerative", "tags": ["situ"] },
+        { "name": "Enlarged Meniscus", "tags": ["situ"] }
+      ]
+    },
+    {
+      "name": "Stegosaurus",
+      "diet": "herbivore",
+      "tier": "Apex",
+      "ability": "Tail Swing",
+      "stats": {
+        "hatchling": { "weight": 5.8, "speed": 5.7, "biteForce": 0.04 },
+        "adult": { "weight": 6000, "speed": 26.2, "biteForce": 50 },
+        "prime": { "weight": 9300, "speed": 30.6, "biteForce": 57.5 }
+      },
+      "growthData": {
+        "totalMinutes": 1075,
+        "stages": [
+          { "name": "Hatchling", "minutes": 45 },
+          { "name": "Juvenile", "minutes": 180 },
+          { "name": "Sub-Adult", "minutes": 405 },
+          { "name": "Elder", "minutes": 445 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Tactile Endurance", "tags": ["s2"] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Xerocole Adaptation", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Barometric Sensitivity", "tags": [] },
+        { "name": "Hydro-regenerative", "tags": ["situ"] },
+        { "name": "Enlarged Meniscus", "tags": ["situ"] }
+      ]
+    },
+    {
+      "name": "Diabloceratops",
+      "diet": "herbivore",
+      "tier": "High",
+      "ability": "Spar",
+      "stats": {
+        "adult": { "weight": 3000, "speed": 36, "biteForce": 275 },
+        "prime": { "weight": 3900, "speed": 37.8, "biteForce": 316.25 }
+      },
+      "growthData": {
+        "totalMinutes": 465,
+        "stages": [
+          { "name": "Hatchling", "minutes": 45 },
+          { "name": "Juvenile", "minutes": 90 },
+          { "name": "Sub-Adult", "minutes": 140 },
+          { "name": "Elder", "minutes": 190 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Tactile Endurance", "tags": ["s2"] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Xerocole Adaptation", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Barometric Sensitivity", "tags": [] },
+        { "name": "Enlarged Meniscus", "tags": ["situ"] }
+      ]
+    },
+    {
+      "name": "Maiasaura",
+      "diet": "herbivore",
+      "tier": "High",
+      "ability": "Bipedal/Quadrupedal",
+      "stats": {
+        "hatchling": { "weight": 101.25, "speed": 38.9, "biteForce": 1.6 },
+        "adult": { "weight": 3700, "speed": 46.9, "biteForce": 39.4 },
+        "prime": { "weight": 5400, "speed": 42.3, "biteForce": 57.5 }
+      },
+      "growthData": {
+        "totalMinutes": 420,
+        "stages": [
+          { "name": "Hatchling", "minutes": 30 },
+          { "name": "Juvenile", "minutes": 100 },
+          { "name": "Sub-Adult", "minutes": 140 },
+          { "name": "Elder", "minutes": 150 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Tactile Endurance", "tags": ["s2"] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Xerocole Adaptation", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Barometric Sensitivity", "tags": [] },
+        { "name": "Hydro-regenerative", "tags": ["situ"] },
+        { "name": "Enlarged Meniscus", "tags": ["situ"] }
+      ]
+    },
+    {
+      "name": "Tenontosaurus",
+      "diet": "herbivore",
+      "tier": "High",
+      "ability": "Tail Slam",
+      "stats": {
+        "hatchling": { "weight": 1.03, "speed": 5.7, "biteForce": 0.04 },
+        "adult": { "weight": 1600, "speed": 40.5, "biteForce": 35 },
+        "prime": { "weight": 1830, "speed": 43.2, "biteForce": 40.25 }
+      },
+      "growthData": {
+        "totalMinutes": 340,
+        "stages": [
+          { "name": "Hatchling", "minutes": 20 },
+          { "name": "Juvenile", "minutes": 90 },
+          { "name": "Sub-Adult", "minutes": 110 },
+          { "name": "Elder", "minutes": 120 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Tactile Endurance", "tags": ["s2"] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Xerocole Adaptation", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Barometric Sensitivity", "tags": [] },
+        { "name": "Enlarged Meniscus", "tags": ["situ"] }
+      ]
+    },
+    {
+      "name": "Pachycephalosaurus",
+      "diet": "herbivore",
+      "tier": "Mid",
+      "ability": "Fractures",
+      "stats": {
+        "adult": { "weight": 500, "speed": 41.8, "biteForce": 30 },
+        "prime": { "weight": 910, "speed": 46.5, "biteForce": 34.5 }
+      },
+      "growthData": {
+        "totalMinutes": 375,
+        "stages": [
+          { "name": "Hatchling", "minutes": 25 },
+          { "name": "Juvenile", "minutes": 50 },
+          { "name": "Sub-Adult", "minutes": 140 },
+          { "name": "Elder", "minutes": 160 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Osteosclerosis", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Tactile Endurance", "tags": ["s2"] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Enlarged Meniscus", "tags": [] },
+        { "name": "Xerocole Adaptation", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Barometric Sensitivity", "tags": [] }
+      ]
+    },
+    {
+      "name": "Dryosaurus",
+      "diet": "herbivore",
+      "tier": "Low-Mid",
+      "ability": "Dodge",
+      "stats": {
+        "adult": { "weight": 130, "speed": 45, "biteForce": 20 },
+        "prime": { "weight": 185, "speed": 50.4, "biteForce": 23 }
+      },
+      "growthData": {
+        "totalMinutes": 265,
+        "stages": [
+          { "name": "Hatchling", "minutes": 20 },
+          { "name": "Juvenile", "minutes": 45 },
+          { "name": "Sub-Adult", "minutes": 90 },
+          { "name": "Elder", "minutes": 110 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Reinforced Tendons", "tags": ["desb"] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Xerocole Adaptation", "tags": [] },
+        { "name": "Enlarged Meniscus", "tags": [] },
+        { "name": "Featherweight", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Multichambered Lungs", "tags": ["desb"] }
+      ]
+    },
+    {
+      "name": "Hypsilophodon",
+      "diet": "herbivore",
+      "tier": "Low",
+      "ability": "Blind Spit",
+      "stats": {
+        "adult": { "weight": 20, "speed": 39.6, "biteForce": 2 },
+        "prime": { "weight": 23, "speed": 39.6, "biteForce": 2.3 }
+      },
+      "growthData": {
+        "totalMinutes": 110,
+        "stages": [
+          { "name": "Hatchling", "minutes": 20 },
+          { "name": "Juvenile", "minutes": 20 },
+          { "name": "Sub-Adult", "minutes": 30 },
+          { "name": "Elder", "minutes": 40 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Reinforced Tendons", "tags": ["desb"] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Enlarged Meniscus", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Xerocole Adaptation", "tags": [] },
+        { "name": "Featherweight", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Multichambered Lungs", "tags": ["desb"] }
+      ]
+    }
+  ],
+  "omnivores": [
+    {
+      "name": "Gallimimus",
+      "diet": "omnivore",
+      "tier": "Mid",
+      "ability": "Group Buffs",
+      "stats": {
+        "hatchling": { "weight": 0.5, "speed": 24.6, "biteForce": 0.03 },
+        "adult": { "weight": 535, "speed": 45.6, "biteForce": 25 },
+        "prime": { "weight": 560, "speed": 54, "biteForce": 28.75 }
+      },
+      "growthData": {
+        "totalMinutes": 325,
+        "stages": [
+          { "name": "Hatchling", "minutes": 15 },
+          { "name": "Juvenile", "minutes": 80 },
+          { "name": "Sub-Adult", "minutes": 110 },
+          { "name": "Elder", "minutes": 120 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Multichambered Lungs", "tags": ["desb"] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Featherweight", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Enlarged Meniscus", "tags": [] },
+        { "name": "Xerocole Adaptation", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Barometric Sensitivity", "tags": [] }
+      ]
+    },
+    {
+      "name": "Beipiaosaurus",
+      "diet": "omnivore",
+      "tier": "Low",
+      "ability": "Dive",
+      "stats": {
+        "adult": { "weight": 90, "speed": 32, "biteForce": 20 },
+        "prime": { "weight": 90, "speed": 32, "biteForce": 23 }
+      },
+      "growthData": {
+        "totalMinutes": 220,
+        "stages": [
+          { "name": "Hatchling", "minutes": 20 },
+          { "name": "Juvenile", "minutes": 40 },
+          { "name": "Sub-Adult", "minutes": 70 },
+          { "name": "Elder", "minutes": 90 }
+        ]
+      },
+      "recommendedMutations": [
+        { "name": "Cellular Regeneration", "tags": [] },
+        { "name": "Hydrodynamic", "tags": [] },
+        { "name": "Hypervigilance", "tags": [] },
+        { "name": "Congenital Hypoalgesia", "tags": [] },
+        { "name": "Wader", "tags": [] },
+        { "name": "Reabsorption", "tags": [] },
+        { "name": "Truculency", "tags": [] },
+        { "name": "Increased Inspiratory Capacity", "tags": [] },
+        { "name": "Submerged Optical Retention", "tags": [] },
+        { "name": "Epidermal Fibrosis", "tags": [] },
+        { "name": "Photosynthetic Regeneration", "tags": [] },
+        { "name": "Sustained Hydration", "tags": [] },
+        { "name": "Efficient Digestion", "tags": [] },
+        { "name": "Enlarged Meniscus", "tags": ["situ"] }
+      ]
+    }
+  ]
+}

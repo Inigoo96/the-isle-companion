@@ -30,4 +30,10 @@ public class DinoStat {
     public BigDecimal getWeight() { return weight; }
     public BigDecimal getSpeed() { return speed; }
     public BigDecimal getBiteForce() { return biteForce; }
+
+    public void setId(DinoStatId id) { this.id = id; }
+    public void setDino(Dino dino) { this.dino = dino; }
+    public void setWeight(BigDecimal weight) { this.weight = weight; }
+    public void setSpeed(BigDecimal speed) { this.speed = speed; }
+    public void setBiteForce(BigDecimal biteForce) { this.biteForce = biteForce; }
 }

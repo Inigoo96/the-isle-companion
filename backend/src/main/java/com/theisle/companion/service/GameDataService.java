@@ -31,7 +31,7 @@ public class GameDataService {
     }
 
     public List<DinoDto> getDinos() {
-        return dinoRepo.findAllWithDetails().stream().map(this::toDto).toList();
+        return dinoRepo.findAllByOrderByNameAsc().stream().map(this::toDto).toList();
     }
 
     public List<MutationDto> getMutations() {
@@ -53,11 +53,9 @@ public class GameDataService {
                 d.getDiet().name().toLowerCase(),
                 d.getTier().name().toLowerCase(),
                 d.getAbility(),
-                d.getStats().stream().map(this::toDto).toList(),
-                d.getGrowthStages().stream()
-                        .sorted((a, b) -> a.getOrdinal().compareTo(b.getOrdinal()))
-                        .map(this::toDto).toList(),
-                d.getMutations().stream().map(this::toDto).toList()
+                d.getStats().stream().map(s -> toDto(s)).toList(),
+                d.getGrowthStages().stream().map(g -> toDto(g)).toList(),
+                d.getMutations().stream().map(dm -> toDto(dm)).toList()
         );
     }
 

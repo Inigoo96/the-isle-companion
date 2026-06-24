@@ -36,4 +36,11 @@ public class PrimeTask {
     public String getDescription() { return description; }
     public boolean isDefaultActive() { return defaultActive; }
     public Short getSortOrder() { return sortOrder; }
+
+    public void setKey(String key) { this.key = key; }
+    public void setName(String name) { this.name = name; }
+    public void setCategory(PrimeTaskCategory category) { this.category = category; }
+    public void setDescription(String description) { this.description = description; }
+    public void setDefaultActive(boolean defaultActive) { this.defaultActive = defaultActive; }
+    public void setSortOrder(Short sortOrder) { this.sortOrder = sortOrder; }
 }

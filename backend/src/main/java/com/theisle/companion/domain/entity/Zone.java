@@ -32,4 +32,9 @@ public class Zone {
     public ZoneCategory getCategory() { return category; }
     public ZoneShape getShape() { return shape; }
     public String getGeometry() { return geometry; }
+
+    public void setName(String name) { this.name = name; }
+    public void setCategory(ZoneCategory category) { this.category = category; }
+    public void setShape(ZoneShape shape) { this.shape = shape; }
+    public void setGeometry(String geometry) { this.geometry = geometry; }
 }

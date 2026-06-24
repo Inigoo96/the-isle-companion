@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/isle_companion}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/isle_companion?stringtype=unspecified}
     username: ${DB_USER:postgres}
     password: ${DB_PASSWORD:admin}
     driver-class-name: org.postgresql.Driver
@@ -23,3 +23,8 @@ management:
   endpoint:
     health:
       show-details: always
+
+server:
+  error:
+    include-message: always
+    include-binding-errors: always

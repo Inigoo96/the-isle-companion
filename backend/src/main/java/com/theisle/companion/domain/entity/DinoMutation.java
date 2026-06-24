@@ -31,4 +31,10 @@ public class DinoMutation {
     public Mutation getMutation() { return mutation; }
     public Short getPriority() { return priority; }
     public RecommendationTag getTag() { return tag; }
+
+    public void setId(DinoMutationId id) { this.id = id; }
+    public void setDino(Dino dino) { this.dino = dino; }
+    public void setMutation(Mutation mutation) { this.mutation = mutation; }
+    public void setPriority(Short priority) { this.priority = priority; }
+    public void setTag(RecommendationTag tag) { this.tag = tag; }
 }

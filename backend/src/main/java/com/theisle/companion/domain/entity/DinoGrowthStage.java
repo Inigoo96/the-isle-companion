@@ -25,4 +25,9 @@ public class DinoGrowthStage {
     public Dino getDino() { return dino; }
     public Short getOrdinal() { return ordinal; }
     public Integer getMinutes() { return minutes; }
+
+    public void setId(DinoGrowthStageId id) { this.id = id; }
+    public void setDino(Dino dino) { this.dino = dino; }
+    public void setOrdinal(Short ordinal) { this.ordinal = ordinal; }
+    public void setMinutes(Integer minutes) { this.minutes = minutes; }
 }
