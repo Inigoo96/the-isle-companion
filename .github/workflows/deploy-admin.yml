@@ -6,6 +6,7 @@ on:
     paths:
       - 'admin/**'
       - '.github/workflows/deploy-admin.yml'
+      - '!admin/**/*.md'
   workflow_dispatch:
 
 permissions:
