@@ -760,21 +760,45 @@ function getToken()        { return localStorage.getItem('isle_token'); }
 function getDisplayName()  { return localStorage.getItem('isle_display_name'); }
 
 function updateAuthUI() {
-  const name = getDisplayName();
-  const loginBtn  = document.getElementById('steam-login-btn');
-  const steamUser = document.getElementById('steam-user');
+  const name           = getDisplayName();
+  const loginBtn       = document.getElementById('steam-login-btn');
+  const steamUser      = document.getElementById('steam-user');
+  const logoutBtn      = document.getElementById('steam-logout-btn');
+  const logoutConfirm  = document.getElementById('steam-logout-confirm');
   if (name) {
     loginBtn.classList.add('hidden');
     steamUser.textContent = name;
     steamUser.classList.remove('hidden');
+    logoutBtn.classList.remove('hidden');
   } else {
     loginBtn.classList.remove('hidden');
     steamUser.classList.add('hidden');
+    logoutBtn.classList.add('hidden');
+    logoutConfirm.classList.add('hidden');
   }
+}
+
+function doLogout() {
+  localStorage.removeItem('isle_token');
+  localStorage.removeItem('isle_display_name');
+  updateAuthUI();
 }
 
 document.getElementById('steam-login-btn').addEventListener('click', () => {
   window.isleAPI.steamLogin();
+});
+
+document.getElementById('steam-logout-btn').addEventListener('click', () => {
+  document.getElementById('steam-user').classList.add('hidden');
+  document.getElementById('steam-logout-btn').classList.add('hidden');
+  document.getElementById('steam-logout-confirm').classList.remove('hidden');
+});
+
+document.getElementById('steam-logout-yes').addEventListener('click', doLogout);
+
+document.getElementById('steam-logout-no').addEventListener('click', () => {
+  document.getElementById('steam-logout-confirm').classList.add('hidden');
+  updateAuthUI();
 });
 
 window.isleAPI.onAuthSuccess(({ token, displayName }) => {

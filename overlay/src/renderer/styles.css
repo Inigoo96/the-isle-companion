@@ -151,6 +151,46 @@ body {
 }
 .steam-user.hidden { display: none; }
 
+.steam-logout-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.95em;
+  line-height: 1;
+  padding: 0 2px;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.steam-logout-btn:hover { color: var(--danger); }
+.steam-logout-btn.hidden { display: none; }
+
+.steam-logout-confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.steam-logout-confirm.hidden { display: none; }
+.logout-yes, .logout-no {
+  font-size: 0.75em;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  border: 1px solid;
+}
+.logout-yes {
+  background: rgba(180, 60, 40, 0.2);
+  border-color: rgba(180, 60, 40, 0.5);
+  color: var(--danger);
+}
+.logout-yes:hover { background: rgba(180, 60, 40, 0.35); }
+.logout-no {
+  background: none;
+  border-color: var(--border);
+  color: var(--text-dim);
+}
+.logout-no:hover { color: var(--text); }
+
 /* ============================================================
    TABS
    ============================================================ */
