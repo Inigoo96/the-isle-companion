@@ -56,12 +56,13 @@ public class ServerService {
 
     public ServerDto getBySlug(String slug) {
         Server server = serverRepo.findBySlugWithDinos(slug)
+                .filter(s -> s.getStatus() == ServerStatus.ACCEPTED)  // publico: solo aceptados
                 .orElseThrow(() -> new EntityNotFoundException("Server not found: " + slug));
         return toDto(server);
     }
 
     public List<ServerSummaryDto> listAll() {
-        return serverRepo.findAllByOrderByNameAsc().stream()
+        return serverRepo.findByStatusOrderByNameAsc(ServerStatus.ACCEPTED).stream()
                 .map(s -> new ServerSummaryDto(s.getSlug(), s.getName(), s.getGrowthMultiplier()))
                 .toList();
     }

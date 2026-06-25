@@ -41,6 +41,7 @@ CREATE DATABASE isle_companion;
 | `DISCORD_CLIENT_ID` | *(vacío)* | Client ID de la app de Discord (panel) |
 | `DISCORD_CLIENT_SECRET` | *(vacío)* | Client Secret de la app de Discord |
 | `DISCORD_REDIRECT_URI` | `http://localhost:8080/auth/discord/callback` | URL de callback registrada en la app de Discord |
+| `PLATFORM_ADMINS` | *(vacío)* | Discord user ids con permisos de moderación de plataforma (separados por coma) |
 
 > **Seguridad:** `STEAM_API_KEY`, `DISCORD_CLIENT_SECRET` y `JWT_SECRET` nunca deben commitearse. Usar siempre variables de entorno.
 
@@ -104,6 +105,7 @@ Configurar en el servicio de backend (Railway → Backend → Variables):
 | `DISCORD_CLIENT_ID` | Client ID de tu app de Discord |
 | `DISCORD_CLIENT_SECRET` | Client Secret de tu app de Discord |
 | `DISCORD_REDIRECT_URI` | `https://the-isle-companion-production.up.railway.app/auth/discord/callback` |
+| `PLATFORM_ADMINS` | Tu Discord user id (para moderar). Varios → separados por coma |
 
 > Los datos de conexión de PostgreSQL se obtienen desde Railway → Postgres → Connect → Public URL. Separar en URL, usuario y contraseña (Railway no soporta bien la URL completa con credenciales en la variable `${{Postgres.DATABASE_URL}}`).
 
@@ -161,17 +163,29 @@ El token de Discord se usa solo dentro del callback y **nunca se persiste**. Son
 | Método | Ruta | Rol | Descripción |
 |---|---|---|---|
 | GET | `/me` | `player` | Perfil Steam del jugador (`steamId`, `displayName`, `avatarUrl`, `status`, `superAdmin`) |
+| GET | `/admin/me` | `admin` | Perfil del admin Discord (`discordUserId`, `username`, `avatarUrl`, `platformAdmin`) |
 | GET | `/admin/guilds` | `admin` | Guilds de Discord donde el admin es owner/ADMINISTRATOR (cache del login) |
 | GET | `/servers/mine` | `admin` | Servidores cuyo `owner` es el admin Discord autenticado |
 | POST | `/servers` | `admin` | Crear servidor — requiere `discordGuildId` **verificado** en backend; queda en `status=pending` |
 | PUT | `/servers/{slug}` | `admin` | Actualizar servidor (debe ser el `owner`) |
 | DELETE | `/servers/{slug}` | `admin` | Eliminar servidor (debe ser el `owner`) |
 
+### Moderación de plataforma (solo `PLATFORM_ADMINS`)
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| GET | `/admin/servers?status=pending` | Lista servidores por estado (`pending`/`accepted`/`rejected`/`banned`) con info del guild verificado |
+| POST | `/admin/servers/{id}/approve` | `accepted` + `reviewed_at`/`reviewed_by` |
+| POST | `/admin/servers/{id}/reject` | `rejected` |
+| POST | `/admin/servers/{id}/ban` | `banned` |
+
+Gateado por `ROLE_ADMIN` y, dentro, por la allowlist `PLATFORM_ADMINS` (403 si no estás). Los servidores **nunca se borran**; solo cambian de estado. El listado público (`GET /servers`, `GET /servers/{slug}`) solo devuelve `accepted`.
+
 > El rol se deriva del claim `type` del JWT: `ROLE_ADMIN` (panel Discord) o `ROLE_PLAYER` (overlay Steam). La verificación de propiedad (`owner`) y la del guild se hacen **siempre en el backend**, no basta con esconderlo en React.
 
 > **Verificación de guild:** en el login se leen los guilds del admin (`/users/@me/guilds`), se filtran los que es owner/ADMINISTRATOR y se cachean en memoria (TTL 30 min). Al crear un servidor, el `discordGuildId` enviado debe estar en ese set (si no → 403). El token de Discord nunca se persiste.
 
-> **Nota:** los endpoints de moderación de plataforma (`GET /admin/servers?status=…`, approve/reject/ban) llegan en el siguiente checkpoint. El antiguo super-admin por Steam (`/admin/accounts`) fue **eliminado**.
+> El antiguo super-admin por Steam (`/admin/accounts`) fue **eliminado**.
 
 ### Body de creación/actualización de servidor
 
@@ -250,8 +264,8 @@ Las migraciones están en `src/main/resources/db/migration/`. Se aplican automá
 | A | Esquema V4 + entidades/repos/DTOs + baja del super-admin Steam | ✅ hecho |
 | B | Login Discord OAuth2 del panel (token `type=admin`, roles, `/auth/discord`) | ✅ hecho |
 | C | Verificación de guild en el alta + cache de guilds elegibles + enforcement de propiedad | ✅ hecho |
-| D | Moderación de plataforma (`/admin/servers`, approve/reject/ban) + filtrado público por `accepted` + lectura de equipo | ⏳ pendiente |
-| E | Frontend (botón Discord, alta con selector de guild, vista de moderación) | ⏳ pendiente |
+| D | Moderación de plataforma (`/admin/servers`, approve/reject/ban) + filtrado público por `accepted` | ✅ hecho |
+| E | Frontend (botón Discord, alta con selector de guild, vista de moderación) | ✅ hecho |
 
 ## Próximos pasos
 

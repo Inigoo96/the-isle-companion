@@ -583,7 +583,7 @@ PENDIENTE PARA v0.6.0:
  VERSION 0.6.0 - Panel admin 100% Discord (identidad separada)
  Fecha: 2026-06-25
  Overlay: sin cambios (sigue con login Steam)
- Estado: en progreso (checkpoints A, B y C hechos; D-E pendientes)
+ Estado: completo (checkpoints A-E hechos)
 ========================================
 
 CONTEXTO:
@@ -650,12 +650,32 @@ CHECKPOINT C - Verificacion de guild en el alta de server:
       guild_id del frontend. update/delete siguen exigiendo ser el owner.
   [x] /admin/** exige ROLE_ADMIN en SecurityConfig.
 
-PENDIENTE (siguientes checkpoints):
-  - D: moderacion de plataforma (allowlist app.platform-admins de discord ids;
-       GET /admin/servers?status, approve/reject/ban; publico solo ve accepted)
-       + lectura del equipo (server_members).
-  - E: frontend (boton "Login with Discord", alta con selector de guild,
-       vista de moderacion).
+CHECKPOINT D - Moderacion de plataforma:
+  [x] Allowlist app.platform-admins (env PLATFORM_ADMINS, discord ids por coma)
+      + AdminService.isPlatformAdmin.
+  [x] GET /admin/me: perfil del admin (discordUserId, username, avatarUrl,
+      platformAdmin). GET /admin/guilds consolidado en el mismo controller.
+  [x] PlatformModerationController: GET /admin/servers?status=...,
+      POST .../approve|reject|ban (status + reviewed_at/by). 403 si no eres
+      platform admin, 400 status invalido, 404 server inexistente.
+  [x] Filtrado publico: GET /servers y /servers/{slug} solo devuelven accepted.
+  [x] server_members queda modelado (sin flujo de invitaciones todavia).
+
+CHECKPOINT E - Frontend (admin React + Vite, 100% Discord):
+  [x] Login: boton "Login with Discord" (redirect completo a /auth/discord).
+  [x] AuthCallback: llama a /admin/me (ya no /me, que es player) y guarda la
+      sesion admin. Guard por user.platformAdmin para la vista de moderacion.
+  [x] ServerForm: en el alta, selector de guild verificado (GET /admin/guilds)
+      que envia discordGuildId; en edicion carga desde /servers/mine (porque el
+      GET publico ya solo da accepted) y muestra guild + estado.
+  [x] Dashboard: badge de estado por servidor. Layout: nav "Moderation" solo si
+      platformAdmin. Eliminadas las paginas viejas de Steam (SuperAdmin, Pending).
+  [x] Nueva pagina Moderation: pestañas por estado + approve/reject/ban.
+
+CONFIGURACION PARA MODERAR:
+  Para que tu cuenta vea la moderacion, pon tu Discord user id en la env
+  PLATFORM_ADMINS del backend en Railway (Discord -> Ajustes -> Avanzado ->
+  Modo desarrollador, luego clic derecho en tu nombre -> Copiar ID de usuario).
 
 
 ================================================================================

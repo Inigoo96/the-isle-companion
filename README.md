@@ -146,8 +146,8 @@ El instalador permite elegir la carpeta de instalación y crea acceso directo en
 - [x] Esquema: tabla `admins` (Discord), `servers.owner` → admin, estado de servidor (`pending`/`accepted`/`rejected`/`banned`), tabla `server_members` (checkpoint A)
 - [x] Login del panel por Discord OAuth2 + JWT con identidad dual (`type=admin`/`type=player`) (checkpoint B)
 - [x] Verificación de propiedad del guild de Discord en el alta de servidor + cache de guilds elegibles (checkpoint C)
-- [ ] Moderación de plataforma: aprobar/rechazar/banear servidores; público solo ve `accepted` (checkpoint D)
-- [ ] Frontend: botón "Login with Discord", alta con selector de guild, vista de moderación (checkpoint E)
+- [x] Moderación de plataforma: aprobar/rechazar/banear servidores; público solo ve `accepted` (checkpoint D)
+- [x] Frontend: botón "Login with Discord", alta con selector de guild, vista de moderación (checkpoint E)
 
 ### Pendiente — Corrección de datos de dinosaurios
 > **IMPORTANTE:** Los datos actuales de dinos.json necesitan revisión.

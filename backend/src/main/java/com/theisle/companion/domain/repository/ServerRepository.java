@@ -1,6 +1,7 @@
 package com.theisle.companion.domain.repository;
 
 import com.theisle.companion.domain.entity.Server;
+import com.theisle.companion.domain.enums.ServerStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -42,4 +43,16 @@ public interface ServerRepository extends JpaRepository<Server, UUID> {
     boolean existsByDiscordGuildId(String discordGuildId);
 
     List<Server> findAllByOrderByNameAsc();
+
+    /** Listado publico: solo servidores con un estado dado (p.ej. accepted). */
+    List<Server> findByStatusOrderByNameAsc(ServerStatus status);
+
+    /** Cola de moderacion: servidores por estado, con el owner cargado. */
+    @Query("""
+        SELECT s FROM Server s
+        JOIN FETCH s.owner
+        WHERE s.status = :status
+        ORDER BY s.createdAt ASC
+        """)
+    List<Server> findByStatusWithOwner(@Param("status") ServerStatus status);
 }

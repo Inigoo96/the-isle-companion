@@ -9,27 +9,44 @@ export default function ServerForm() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
-    slug: '', name: '', growthMultiplier: '1.00', rules: ''
+    slug: '', name: '', growthMultiplier: '1.00', rules: '', discordInviteUrl: ''
   });
-  const [allDinos, setAllDinos]     = useState([]);
-  const [allowedDinos, setAllowed]  = useState(new Set());
-  const [error, setError]           = useState('');
-  const [saving, setSaving]         = useState(false);
+  const [allDinos, setAllDinos]       = useState([]);
+  const [allowedDinos, setAllowed]    = useState(new Set());
+  const [guilds, setGuilds]           = useState([]);          // eligible guilds (create only)
+  const [guildId, setGuildId]         = useState('');          // selected guild (create)
+  const [guildName, setGuildName]     = useState('');          // existing guild (edit)
+  const [status, setStatus]           = useState('');          // existing status (edit)
+  const [error, setError]             = useState('');
+  const [loading, setLoading]         = useState(true);
+  const [saving, setSaving]           = useState(false);
 
   useEffect(() => {
     const dinosPromise = api.get('/dinos').then(d => { setAllDinos(d); return d; });
+
     if (isEdit) {
-      Promise.all([dinosPromise, api.get(`/servers/${slug}`)]).then(([dinos, s]) => {
-        setForm({
-          slug: s.slug,
-          name: s.name,
-          growthMultiplier: s.growthMultiplier,
-          rules: s.rules || ''
-        });
-        // If all dinos are returned it means the server allows all → keep Set empty (= all allowed)
-        const allAllowed = s.allowedDinos?.length === dinos.length;
-        setAllowed(allAllowed ? new Set() : new Set(s.allowedDinos?.map(d => d.id) || []));
-      });
+      // The public GET /servers/{slug} only returns accepted servers, so load the
+      // owner's own server (including pending) from /servers/mine.
+      Promise.all([dinosPromise, api.get('/servers/mine')])
+        .then(([dinos, mine]) => {
+          const s = (mine || []).find(x => x.slug === slug);
+          if (!s) { setError('Server not found'); return; }
+          setForm({
+            slug: s.slug, name: s.name, growthMultiplier: s.growthMultiplier,
+            rules: s.rules || '', discordInviteUrl: s.discordInviteUrl || ''
+          });
+          setGuildName(s.discordGuildName || '');
+          setStatus(s.status || '');
+          const allAllowed = s.allowedDinos?.length === dinos.length;
+          setAllowed(allAllowed ? new Set() : new Set(s.allowedDinos?.map(d => d.id) || []));
+        })
+        .catch(err => setError(err.message))
+        .finally(() => setLoading(false));
+    } else {
+      Promise.all([dinosPromise, api.get('/admin/guilds')])
+        .then(([, g]) => setGuilds(g || []))
+        .catch(err => setError(err.message))
+        .finally(() => setLoading(false));
     }
   }, [slug]);
 
@@ -47,12 +64,17 @@ export default function ServerForm() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (!isEdit && !guildId) { setError('Pick the Discord server you administrate.'); return; }
     setSaving(true);
     setError('');
     try {
       const body = {
-        ...form,
+        slug: form.slug,
+        name: form.name,
         growthMultiplier: parseFloat(form.growthMultiplier),
+        rules: form.rules,
+        discordInviteUrl: form.discordInviteUrl || null,
+        discordGuildId: isEdit ? null : guildId,
         allowedDinoIds: [...allowedDinos]
       };
       if (isEdit) {
@@ -94,6 +116,43 @@ export default function ServerForm() {
       <form onSubmit={handleSubmit} className={styles.form}>
         {error && <div className={styles.error}>{error}</div>}
 
+        {/* New server: pick the verified Discord guild you own/administrate */}
+        {!isEdit && (
+          <div className={styles.field}>
+            <label>Discord Server (verified ownership)</label>
+            {loading ? (
+              <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>Loading your Discord servers…</p>
+            ) : guilds.length === 0 ? (
+              <p style={{ color: 'var(--text-muted)', fontSize: 13, lineHeight: 1.5 }}>
+                No eligible Discord servers found. You must be the <strong>owner</strong> or have
+                <strong> Administrator</strong> in a Discord server. If you recently got access,
+                <a href="#" onClick={(e) => { e.preventDefault(); window.location.reload(); }}> log in again</a> to refresh.
+              </p>
+            ) : (
+              <div className={styles.dinoGrid}>
+                {guilds.map(g => (
+                  <label key={g.id} className={`${styles.dinoChip} ${guildId === g.id ? styles.selected : ''}`}>
+                    <input type="radio" name="guild" checked={guildId === g.id}
+                      onChange={() => setGuildId(g.id)} />
+                    {g.iconUrl && <img src={g.iconUrl} alt="" style={{ width: 18, height: 18, borderRadius: 4, marginRight: 6, verticalAlign: 'middle' }} />}
+                    {g.name}
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Edit: show the (immutable) verified guild + moderation status */}
+        {isEdit && (
+          <div className={styles.field}>
+            <label>Discord Server</label>
+            <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>
+              {guildName || '—'} {status && <span>· status: <strong>{status}</strong></span>}
+            </p>
+          </div>
+        )}
+
         <div className={styles.row}>
           <div className={styles.field}>
             <label>Server Name</label>
@@ -108,11 +167,18 @@ export default function ServerForm() {
           </div>
         </div>
 
-        <div className={styles.field} style={{ maxWidth: 200 }}>
-          <label>Growth Multiplier</label>
-          <input type="number" min="0.05" max="100" step="0.05"
-            value={form.growthMultiplier}
-            onChange={e => set('growthMultiplier', e.target.value)} required />
+        <div className={styles.row}>
+          <div className={styles.field} style={{ maxWidth: 200 }}>
+            <label>Growth Multiplier</label>
+            <input type="number" min="0.05" max="100" step="0.05"
+              value={form.growthMultiplier}
+              onChange={e => set('growthMultiplier', e.target.value)} required />
+          </div>
+          <div className={styles.field}>
+            <label>Discord Invite (optional)</label>
+            <input value={form.discordInviteUrl} onChange={e => set('discordInviteUrl', e.target.value)}
+              placeholder="https://discord.gg/…" />
+          </div>
         </div>
 
         <div className={styles.field}>

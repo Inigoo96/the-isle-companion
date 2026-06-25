@@ -1,0 +1,74 @@
+.header { margin-bottom: 20px; }
+.title { font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+.sub { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
+
+.tabs { display: flex; gap: 6px; margin-bottom: 20px; }
+.tab {
+  padding: 7px 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.tab:hover { color: var(--text); }
+.tabActive {
+  color: var(--accent);
+  border-color: rgba(var(--accent-rgb), 0.4);
+  background: rgba(var(--accent-rgb), 0.08);
+}
+
+.muted { color: var(--text-muted); font-size: 14px; }
+.error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #f87171;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.list { display: flex; flex-direction: column; gap: 10px; }
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.cardMain { min-width: 0; }
+.name { font-size: 15px; font-weight: 700; color: var(--text); }
+.slug { color: var(--text-muted); font-weight: 500; font-size: 13px; }
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.meta strong { color: var(--text); font-weight: 600; }
+.meta a { color: var(--accent); }
+
+.actions { display: flex; gap: 8px; flex-shrink: 0; }
+.actions button {
+  padding: 7px 14px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: opacity 0.15s;
+}
+.actions button:disabled { opacity: 0.5; cursor: default; }
+.approve { background: rgba(34, 197, 94, 0.15); color: #22c55e; border-color: rgba(34, 197, 94, 0.3); }
+.reject  { background: rgba(234, 179, 8, 0.12); color: #eab308; border-color: rgba(234, 179, 8, 0.3); }
+.ban     { background: rgba(239, 68, 68, 0.12); color: #ef4444; border-color: rgba(239, 68, 68, 0.3); }

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { saveAuth } from '../auth';
+import { saveAuth, clearAuth } from '../auth';
 import { api } from '../api';
 
 export default function AuthCallback() {
@@ -9,23 +9,18 @@ export default function AuthCallback() {
 
   useEffect(() => {
     const token = params.get('token');
-    if (!token) { navigate('/login'); return; }
+    if (!token) { navigate('/login', { replace: true }); return; }
 
-    // Save token first so api.js can use it, then fetch full profile
+    // Save token first so api.js attaches it, then load the admin profile.
     localStorage.setItem('isle_admin_token', token);
-    api.get('/me')
+    api.get('/admin/me')
       .then(user => {
         saveAuth(token, user);
-        if (window.opener) {
-          window.opener.postMessage({ type: 'auth-success' }, window.location.origin);
-          window.close();
-        } else {
-          navigate('/');
-        }
+        navigate('/', { replace: true });
       })
       .catch(() => {
-        if (window.opener) window.close();
-        else navigate('/login');
+        clearAuth();
+        navigate('/login', { replace: true });
       });
   }, []);
 

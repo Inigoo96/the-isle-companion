@@ -17,7 +17,7 @@ export default function Layout({ children }) {
   const links = [
     { to: '/',             label: 'Dashboard' },
     { to: '/servers/new',  label: '+ New Server' },
-    ...(user?.superAdmin ? [{ to: '/super-admin', label: 'Accounts' }] : []),
+    ...(user?.platformAdmin ? [{ to: '/moderation', label: 'Moderation' }] : []),
   ];
 
   return (
@@ -46,7 +46,7 @@ export default function Layout({ children }) {
             {user?.avatarUrl && (
               <img src={user.avatarUrl} alt="" className={styles.avatar} />
             )}
-            <span className={styles.userName}>{user?.displayName}</span>
+            <span className={styles.userName}>{user?.username}</span>
           </div>
           {confirming ? (
             <div className={styles.logoutConfirm}>

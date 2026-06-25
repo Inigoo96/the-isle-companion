@@ -18,12 +18,30 @@ export default function Dashboard() {
 
   const totalDinos = servers.reduce((sum, s) => sum + (s.allowedDinos?.length || 0), 0);
 
+  function StatusPill({ status }) {
+    if (!status) return null;
+    const colors = {
+      pending:  { bg: 'rgba(234,179,8,0.15)',  fg: '#eab308' },
+      accepted: { bg: 'rgba(34,197,94,0.15)',  fg: '#22c55e' },
+      rejected: { bg: 'rgba(239,68,68,0.15)',  fg: '#ef4444' },
+      banned:   { bg: 'rgba(127,29,29,0.25)',  fg: '#f87171' },
+    };
+    const c = colors[status] || colors.pending;
+    return (
+      <span style={{
+        marginLeft: 8, padding: '2px 8px', borderRadius: 999, fontSize: 10,
+        fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em',
+        background: c.bg, color: c.fg, verticalAlign: 'middle',
+      }}>{status}</span>
+    );
+  }
+
   return (
     <div>
       <div className={styles.header}>
         <div>
           <h1 className={styles.title}>Dashboard</h1>
-          <p className={styles.sub}>Welcome back, <strong>{user?.displayName}</strong></p>
+          <p className={styles.sub}>Welcome back, <strong>{user?.username}</strong></p>
         </div>
         <Link to="/servers/new" className={styles.btnPrimary}>+ New Server</Link>
       </div>
@@ -61,7 +79,10 @@ export default function Dashboard() {
             <Link key={s.slug} to={`/servers/${s.slug}`} className={styles.card}>
               <div className={styles.cardAccent} />
               <div className={styles.cardBody}>
-                <div className={styles.cardName}>{s.name}</div>
+                <div className={styles.cardName}>
+                  {s.name}
+                  <StatusPill status={s.status} />
+                </div>
                 <div className={styles.cardSlug}>/{s.slug}</div>
                 {s.rules && (
                   <p className={styles.cardRules}>{s.rules}</p>
