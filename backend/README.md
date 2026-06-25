@@ -161,14 +161,17 @@ El token de Discord se usa solo dentro del callback y **nunca se persiste**. Son
 | Método | Ruta | Rol | Descripción |
 |---|---|---|---|
 | GET | `/me` | `player` | Perfil Steam del jugador (`steamId`, `displayName`, `avatarUrl`, `status`, `superAdmin`) |
+| GET | `/admin/guilds` | `admin` | Guilds de Discord donde el admin es owner/ADMINISTRATOR (cache del login) |
 | GET | `/servers/mine` | `admin` | Servidores cuyo `owner` es el admin Discord autenticado |
-| POST | `/servers` | `admin` | Crear servidor (queda en `status=pending`) |
+| POST | `/servers` | `admin` | Crear servidor — requiere `discordGuildId` **verificado** en backend; queda en `status=pending` |
 | PUT | `/servers/{slug}` | `admin` | Actualizar servidor (debe ser el `owner`) |
 | DELETE | `/servers/{slug}` | `admin` | Eliminar servidor (debe ser el `owner`) |
 
-> El rol se deriva del claim `type` del JWT: `ROLE_ADMIN` (panel Discord) o `ROLE_PLAYER` (overlay Steam). La verificación de propiedad (`owner`) se hace **siempre en el backend**, no basta con esconderlo en React.
+> El rol se deriva del claim `type` del JWT: `ROLE_ADMIN` (panel Discord) o `ROLE_PLAYER` (overlay Steam). La verificación de propiedad (`owner`) y la del guild se hacen **siempre en el backend**, no basta con esconderlo en React.
 
-> **Nota:** los endpoints de moderación de plataforma (`GET /admin/servers?status=…`, approve/reject/ban) y la verificación de guild en el alta llegan en los siguientes checkpoints. El antiguo super-admin por Steam (`/admin/accounts`) fue **eliminado**.
+> **Verificación de guild:** en el login se leen los guilds del admin (`/users/@me/guilds`), se filtran los que es owner/ADMINISTRATOR y se cachean en memoria (TTL 30 min). Al crear un servidor, el `discordGuildId` enviado debe estar en ese set (si no → 403). El token de Discord nunca se persiste.
+
+> **Nota:** los endpoints de moderación de plataforma (`GET /admin/servers?status=…`, approve/reject/ban) llegan en el siguiente checkpoint. El antiguo super-admin por Steam (`/admin/accounts`) fue **eliminado**.
 
 ### Body de creación/actualización de servidor
 
@@ -246,7 +249,7 @@ Las migraciones están en `src/main/resources/db/migration/`. Se aplican automá
 |---|---|---|
 | A | Esquema V4 + entidades/repos/DTOs + baja del super-admin Steam | ✅ hecho |
 | B | Login Discord OAuth2 del panel (token `type=admin`, roles, `/auth/discord`) | ✅ hecho |
-| C | Verificación de guild en el alta + cache de guilds elegibles + enforcement de propiedad | ⏳ pendiente |
+| C | Verificación de guild en el alta + cache de guilds elegibles + enforcement de propiedad | ✅ hecho |
 | D | Moderación de plataforma (`/admin/servers`, approve/reject/ban) + filtrado público por `accepted` + lectura de equipo | ⏳ pendiente |
 | E | Frontend (botón Discord, alta con selector de guild, vista de moderación) | ⏳ pendiente |
 

@@ -12,6 +12,8 @@ public record ServerDto(
         String rules,
         JsonNode branding,
         String status,
+        String discordGuildName,
+        String discordInviteUrl,
         List<AllowedDinoDto> allowedDinos
 ) {
     public record AllowedDinoDto(int id, String name, String diet, String tier) {}

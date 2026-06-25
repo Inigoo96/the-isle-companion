@@ -49,6 +49,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/servers/*").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/servers/*").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/servers", "/servers/*").permitAll()
+                // Panel admin (Discord): guilds elegibles y, más adelante, moderación
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 // Everything else requires JWT
                 .anyRequest().authenticated()
             )

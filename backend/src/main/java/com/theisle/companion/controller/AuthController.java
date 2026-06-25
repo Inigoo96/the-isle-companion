@@ -5,6 +5,7 @@ import com.theisle.companion.domain.entity.Admin;
 import com.theisle.companion.service.AccountService;
 import com.theisle.companion.service.AdminService;
 import com.theisle.companion.service.DiscordOAuthService;
+import com.theisle.companion.service.EligibleGuildService;
 import com.theisle.companion.service.JwtService;
 import com.theisle.companion.service.OAuthStateService;
 import com.theisle.companion.service.SteamOpenIdService;
@@ -32,6 +33,7 @@ public class AuthController {
     private final DiscordOAuthService discordOAuth;
     private final OAuthStateService oauthState;
     private final AdminService adminService;
+    private final EligibleGuildService eligibleGuilds;
     private final JwtService jwtService;
     private final String adminUrl;
 
@@ -40,6 +42,7 @@ public class AuthController {
                           DiscordOAuthService discordOAuth,
                           OAuthStateService oauthState,
                           AdminService adminService,
+                          EligibleGuildService eligibleGuilds,
                           JwtService jwtService,
                           @Value("${app.admin-url}") String adminUrl) {
         this.steamOpenId    = steamOpenId;
@@ -47,6 +50,7 @@ public class AuthController {
         this.discordOAuth   = discordOAuth;
         this.oauthState     = oauthState;
         this.adminService   = adminService;
+        this.eligibleGuilds = eligibleGuilds;
         this.jwtService     = jwtService;
         this.adminUrl       = adminUrl;
     }
@@ -109,6 +113,9 @@ public class AuthController {
         String accessToken = discordOAuth.exchangeCode(code);
         DiscordOAuthService.DiscordUser user = discordOAuth.fetchUser(accessToken);
         Admin admin = adminService.findOrCreate(user.id(), user.username(), user.avatarUrl());
+        // El login tambien verifica propiedad: cacheamos los guilds elegibles del
+        // admin (owner/ADMINISTRATOR). El token de Discord no se persiste.
+        eligibleGuilds.store(admin.getDiscordUserId(), discordOAuth.fetchEligibleGuilds(accessToken));
         String token = jwtService.generateAdmin(admin.getDiscordUserId(), admin.getUsername());
         return redirectToPanel(adminUrl + "/auth/callback", "token", token);
     }

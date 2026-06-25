@@ -12,7 +12,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
@@ -25,10 +27,14 @@ import java.util.StringJoiner;
 @Service
 public class DiscordOAuthService {
 
-    private static final String AUTHORIZE_URL = "https://discord.com/api/oauth2/authorize";
-    private static final String TOKEN_URL     = "https://discord.com/api/oauth2/token";
-    private static final String USERS_ME_URL  = "https://discord.com/api/users/@me";
-    private static final String SCOPES        = "identify guilds";
+    private static final String AUTHORIZE_URL      = "https://discord.com/api/oauth2/authorize";
+    private static final String TOKEN_URL          = "https://discord.com/api/oauth2/token";
+    private static final String USERS_ME_URL       = "https://discord.com/api/users/@me";
+    private static final String USERS_ME_GUILDS_URL = "https://discord.com/api/users/@me/guilds";
+    private static final String SCOPES             = "identify guilds";
+
+    // Permiso ADMINISTRATOR de Discord (bit 0x8 del bitfield de permisos).
+    private static final long PERM_ADMINISTRATOR = 0x8L;
 
     private final String clientId;
     private final String clientSecret;
@@ -88,6 +94,42 @@ public class DiscordOAuthService {
         return new DiscordUser(id, username, avatarUrl);
     }
 
+    /**
+     * Lee los guilds del usuario (GET /users/@me/guilds) y devuelve SOLO aquellos
+     * donde es owner o tiene ADMINISTRATOR. Esta es la verificacion de propiedad:
+     * se hace en el backend con el token de Discord, nunca confiando en el frontend.
+     */
+    public List<DiscordGuild> fetchEligibleGuilds(String accessToken) {
+        JsonNode arr = getJson(USERS_ME_GUILDS_URL, accessToken);
+        List<DiscordGuild> eligible = new ArrayList<>();
+        if (arr != null && arr.isArray()) {
+            for (JsonNode g : arr) {
+                boolean owner = g.path("owner").asBoolean(false);
+                boolean admin = (parsePermissions(g.path("permissions")) & PERM_ADMINISTRATOR) != 0;
+                if (!owner && !admin) continue;
+
+                String id   = text(g, "id");
+                String name = text(g, "name");
+                String icon = text(g, "icon");
+                String iconUrl = (id != null && icon != null)
+                        ? "https://cdn.discordapp.com/icons/" + id + "/" + icon + ".png"
+                        : null;
+                eligible.add(new DiscordGuild(id, name, iconUrl));
+            }
+        }
+        return eligible;
+    }
+
+    private static long parsePermissions(JsonNode permissions) {
+        if (permissions == null || permissions.isNull()) return 0L;
+        try {
+            // Discord envia el bitfield como string para no perder precision.
+            return Long.parseLong(permissions.asText("0"));
+        } catch (NumberFormatException e) {
+            return 0L;
+        }
+    }
+
     // --- HTTP helpers ---------------------------------------------------------
 
     private JsonNode postForm(String url, Map<String, String> form) {
@@ -132,4 +174,7 @@ public class DiscordOAuthService {
     }
 
     public record DiscordUser(String id, String username, String avatarUrl) {}
+
+    /** Guild verificado: el admin es owner o tiene ADMINISTRATOR en el. */
+    public record DiscordGuild(String id, String name, String iconUrl) {}
 }

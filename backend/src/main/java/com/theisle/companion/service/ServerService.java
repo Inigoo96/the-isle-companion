@@ -13,9 +13,11 @@ import com.theisle.companion.domain.repository.ServerRepository;
 import com.theisle.companion.dto.ServerDto;
 import com.theisle.companion.dto.ServerRequest;
 import com.theisle.companion.dto.ServerSummaryDto;
+import com.theisle.companion.service.DiscordOAuthService.DiscordGuild;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +34,7 @@ public class ServerService {
     private final ServerAllowedDinoRepository allowedDinoRepo;
     private final AdminRepository adminRepo;
     private final DinoRepository dinoRepo;
+    private final EligibleGuildService eligibleGuilds;
     private final ObjectMapper objectMapper;
 
     @PersistenceContext
@@ -41,11 +44,13 @@ public class ServerService {
                          ServerAllowedDinoRepository allowedDinoRepo,
                          AdminRepository adminRepo,
                          DinoRepository dinoRepo,
+                         EligibleGuildService eligibleGuilds,
                          ObjectMapper objectMapper) {
         this.serverRepo      = serverRepo;
         this.allowedDinoRepo = allowedDinoRepo;
         this.adminRepo       = adminRepo;
         this.dinoRepo        = dinoRepo;
+        this.eligibleGuilds  = eligibleGuilds;
         this.objectMapper    = objectMapper;
     }
 
@@ -69,8 +74,20 @@ public class ServerService {
 
     @Transactional
     public ServerDto create(String discordUserId, ServerRequest req) {
+        if (req.discordGuildId() == null || req.discordGuildId().isBlank()) {
+            throw new IllegalArgumentException("discordGuildId is required");
+        }
         if (serverRepo.existsBySlug(req.slug())) {
             throw new IllegalArgumentException("Slug already in use: " + req.slug());
+        }
+        // Verificacion de propiedad en el BACKEND: el guild debe estar en el set
+        // elegible del admin (owner/ADMINISTRATOR), cacheado en el login. Nunca
+        // confiamos en el guild_id que mande el frontend sin contrastarlo.
+        DiscordGuild guild = eligibleGuilds.findVerified(discordUserId, req.discordGuildId())
+                .orElseThrow(() -> new AccessDeniedException(
+                        "Not an owner/admin of the requested Discord guild (or session expired)"));
+        if (serverRepo.existsByDiscordGuildId(guild.id())) {
+            throw new IllegalArgumentException("Guild already linked to a server: " + guild.id());
         }
         Admin owner = adminRepo.findByDiscordUserId(discordUserId)
                 .orElseThrow(() -> new EntityNotFoundException("Admin not found"));
@@ -84,6 +101,9 @@ public class ServerService {
         server.setRules(req.rules());
         server.setBranding("{}");
         server.setStatus(ServerStatus.PENDING);
+        server.setDiscordGuildId(guild.id());
+        server.setDiscordGuildName(guild.name());
+        server.setDiscordInviteUrl(req.discordInviteUrl());
         OffsetDateTime now = OffsetDateTime.now();
         server.setCreatedAt(now);
         server.setUpdatedAt(now);
@@ -101,6 +121,8 @@ public class ServerService {
         server.setName(req.name());
         server.setGrowthMultiplier(req.growthMultiplier());
         server.setRules(req.rules());
+        // El guild verificado no se cambia aqui; la invitacion publica si es editable.
+        server.setDiscordInviteUrl(req.discordInviteUrl());
         server.setUpdatedAt(OffsetDateTime.now());
 
         syncAllowedDinos(server, req.allowedDinoIds());
@@ -160,6 +182,8 @@ public class ServerService {
                 s.getRules(),
                 parseJson(s.getBranding()),
                 s.getStatus() != null ? s.getStatus().name().toLowerCase() : null,
+                s.getDiscordGuildName(),
+                s.getDiscordInviteUrl(),
                 allowedDinos
         );
     }

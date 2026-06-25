@@ -583,7 +583,7 @@ PENDIENTE PARA v0.6.0:
  VERSION 0.6.0 - Panel admin 100% Discord (identidad separada)
  Fecha: 2026-06-25
  Overlay: sin cambios (sigue con login Steam)
- Estado: en progreso (checkpoints A y B hechos; C-E pendientes)
+ Estado: en progreso (checkpoints A, B y C hechos; D-E pendientes)
 ========================================
 
 CONTEXTO:
@@ -638,10 +638,19 @@ CONFIGURACION REQUERIDA PARA PROBAR EN PRODUCCION:
   El boton del panel todavia es Steam (cambio del frontend = checkpoint E);
   hasta entonces el flujo Discord se prueba visitando /auth/discord a mano.
 
+CHECKPOINT C - Verificacion de guild en el alta de server:
+  [x] DiscordOAuthService.fetchEligibleGuilds: GET /users/@me/guilds y filtra
+      los guilds donde el admin es owner o tiene ADMINISTRATOR (permissions & 0x8).
+  [x] EligibleGuildService: cache en memoria por admin (TTL 30 min), poblado en
+      el callback del login. El token de Discord no se persiste.
+  [x] GET /admin/guilds: lista los guilds elegibles del admin (desde el cache).
+  [x] ServerService.create: exige discordGuildId, lo verifica contra el cache
+      (403 si no es elegible), bloquea guild ya enlazado a otro server (400), y
+      graba discord_guild_id/name verificados + status=pending. Nunca se fia del
+      guild_id del frontend. update/delete siguen exigiendo ser el owner.
+  [x] /admin/** exige ROLE_ADMIN en SecurityConfig.
+
 PENDIENTE (siguientes checkpoints):
-  - C: verificacion de guild en el alta de server (GET /users/@me/guilds,
-       filtra owner o ADMINISTRATOR) + cache en memoria de guilds elegibles +
-       enforcement de propiedad por admin en backend.
   - D: moderacion de plataforma (allowlist app.platform-admins de discord ids;
        GET /admin/servers?status, approve/reject/ban; publico solo ve accepted)
        + lectura del equipo (server_members).

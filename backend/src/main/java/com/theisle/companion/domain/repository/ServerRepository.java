@@ -39,5 +39,7 @@ public interface ServerRepository extends JpaRepository<Server, UUID> {
 
     boolean existsBySlug(String slug);
 
+    boolean existsByDiscordGuildId(String discordGuildId);
+
     List<Server> findAllByOrderByNameAsc();
 }
