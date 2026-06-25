@@ -66,7 +66,9 @@ public class AuthController {
                     .fromPath("/auth/done")
                     .queryParam("token", token)
                     .queryParam("displayName", account.getDisplayName())
-                    .build().toUri().toString();
+                    .encode()
+                    .build()
+                    .toUriString();
         }
 
         return ResponseEntity.status(HttpStatus.FOUND)
