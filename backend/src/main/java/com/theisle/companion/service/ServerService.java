@@ -2,12 +2,11 @@ package com.theisle.companion.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.theisle.companion.domain.entity.Account;
-import com.theisle.companion.domain.entity.Dino;
+import com.theisle.companion.domain.entity.Admin;
 import com.theisle.companion.domain.entity.Server;
 import com.theisle.companion.domain.entity.ServerAllowedDino;
-import com.theisle.companion.domain.enums.AccountStatus;
-import com.theisle.companion.domain.repository.AccountRepository;
+import com.theisle.companion.domain.enums.ServerStatus;
+import com.theisle.companion.domain.repository.AdminRepository;
 import com.theisle.companion.domain.repository.DinoRepository;
 import com.theisle.companion.domain.repository.ServerAllowedDinoRepository;
 import com.theisle.companion.domain.repository.ServerRepository;
@@ -17,8 +16,6 @@ import com.theisle.companion.dto.ServerSummaryDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,35 +30,23 @@ public class ServerService {
 
     private final ServerRepository serverRepo;
     private final ServerAllowedDinoRepository allowedDinoRepo;
-    private final AccountRepository accountRepo;
+    private final AdminRepository adminRepo;
     private final DinoRepository dinoRepo;
     private final ObjectMapper objectMapper;
-    private final String superAdminSteamId;
 
     @PersistenceContext
     private EntityManager em;
 
     public ServerService(ServerRepository serverRepo,
                          ServerAllowedDinoRepository allowedDinoRepo,
-                         AccountRepository accountRepo,
+                         AdminRepository adminRepo,
                          DinoRepository dinoRepo,
-                         ObjectMapper objectMapper,
-                         @Value("${app.super-admin-steam-id}") String superAdminSteamId) {
-        this.serverRepo        = serverRepo;
-        this.allowedDinoRepo   = allowedDinoRepo;
-        this.accountRepo       = accountRepo;
-        this.dinoRepo          = dinoRepo;
-        this.objectMapper      = objectMapper;
-        this.superAdminSteamId = superAdminSteamId;
-    }
-
-    private void requireActive(String steamId) {
-        if (superAdminSteamId.equals(steamId)) return;
-        accountRepo.findBySteamId(steamId).ifPresent(a -> {
-            if (a.getStatus() != AccountStatus.ACTIVE) {
-                throw new AccessDeniedException("Account not approved to manage servers");
-            }
-        });
+                         ObjectMapper objectMapper) {
+        this.serverRepo      = serverRepo;
+        this.allowedDinoRepo = allowedDinoRepo;
+        this.adminRepo       = adminRepo;
+        this.dinoRepo        = dinoRepo;
+        this.objectMapper    = objectMapper;
     }
 
     public ServerDto getBySlug(String slug) {
@@ -76,20 +61,19 @@ public class ServerService {
                 .toList();
     }
 
-    public List<ServerDto> listByOwner(String steamId) {
-        return serverRepo.findByOwnerSteamId(steamId).stream()
+    public List<ServerDto> listByOwner(String discordUserId) {
+        return serverRepo.findByOwnerDiscordUserId(discordUserId).stream()
                 .map(this::toDto)
                 .toList();
     }
 
     @Transactional
-    public ServerDto create(String steamId, ServerRequest req) {
-        requireActive(steamId);
+    public ServerDto create(String discordUserId, ServerRequest req) {
         if (serverRepo.existsBySlug(req.slug())) {
             throw new IllegalArgumentException("Slug already in use: " + req.slug());
         }
-        Account owner = accountRepo.findBySteamId(steamId)
-                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+        Admin owner = adminRepo.findByDiscordUserId(discordUserId)
+                .orElseThrow(() -> new EntityNotFoundException("Admin not found"));
 
         Server server = new Server();
         server.setId(UUID.randomUUID());
@@ -99,6 +83,7 @@ public class ServerService {
         server.setGrowthMultiplier(req.growthMultiplier());
         server.setRules(req.rules());
         server.setBranding("{}");
+        server.setStatus(ServerStatus.PENDING);
         OffsetDateTime now = OffsetDateTime.now();
         server.setCreatedAt(now);
         server.setUpdatedAt(now);
@@ -109,9 +94,8 @@ public class ServerService {
     }
 
     @Transactional
-    public ServerDto update(String steamId, String slug, ServerRequest req) {
-        requireActive(steamId);
-        Server server = serverRepo.findBySlugAndOwnerWithDinos(slug, steamId)
+    public ServerDto update(String discordUserId, String slug, ServerRequest req) {
+        Server server = serverRepo.findBySlugAndOwnerWithDinos(slug, discordUserId)
                 .orElseThrow(() -> new EntityNotFoundException("Server not found: " + slug));
 
         server.setName(req.name());
@@ -124,9 +108,8 @@ public class ServerService {
     }
 
     @Transactional
-    public void delete(String steamId, String slug) {
-        requireActive(steamId);
-        Server server = serverRepo.findBySlugAndOwnerWithDinos(slug, steamId)
+    public void delete(String discordUserId, String slug) {
+        Server server = serverRepo.findBySlugAndOwnerWithDinos(slug, discordUserId)
                 .orElseThrow(() -> new EntityNotFoundException("Server not found: " + slug));
         allowedDinoRepo.deleteByServerId(server.getId());
         serverRepo.delete(server);
@@ -176,6 +159,7 @@ public class ServerService {
                 s.getGrowthMultiplier(),
                 s.getRules(),
                 parseJson(s.getBranding()),
+                s.getStatus() != null ? s.getStatus().name().toLowerCase() : null,
                 allowedDinos
         );
     }

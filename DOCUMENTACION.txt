@@ -579,6 +579,76 @@ PENDIENTE PARA v0.6.0:
   - RCON / datos en vivo (Nivel 2)
 
 
+========================================
+ VERSION 0.6.0 - Panel admin 100% Discord (identidad separada)
+ Fecha: 2026-06-25
+ Overlay: sin cambios (sigue con login Steam)
+ Estado: en progreso (checkpoints A y B hechos; C-E pendientes)
+========================================
+
+CONTEXTO:
+  El panel de administracion pasa a autenticarse y verificar propiedad 100%
+  por Discord. El overlay (jugadores) sigue intacto con Steam. Se separan las
+  dos identidades en tablas distintas y nunca se mezclan:
+    - accounts (Steam) = SOLO jugadores del overlay.
+    - admins (Discord) = SOLO identidad del panel de administracion.
+
+CHECKPOINT A - Esquema y dominio (migracion V4):
+  [x] V4__discord_admin_identity.sql:
+        - Nueva tabla admins (id, discord_user_id UNIQUE, username, avatar_url,
+          created_at, last_login_at).
+        - servers.owner_id: soltada la FK a accounts y recreada hacia admins
+          (ON DELETE RESTRICT). Sin datos reales, se vacian servers y
+          server_allowed_dinos para el cambio de FK.
+        - servers gana: status (enum server_status: pending/accepted/rejected/
+          banned, default pending), reviewed_at, reviewed_by, discord_guild_id,
+          discord_guild_name, discord_invite_url. Indice en status.
+        - Nueva tabla server_members (server_id, admin_id, role) para co-admins;
+          el owner NO va aqui. Solo se modela; invitaciones son fase posterior.
+  [x] Entidades JPA Admin, ServerMember (+ ServerMemberId), enum ServerStatus
+      + converter (mismo patron LowerCaseEnumConverter del resto de enums PG).
+  [x] Server.owner pasa de Account a Admin; repos y DTOs ajustados.
+  [x] Eliminado el admin viejo basado en Steam: SuperAdminController,
+      SuperAdminService, AccountSummaryDto, y el gating por AccountStatus en
+      la gestion de servers. (accounts.status se mantiene en BD por si el
+      overlay lo usa, pero ya no gatea nada del panel.)
+
+CHECKPOINT B - Login del panel por Discord OAuth2:
+  [x] DiscordOAuthService: construye la URL de autorizacion (scopes
+      "identify guilds" + state firmado anti-CSRF), canjea el code por access
+      token y lee GET /users/@me. El token de Discord NO se persiste.
+  [x] OAuthStateService: state firmado de vida corta (10 min), stateless.
+  [x] AdminService.findOrCreate por discord_user_id + last_login_at.
+  [x] JwtService.generateAdmin: token de panel con subject=discord_user_id y
+      claim type=admin. El token del overlay ahora lleva type=player.
+  [x] JwtAuthFilter: asigna ROLE_ADMIN o ROLE_PLAYER segun el claim type
+      (tokens antiguos sin type = player).
+  [x] SecurityConfig: las escrituras de /servers y /servers/mine exigen
+      ROLE_ADMIN. El overlay y su login Steam quedan intactos.
+  [x] AuthController: GET /auth/discord (redirige a Discord) y
+      GET /auth/discord/callback (emite el JWT de panel y vuelve al admin).
+  [x] application.yml: bloque discord.* (client-id, client-secret, redirect-uri).
+
+CONFIGURACION REQUERIDA PARA PROBAR EN PRODUCCION:
+  En https://discord.com/developers/applications crear una app, anadir el
+  redirect "https://the-isle-companion-production.up.railway.app/auth/discord/
+  callback" y configurar en Railway (servicio backend):
+    DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET,
+    DISCORD_REDIRECT_URI = <ese mismo callback de produccion>.
+  El boton del panel todavia es Steam (cambio del frontend = checkpoint E);
+  hasta entonces el flujo Discord se prueba visitando /auth/discord a mano.
+
+PENDIENTE (siguientes checkpoints):
+  - C: verificacion de guild en el alta de server (GET /users/@me/guilds,
+       filtra owner o ADMINISTRATOR) + cache en memoria de guilds elegibles +
+       enforcement de propiedad por admin en backend.
+  - D: moderacion de plataforma (allowlist app.platform-admins de discord ids;
+       GET /admin/servers?status, approve/reject/ban; publico solo ve accepted)
+       + lectura del equipo (server_members).
+  - E: frontend (boton "Login with Discord", alta con selector de guild,
+       vista de moderacion).
+
+
 ================================================================================
  NOTAS PARA FUTURAS VERSIONES DE THE ISLE
 ================================================================================

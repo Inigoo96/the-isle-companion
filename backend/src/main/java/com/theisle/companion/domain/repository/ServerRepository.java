@@ -23,18 +23,19 @@ public interface ServerRepository extends JpaRepository<Server, UUID> {
         SELECT DISTINCT s FROM Server s
         LEFT JOIN FETCH s.allowedDinos ad
         LEFT JOIN FETCH ad.dino
-        WHERE s.owner.steamId = :steamId
+        WHERE s.owner.discordUserId = :discordUserId
         ORDER BY s.createdAt DESC
         """)
-    List<Server> findByOwnerSteamId(@Param("steamId") String steamId);
+    List<Server> findByOwnerDiscordUserId(@Param("discordUserId") String discordUserId);
 
     @Query("""
         SELECT s FROM Server s
         LEFT JOIN FETCH s.allowedDinos ad
         LEFT JOIN FETCH ad.dino
-        WHERE s.slug = :slug AND s.owner.steamId = :steamId
+        WHERE s.slug = :slug AND s.owner.discordUserId = :discordUserId
         """)
-    Optional<Server> findBySlugAndOwnerWithDinos(@Param("slug") String slug, @Param("steamId") String steamId);
+    Optional<Server> findBySlugAndOwnerWithDinos(@Param("slug") String slug,
+                                                 @Param("discordUserId") String discordUserId);
 
     boolean existsBySlug(String slug);
 

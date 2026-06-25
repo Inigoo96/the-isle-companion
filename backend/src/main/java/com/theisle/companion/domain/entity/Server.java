@@ -1,5 +1,6 @@
 package com.theisle.companion.domain.entity;
 
+import com.theisle.companion.domain.enums.ServerStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -16,9 +17,10 @@ public class Server {
     @Id
     private UUID id;
 
+    // Owner = identidad Discord del panel (admins), NO una cuenta Steam.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
-    private Account owner;
+    private Admin owner;
 
     @Column(nullable = false, unique = true, length = 48)
     private String slug;
@@ -36,6 +38,26 @@ public class Server {
     @Column(nullable = false, columnDefinition = "jsonb")
     private String branding;
 
+    // Moderacion de plataforma: solo los servers 'accepted' son publicos.
+    @Column(nullable = false)
+    private ServerStatus status;
+
+    private OffsetDateTime reviewedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reviewed_by")
+    private Admin reviewedBy;
+
+    // Guild de Discord verificado en el alta (no se persiste el token de Discord).
+    @Column(length = 32)
+    private String discordGuildId;
+
+    @Column(length = 128)
+    private String discordGuildName;
+
+    @Column(columnDefinition = "text")
+    private String discordInviteUrl;
+
     @Column(nullable = false)
     private OffsetDateTime createdAt;
 
@@ -46,23 +68,35 @@ public class Server {
     private List<ServerAllowedDino> allowedDinos = new ArrayList<>();
 
     public UUID getId() { return id; }
-    public Account getOwner() { return owner; }
+    public Admin getOwner() { return owner; }
     public String getSlug() { return slug; }
     public String getName() { return name; }
     public BigDecimal getGrowthMultiplier() { return growthMultiplier; }
     public String getRules() { return rules; }
     public String getBranding() { return branding; }
+    public ServerStatus getStatus() { return status; }
+    public OffsetDateTime getReviewedAt() { return reviewedAt; }
+    public Admin getReviewedBy() { return reviewedBy; }
+    public String getDiscordGuildId() { return discordGuildId; }
+    public String getDiscordGuildName() { return discordGuildName; }
+    public String getDiscordInviteUrl() { return discordInviteUrl; }
     public OffsetDateTime getCreatedAt() { return createdAt; }
     public OffsetDateTime getUpdatedAt() { return updatedAt; }
     public List<ServerAllowedDino> getAllowedDinos() { return allowedDinos; }
 
     public void setId(UUID id) { this.id = id; }
-    public void setOwner(Account owner) { this.owner = owner; }
+    public void setOwner(Admin owner) { this.owner = owner; }
     public void setSlug(String slug) { this.slug = slug; }
     public void setName(String name) { this.name = name; }
     public void setGrowthMultiplier(BigDecimal growthMultiplier) { this.growthMultiplier = growthMultiplier; }
     public void setRules(String rules) { this.rules = rules; }
     public void setBranding(String branding) { this.branding = branding; }
+    public void setStatus(ServerStatus status) { this.status = status; }
+    public void setReviewedAt(OffsetDateTime reviewedAt) { this.reviewedAt = reviewedAt; }
+    public void setReviewedBy(Admin reviewedBy) { this.reviewedBy = reviewedBy; }
+    public void setDiscordGuildId(String discordGuildId) { this.discordGuildId = discordGuildId; }
+    public void setDiscordGuildName(String discordGuildName) { this.discordGuildName = discordGuildName; }
+    public void setDiscordInviteUrl(String discordInviteUrl) { this.discordInviteUrl = discordInviteUrl; }
     public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
     public void setUpdatedAt(OffsetDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

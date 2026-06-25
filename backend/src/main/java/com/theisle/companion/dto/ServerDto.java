@@ -11,6 +11,7 @@ public record ServerDto(
         BigDecimal growthMultiplier,
         String rules,
         JsonNode branding,
+        String status,
         List<AllowedDinoDto> allowedDinos
 ) {
     public record AllowedDinoDto(int id, String name, String diet, String tier) {}

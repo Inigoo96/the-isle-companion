@@ -43,8 +43,11 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**").permitAll()
                 // Health
                 .requestMatchers("/actuator/health").permitAll()
-                // Server reads are public; /mine and writes require JWT
-                .requestMatchers(HttpMethod.GET, "/servers/mine").authenticated()
+                // Server reads are public; /mine and writes are panel-only (Discord admin)
+                .requestMatchers(HttpMethod.GET, "/servers/mine").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/servers").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/servers/*").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/servers/*").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/servers", "/servers/*").permitAll()
                 // Everything else requires JWT
                 .anyRequest().authenticated()

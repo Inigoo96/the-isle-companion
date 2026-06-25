@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -32,9 +33,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String token = authHeader.substring(7);
             if (jwtService.isValid(token)) {
                 Claims claims = jwtService.validate(token);
-                String steamId = claims.getSubject();
+                String subject = claims.getSubject();
+                // type distingue las dos identidades: "admin" (panel Discord) vs
+                // "player" (overlay Steam). Tokens antiguos sin type = jugador.
+                String type = claims.get("type", String.class);
+                String role = "admin".equals(type) ? "ROLE_ADMIN" : "ROLE_PLAYER";
                 UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(steamId, null, List.of());
+                        new UsernamePasswordAuthenticationToken(
+                                subject, null, List.of(new SimpleGrantedAuthority(role)));
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         }

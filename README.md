@@ -130,17 +130,24 @@ El instalador permite elegir la carpeta de instalación y crea acceso directo en
 - [x] Growth Timer con countdown por stage y multiplicador de servidor
 - [x] 20 dinosaurios añadidos (10 carnívoros, 8 herbívoros, 2 omnívoros)
 - [x] Backend Spring Boot multi-tenant con seed automático de catálogos
-- [x] Autenticación Steam OpenID 2.0 + JWT (overlay y admin panel)
+- [x] Autenticación Steam OpenID 2.0 + JWT (overlay)
 - [x] Panel admin React + Vite: crear, editar y eliminar servidores
 - [x] Selector de servidor en el overlay (multiplicador automático + filtro de dinos permitidos)
 - [x] Display name de Steam en lugar del Steam ID
-- [x] Sistema super-admin: gestión de cuentas con estados PENDING/ACTIVE/BANNED
 - [x] Deploy del admin panel en GitHub Pages con CI/CD (GitHub Actions)
 - [x] Deploy del backend y base de datos en Railway
 - [x] Overlay conectado al backend de Railway en producción (CSP, CORS, encoding UTF-8)
 - [x] Logout con confirmación en overlay y admin panel
 - [x] Dashboard del admin panel rediseñado con stats y tarjetas elaboradas
 - [x] Optimización: 0 filas en server_allowed_dinos = todos los dinos permitidos
+
+### En progreso — Panel admin 100% Discord (v0.6.0)
+> Identidad del panel separada del overlay: el overlay sigue con Steam; el panel pasa a Discord.
+- [x] Esquema: tabla `admins` (Discord), `servers.owner` → admin, estado de servidor (`pending`/`accepted`/`rejected`/`banned`), tabla `server_members` (checkpoint A)
+- [x] Login del panel por Discord OAuth2 + JWT con identidad dual (`type=admin`/`type=player`) (checkpoint B)
+- [ ] Verificación de propiedad del guild de Discord en el alta de servidor (checkpoint C)
+- [ ] Moderación de plataforma: aprobar/rechazar/banear servidores; público solo ve `accepted` (checkpoint D)
+- [ ] Frontend: botón "Login with Discord", alta con selector de guild, vista de moderación (checkpoint E)
 
 ### Pendiente — Corrección de datos de dinosaurios
 > **IMPORTANTE:** Los datos actuales de dinos.json necesitan revisión.

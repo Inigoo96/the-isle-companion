@@ -38,14 +38,14 @@ public class ServerController {
 
     @GetMapping("/mine")
     public ResponseEntity<List<ServerDto>> mine(Authentication auth) {
-        return ResponseEntity.ok(service.listByOwner(steamId(auth)));
+        return ResponseEntity.ok(service.listByOwner(principal(auth)));
     }
 
     @PostMapping
     public ResponseEntity<ServerDto> create(Authentication auth,
                                             @RequestBody ServerRequest req) {
         try {
-            ServerDto created = service.create(steamId(auth), req);
+            ServerDto created = service.create(principal(auth), req);
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -57,7 +57,7 @@ public class ServerController {
                                             @PathVariable String slug,
                                             @RequestBody ServerRequest req) {
         try {
-            return ResponseEntity.ok(service.update(steamId(auth), slug, req));
+            return ResponseEntity.ok(service.update(principal(auth), slug, req));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
@@ -66,14 +66,15 @@ public class ServerController {
     @DeleteMapping("/{slug}")
     public ResponseEntity<Void> delete(Authentication auth, @PathVariable String slug) {
         try {
-            service.delete(steamId(auth), slug);
+            service.delete(principal(auth), slug);
             return ResponseEntity.noContent().build();
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    private String steamId(Authentication auth) {
+    /** Subject del JWT del panel = discord_user_id del admin autenticado. */
+    private String principal(Authentication auth) {
         return (String) auth.getPrincipal();
     }
 }

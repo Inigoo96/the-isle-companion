@@ -36,10 +36,24 @@ CREATE DATABASE isle_companion;
 | `JWT_EXPIRATION_DAYS` | `30` | Duración del token JWT |
 | `STEAM_API_KEY` | *(vacío)* | API key de Steam — necesaria para nombre y avatar. Obtener en https://steamcommunity.com/dev/apikey |
 | `APP_BASE_URL` | `http://localhost:8080` | URL pública del backend (usada en el callback de Steam OpenID) |
-| `SUPER_ADMIN_STEAM_ID` | `76561199415486620` | Steam ID del super-administrador de la plataforma |
+| `SUPER_ADMIN_STEAM_ID` | `76561199415486620` | Steam ID del super-administrador (overlay/`/me`; ya **no** gatea la gestión de servidores) |
 | `ADMIN_URL` | `http://localhost:5173` | URL del admin panel (para CORS y redirect post-login) |
+| `DISCORD_CLIENT_ID` | *(vacío)* | Client ID de la app de Discord (panel) |
+| `DISCORD_CLIENT_SECRET` | *(vacío)* | Client Secret de la app de Discord |
+| `DISCORD_REDIRECT_URI` | `http://localhost:8080/auth/discord/callback` | URL de callback registrada en la app de Discord |
 
-> **Seguridad:** `STEAM_API_KEY` y `JWT_SECRET` nunca deben commitearse. Usar siempre variables de entorno.
+> **Seguridad:** `STEAM_API_KEY`, `DISCORD_CLIENT_SECRET` y `JWT_SECRET` nunca deben commitearse. Usar siempre variables de entorno.
+
+### Configurar la app de Discord (login del panel)
+
+El panel de administración se autentica **100% por Discord** (el overlay sigue con Steam, intacto). Para activarlo:
+
+1. Crear una aplicación en [discord.com/developers/applications](https://discord.com/developers/applications).
+2. En **OAuth2 → Redirects**, añadir la URL de callback:
+   - Local: `http://localhost:8080/auth/discord/callback`
+   - Producción: `https://the-isle-companion-production.up.railway.app/auth/discord/callback`
+3. Copiar **Client ID** y **Client Secret** a las variables `DISCORD_CLIENT_ID` / `DISCORD_CLIENT_SECRET`, y poner `DISCORD_REDIRECT_URI` con la URL de callback correspondiente.
+4. Scopes usados: `identify guilds` (el `guilds` se usará en el alta de servidor para verificar propiedad del guild).
 
 El parámetro `stringtype=unspecified` en la URL JDBC es necesario para que el driver haga cast implícito de strings a tipos enum nativos de PostgreSQL.
 
@@ -87,6 +101,9 @@ Configurar en el servicio de backend (Railway → Backend → Variables):
 | `APP_BASE_URL` | `https://the-isle-companion-production.up.railway.app` |
 | `SUPER_ADMIN_STEAM_ID` | Tu Steam ID |
 | `ADMIN_URL` | `https://inigoo96.github.io/the-isle-companion` |
+| `DISCORD_CLIENT_ID` | Client ID de tu app de Discord |
+| `DISCORD_CLIENT_SECRET` | Client Secret de tu app de Discord |
+| `DISCORD_REDIRECT_URI` | `https://the-isle-companion-production.up.railway.app/auth/discord/callback` |
 
 > Los datos de conexión de PostgreSQL se obtienen desde Railway → Postgres → Connect → Public URL. Separar en URL, usuario y contraseña (Railway no soporta bien la URL completa con credenciales en la variable `${{Postgres.DATABASE_URL}}`).
 
@@ -118,41 +135,40 @@ Las migraciones se aplican automáticamente al arrancar. No es necesario ningún
 | GET | `/servers/{slug}` | Config completa de un servidor (incluye dinos permitidos) |
 | GET | `/actuator/health` | Estado del backend |
 
-### Autenticación Steam OpenID
+### Autenticación Steam OpenID (overlay/jugadores)
 
 | Método | Ruta | Descripción |
 |---|---|---|
 | GET | `/auth/steam?source=overlay\|admin` | Inicia el flujo OpenID — redirige a Steam |
-| GET | `/auth/steam/callback` | Callback de Steam — verifica, crea/actualiza cuenta, emite JWT |
+| GET | `/auth/steam/callback` | Callback de Steam — verifica, crea/actualiza cuenta, emite JWT (`type=player`) |
 | GET | `/auth/done` | Página de confirmación para el overlay Electron |
 
 El parámetro `source` controla el destino tras el login:
 - `overlay` → redirige a `/auth/done` (Electron intercepta la URL y extrae el token)
-- `admin` → redirige a `{ADMIN_URL}/auth/callback?token=JWT`
+- `admin` → *(legacy)* redirige a `{ADMIN_URL}/auth/callback?token=JWT`. El panel ya **no** usa este flujo; usa Discord (abajo).
+
+### Autenticación Discord OAuth2 (panel de administración)
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| GET | `/auth/discord` | Inicia OAuth2 — redirige a Discord con scopes `identify guilds` y `state` firmado (anti-CSRF) |
+| GET | `/auth/discord/callback` | Callback — valida el `state`, canjea el `code`, lee `/users/@me`, crea/actualiza el `admin` y emite JWT del panel (`type=admin`, `sub=discord_user_id`). Redirige a `{ADMIN_URL}/auth/callback?token=JWT` |
+
+El token de Discord se usa solo dentro del callback y **nunca se persiste**. Son dos identidades separadas: `accounts` (Steam, jugadores) y `admins` (Discord, panel).
 
 ### Endpoints protegidos (requieren `Authorization: Bearer <JWT>`)
 
-| Método | Ruta | Descripción |
-|---|---|---|
-| GET | `/me` | Perfil del usuario autenticado (`steamId`, `displayName`, `avatarUrl`, `status`, `superAdmin`) |
-| GET | `/servers/mine` | Servidores del admin autenticado (con dinos permitidos) |
-| POST | `/servers` | Crear servidor (requiere status `ACTIVE`) |
-| PUT | `/servers/{slug}` | Actualizar servidor (requiere status `ACTIVE` + ser propietario) |
-| DELETE | `/servers/{slug}` | Eliminar servidor (requiere status `ACTIVE` + ser propietario) |
+| Método | Ruta | Rol | Descripción |
+|---|---|---|---|
+| GET | `/me` | `player` | Perfil Steam del jugador (`steamId`, `displayName`, `avatarUrl`, `status`, `superAdmin`) |
+| GET | `/servers/mine` | `admin` | Servidores cuyo `owner` es el admin Discord autenticado |
+| POST | `/servers` | `admin` | Crear servidor (queda en `status=pending`) |
+| PUT | `/servers/{slug}` | `admin` | Actualizar servidor (debe ser el `owner`) |
+| DELETE | `/servers/{slug}` | `admin` | Eliminar servidor (debe ser el `owner`) |
 
-### Endpoints de super-admin (solo `SUPER_ADMIN_STEAM_ID`)
+> El rol se deriva del claim `type` del JWT: `ROLE_ADMIN` (panel Discord) o `ROLE_PLAYER` (overlay Steam). La verificación de propiedad (`owner`) se hace **siempre en el backend**, no basta con esconderlo en React.
 
-| Método | Ruta | Descripción |
-|---|---|---|
-| GET | `/admin/accounts` | Lista todos los admins registrados con sus servers y estadísticas |
-| PUT | `/admin/accounts/{steamId}/status` | Cambia el estado de una cuenta |
-
-Body del PUT:
-```json
-{ "status": "ACTIVE" }
-```
-
-Estados válidos: `PENDING` · `ACTIVE` · `BANNED`
+> **Nota:** los endpoints de moderación de plataforma (`GET /admin/servers?status=…`, approve/reject/ban) y la verificación de guild en el alta llegan en los siguientes checkpoints. El antiguo super-admin por Steam (`/admin/accounts`) fue **eliminado**.
 
 ### Body de creación/actualización de servidor
 
@@ -170,17 +186,27 @@ Estados válidos: `PENDING` · `ACTIVE` · `BANNED`
 
 ---
 
-## Sistema de cuentas y autorización
+## Identidad: dos sistemas separados
 
-### Estados de cuenta (`AccountStatus`)
+| Tabla | Identidad | Login | Quién | Token |
+|---|---|---|---|---|
+| `accounts` | Steam64 | Steam OpenID | Jugadores del overlay | JWT `type=player`, `sub=steamId` |
+| `admins` | Discord user id | Discord OAuth2 | Administradores del panel | JWT `type=admin`, `sub=discordUserId` |
 
-| Estado | Descripción | Puede crear/editar servidores |
+Las dos identidades **nunca se mezclan**. El `owner` de un servidor es un `admin` (Discord). El antiguo gating por `AccountStatus` para gestionar servidores fue eliminado; la columna `accounts.status` se mantiene en BD pero ya no condiciona el panel.
+
+### Estado de servidor (`ServerStatus`)
+
+Cada servidor tiene un estado de moderación de plataforma:
+
+| Estado | Descripción | Visible en `/servers` público |
 |---|---|---|
-| `PENDING` | Recién registrado | No — bloqueado en el panel |
-| `ACTIVE` | Aprobado por super-admin | Sí |
-| `BANNED` | Baneado | No |
+| `pending` | Recién creado, a la espera de revisión | No |
+| `accepted` | Aprobado por el admin de plataforma | Sí |
+| `rejected` | Rechazado | No |
+| `banned` | Baneado | No |
 
-El super-admin (identificado por `SUPER_ADMIN_STEAM_ID`) está exento de la comprobación de estado y siempre puede operar.
+> El flujo de aprobación (endpoints de moderación) y el filtrado del listado público por `accepted` se implementan en los checkpoints D.
 
 ### CORS
 
@@ -192,7 +218,11 @@ El backend permite solicitudes de origen `http://localhost:5173` (desarrollo) y 
 
 - Algoritmo: HS256
 - Expiración: 30 días (configurable con `JWT_EXPIRATION_DAYS`)
-- Payload: `sub` = Steam ID, `displayName` = nombre de Steam
+- Claim `type` distingue las dos identidades:
+  - `player` (overlay): `sub` = Steam ID, `displayName` = nombre de Steam
+  - `admin` (panel): `sub` = Discord user id, `username` = nombre de Discord
+- Tokens antiguos sin `type` se tratan como `player`.
+- El `state` de OAuth2 es un JWT firmado aparte, de vida corta (10 min), anti-CSRF.
 - Header: `Authorization: Bearer <token>`
 
 ---
@@ -206,8 +236,19 @@ Las migraciones están en `src/main/resources/db/migration/`. Se aplican automá
 | `V1__initial_schema.sql` | Esquema base: accounts, servers, dinos, mutations, zones, prime_tasks, server_allowed_dinos |
 | `V2__add_zones.sql` | Tabla de zonas del mapa |
 | `V3__account_status.sql` | Columna `status` en accounts (`PENDING`/`ACTIVE`/`BANNED`) |
+| `V4__discord_admin_identity.sql` | Tabla `admins` (Discord); `servers.owner_id` → `admins`; `servers` gana `status`/`reviewed_*`/`discord_guild_*`; tabla `server_members` |
 
 ---
+
+## Migración a panel Discord — estado
+
+| Checkpoint | Contenido | Estado |
+|---|---|---|
+| A | Esquema V4 + entidades/repos/DTOs + baja del super-admin Steam | ✅ hecho |
+| B | Login Discord OAuth2 del panel (token `type=admin`, roles, `/auth/discord`) | ✅ hecho |
+| C | Verificación de guild en el alta + cache de guilds elegibles + enforcement de propiedad | ⏳ pendiente |
+| D | Moderación de plataforma (`/admin/servers`, approve/reject/ban) + filtrado público por `accepted` + lectura de equipo | ⏳ pendiente |
+| E | Frontend (botón Discord, alta con selector de guild, vista de moderación) | ⏳ pendiente |
 
 ## Próximos pasos
 

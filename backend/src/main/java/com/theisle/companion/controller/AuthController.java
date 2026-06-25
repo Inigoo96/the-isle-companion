@@ -1,8 +1,12 @@
 package com.theisle.companion.controller;
 
 import com.theisle.companion.domain.entity.Account;
+import com.theisle.companion.domain.entity.Admin;
 import com.theisle.companion.service.AccountService;
+import com.theisle.companion.service.AdminService;
+import com.theisle.companion.service.DiscordOAuthService;
 import com.theisle.companion.service.JwtService;
+import com.theisle.companion.service.OAuthStateService;
 import com.theisle.companion.service.SteamOpenIdService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -24,15 +29,24 @@ public class AuthController {
 
     private final SteamOpenIdService steamOpenId;
     private final AccountService accountService;
+    private final DiscordOAuthService discordOAuth;
+    private final OAuthStateService oauthState;
+    private final AdminService adminService;
     private final JwtService jwtService;
     private final String adminUrl;
 
     public AuthController(SteamOpenIdService steamOpenId,
                           AccountService accountService,
+                          DiscordOAuthService discordOAuth,
+                          OAuthStateService oauthState,
+                          AdminService adminService,
                           JwtService jwtService,
                           @Value("${app.admin-url}") String adminUrl) {
         this.steamOpenId    = steamOpenId;
         this.accountService = accountService;
+        this.discordOAuth   = discordOAuth;
+        this.oauthState     = oauthState;
+        this.adminService   = adminService;
         this.jwtService     = jwtService;
         this.adminUrl       = adminUrl;
     }
@@ -71,6 +85,38 @@ public class AuthController {
                     .toUriString();
         }
 
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header(HttpHeaders.LOCATION, location)
+                .build();
+    }
+
+    // --- Login del panel por Discord (independiente del flujo Steam del overlay) ---
+
+    @GetMapping("/discord")
+    public ResponseEntity<Void> discordLogin() {
+        String state = oauthState.issue();
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(URI.create(discordOAuth.buildAuthUrl(state)))
+                .build();
+    }
+
+    @GetMapping("/discord/callback")
+    public ResponseEntity<Void> discordCallback(@RequestParam String code,
+                                                @RequestParam String state) {
+        if (!oauthState.isValid(state)) {
+            return redirectToPanel(adminUrl + "/auth/callback", "error", "invalid_state");
+        }
+        String accessToken = discordOAuth.exchangeCode(code);
+        DiscordOAuthService.DiscordUser user = discordOAuth.fetchUser(accessToken);
+        Admin admin = adminService.findOrCreate(user.id(), user.username(), user.avatarUrl());
+        String token = jwtService.generateAdmin(admin.getDiscordUserId(), admin.getUsername());
+        return redirectToPanel(adminUrl + "/auth/callback", "token", token);
+    }
+
+    private ResponseEntity<Void> redirectToPanel(String base, String param, String value) {
+        String location = UriComponentsBuilder.fromHttpUrl(base)
+                .queryParam(param, value)
+                .build().toUriString();
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header(HttpHeaders.LOCATION, location)
                 .build();
