@@ -1,11 +1,10 @@
 package com.theisle.companion.service;
 
 import com.theisle.companion.domain.entity.Admin;
-import com.theisle.companion.domain.entity.Server;
-import com.theisle.companion.domain.enums.ServerStatus;
+import com.theisle.companion.domain.enums.AdminStatus;
 import com.theisle.companion.domain.repository.AdminRepository;
 import com.theisle.companion.domain.repository.ServerRepository;
-import com.theisle.companion.dto.ServerModerationDto;
+import com.theisle.companion.dto.AdminModerationDto;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -18,8 +17,8 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Moderacion de plataforma: aprobar/rechazar/banear servidores. Solo los admins
- * de plataforma (allowlist de discord_user_ids) pueden operar. Los servidores
+ * Moderacion de plataforma: aprobar/rechazar/banear ADMINS (la identidad Discord),
+ * no servers. Solo los admins de plataforma (allowlist) pueden operar. Los admins
  * nunca se borran; solo cambian de estado.
  */
 @Service
@@ -27,60 +26,58 @@ import java.util.UUID;
 public class ModerationService {
 
     /**
-     * Transiciones permitidas del ciclo de vida de moderacion:
+     * Transiciones permitidas del ciclo de vida del admin:
      *   pending  -> accepted | rejected
      *   rejected -> accepted        (re-aprobar)
-     *   accepted -> banned          (retirar)
+     *   accepted -> banned          (retirar acceso)
      *   banned   -> accepted        (des-banear)
      */
-    private static final Map<ServerStatus, Set<ServerStatus>> TRANSITIONS = Map.of(
-            ServerStatus.PENDING,  Set.of(ServerStatus.ACCEPTED, ServerStatus.REJECTED),
-            ServerStatus.REJECTED, Set.of(ServerStatus.ACCEPTED),
-            ServerStatus.ACCEPTED, Set.of(ServerStatus.BANNED),
-            ServerStatus.BANNED,   Set.of(ServerStatus.ACCEPTED)
+    private static final Map<AdminStatus, Set<AdminStatus>> TRANSITIONS = Map.of(
+            AdminStatus.PENDING,  Set.of(AdminStatus.ACCEPTED, AdminStatus.REJECTED),
+            AdminStatus.REJECTED, Set.of(AdminStatus.ACCEPTED),
+            AdminStatus.ACCEPTED, Set.of(AdminStatus.BANNED),
+            AdminStatus.BANNED,   Set.of(AdminStatus.ACCEPTED)
     );
 
-    private final ServerRepository serverRepo;
     private final AdminRepository adminRepo;
+    private final ServerRepository serverRepo;
     private final AdminService adminService;
 
-    public ModerationService(ServerRepository serverRepo,
-                             AdminRepository adminRepo,
+    public ModerationService(AdminRepository adminRepo,
+                             ServerRepository serverRepo,
                              AdminService adminService) {
-        this.serverRepo   = serverRepo;
         this.adminRepo    = adminRepo;
+        this.serverRepo   = serverRepo;
         this.adminService = adminService;
     }
 
-    public List<ServerModerationDto> listByStatus(String callerDiscordId, ServerStatus status) {
+    public List<AdminModerationDto> listByStatus(String callerDiscordId, AdminStatus status) {
         requirePlatformAdmin(callerDiscordId);
-        return serverRepo.findByStatusWithOwner(status).stream()
-                .map(ModerationService::toDto)
+        return adminRepo.findByStatusOrderByCreatedAtAsc(status).stream()
+                .map(this::toDto)
                 .toList();
     }
 
     @Transactional
-    public void review(String callerDiscordId, UUID serverId, ServerStatus newStatus) {
+    public void review(String callerDiscordId, UUID adminId, AdminStatus newStatus) {
         requirePlatformAdmin(callerDiscordId);
         Admin reviewer = adminRepo.findByDiscordUserId(callerDiscordId)
-                .orElseThrow(() -> new EntityNotFoundException("Admin not found"));
-        Server server = serverRepo.findById(serverId)
-                .orElseThrow(() -> new EntityNotFoundException("Server not found: " + serverId));
+                .orElseThrow(() -> new EntityNotFoundException("Reviewer not found"));
+        Admin target = adminRepo.findById(adminId)
+                .orElseThrow(() -> new EntityNotFoundException("Admin not found: " + adminId));
 
-        ServerStatus current = server.getStatus();
+        AdminStatus current = target.getStatus();
         if (current == newStatus) {
-            return; // idempotente: ya esta en ese estado
+            return; // idempotente
         }
         if (!TRANSITIONS.getOrDefault(current, Set.of()).contains(newStatus)) {
-            throw new IllegalStateException(
-                    "Invalid transition: " + current + " -> " + newStatus);
+            throw new IllegalStateException("Invalid transition: " + current + " -> " + newStatus);
         }
 
         OffsetDateTime now = OffsetDateTime.now();
-        server.setStatus(newStatus);
-        server.setReviewedAt(now);
-        server.setReviewedBy(reviewer);
-        server.setUpdatedAt(now);
+        target.setStatus(newStatus);
+        target.setReviewedAt(now);
+        target.setReviewedBy(reviewer);
     }
 
     private void requirePlatformAdmin(String discordUserId) {
@@ -89,18 +86,17 @@ public class ModerationService {
         }
     }
 
-    private static ServerModerationDto toDto(Server s) {
-        return new ServerModerationDto(
-                s.getId().toString(),
-                s.getSlug(),
-                s.getName(),
-                s.getStatus() != null ? s.getStatus().name().toLowerCase() : null,
-                s.getOwner() != null ? s.getOwner().getUsername() : null,
-                s.getDiscordGuildId(),
-                s.getDiscordGuildName(),
-                s.getDiscordInviteUrl(),
-                s.getCreatedAt() != null ? s.getCreatedAt().toString() : null,
-                s.getReviewedAt() != null ? s.getReviewedAt().toString() : null
+    private AdminModerationDto toDto(Admin a) {
+        return new AdminModerationDto(
+                a.getId().toString(),
+                a.getDiscordUserId(),
+                a.getUsername(),
+                a.getAvatarUrl(),
+                a.getStatus() != null ? a.getStatus().name().toLowerCase() : null,
+                serverRepo.countByOwnerId(a.getId()),
+                a.getCreatedAt()   != null ? a.getCreatedAt().toString()   : null,
+                a.getLastLoginAt() != null ? a.getLastLoginAt().toString() : null,
+                a.getReviewedAt()  != null ? a.getReviewedAt().toString()  : null
         );
     }
 }

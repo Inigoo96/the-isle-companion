@@ -45,7 +45,8 @@
   padding: 16px 18px;
 }
 .cardMain { min-width: 0; }
-.name { font-size: 15px; font-weight: 700; color: var(--text); }
+.name { font-size: 15px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
+.avatar { width: 24px; height: 24px; border-radius: 50%; }
 .slug { color: var(--text-muted); font-weight: 500; font-size: 13px; }
 .meta {
   display: flex;

@@ -5,5 +5,6 @@ public record AdminProfileDto(
         String discordUserId,
         String username,
         String avatarUrl,
+        String status,
         boolean platformAdmin
 ) {}

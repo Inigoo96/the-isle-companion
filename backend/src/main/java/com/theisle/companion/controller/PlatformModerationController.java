@@ -1,7 +1,7 @@
 package com.theisle.companion.controller;
 
-import com.theisle.companion.domain.enums.ServerStatus;
-import com.theisle.companion.dto.ServerModerationDto;
+import com.theisle.companion.domain.enums.AdminStatus;
+import com.theisle.companion.dto.AdminModerationDto;
 import com.theisle.companion.service.ModerationService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Moderacion de plataforma. Gateada por ROLE_ADMIN (SecurityConfig) y, dentro,
- * por la allowlist de admins de plataforma (ModerationService). Los servidores
- * nunca se borran; solo cambian de estado.
+ * Moderacion de plataforma sobre ADMINS (la identidad Discord). Gateada por
+ * ROLE_ADMIN (SecurityConfig) y, dentro, por la allowlist de admins de plataforma
+ * (ModerationService). Los admins nunca se borran; solo cambian de estado.
  */
 @RestController
-@RequestMapping("/admin/servers")
+@RequestMapping("/admin/admins")
 public class PlatformModerationController {
 
     private final ModerationService moderation;
@@ -28,11 +28,11 @@ public class PlatformModerationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ServerModerationDto>> list(Authentication auth,
-                                                          @RequestParam(defaultValue = "pending") String status) {
-        ServerStatus parsed;
+    public ResponseEntity<List<AdminModerationDto>> list(Authentication auth,
+                                                         @RequestParam(defaultValue = "pending") String status) {
+        AdminStatus parsed;
         try {
-            parsed = ServerStatus.valueOf(status.toUpperCase());
+            parsed = AdminStatus.valueOf(status.toUpperCase());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
@@ -41,28 +41,28 @@ public class PlatformModerationController {
 
     @PostMapping("/{id}/approve")
     public ResponseEntity<Void> approve(Authentication auth, @PathVariable String id) {
-        return review(auth, id, ServerStatus.ACCEPTED);
+        return review(auth, id, AdminStatus.ACCEPTED);
     }
 
     @PostMapping("/{id}/reject")
     public ResponseEntity<Void> reject(Authentication auth, @PathVariable String id) {
-        return review(auth, id, ServerStatus.REJECTED);
+        return review(auth, id, AdminStatus.REJECTED);
     }
 
     @PostMapping("/{id}/ban")
     public ResponseEntity<Void> ban(Authentication auth, @PathVariable String id) {
-        return review(auth, id, ServerStatus.BANNED);
+        return review(auth, id, AdminStatus.BANNED);
     }
 
-    private ResponseEntity<Void> review(Authentication auth, String id, ServerStatus status) {
-        UUID serverId;
+    private ResponseEntity<Void> review(Authentication auth, String id, AdminStatus status) {
+        UUID adminId;
         try {
-            serverId = UUID.fromString(id);
+            adminId = UUID.fromString(id);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
         try {
-            moderation.review(caller(auth), serverId, status);
+            moderation.review(caller(auth), adminId, status);
             return ResponseEntity.noContent().build();
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();

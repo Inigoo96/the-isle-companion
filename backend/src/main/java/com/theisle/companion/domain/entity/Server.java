@@ -1,6 +1,5 @@
 package com.theisle.companion.domain.entity;
 
-import com.theisle.companion.domain.enums.ServerStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -38,16 +37,6 @@ public class Server {
     @Column(nullable = false, columnDefinition = "jsonb")
     private String branding;
 
-    // Moderacion de plataforma: solo los servers 'accepted' son publicos.
-    @Column(nullable = false)
-    private ServerStatus status;
-
-    private OffsetDateTime reviewedAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reviewed_by")
-    private Admin reviewedBy;
-
     // Guild de Discord verificado en el alta (no se persiste el token de Discord).
     @Column(length = 32)
     private String discordGuildId;
@@ -74,9 +63,6 @@ public class Server {
     public BigDecimal getGrowthMultiplier() { return growthMultiplier; }
     public String getRules() { return rules; }
     public String getBranding() { return branding; }
-    public ServerStatus getStatus() { return status; }
-    public OffsetDateTime getReviewedAt() { return reviewedAt; }
-    public Admin getReviewedBy() { return reviewedBy; }
     public String getDiscordGuildId() { return discordGuildId; }
     public String getDiscordGuildName() { return discordGuildName; }
     public String getDiscordInviteUrl() { return discordInviteUrl; }
@@ -91,9 +77,6 @@ public class Server {
     public void setGrowthMultiplier(BigDecimal growthMultiplier) { this.growthMultiplier = growthMultiplier; }
     public void setRules(String rules) { this.rules = rules; }
     public void setBranding(String branding) { this.branding = branding; }
-    public void setStatus(ServerStatus status) { this.status = status; }
-    public void setReviewedAt(OffsetDateTime reviewedAt) { this.reviewedAt = reviewedAt; }
-    public void setReviewedBy(Admin reviewedBy) { this.reviewedBy = reviewedBy; }
     public void setDiscordGuildId(String discordGuildId) { this.discordGuildId = discordGuildId; }
     public void setDiscordGuildName(String discordGuildName) { this.discordGuildName = discordGuildName; }
     public void setDiscordInviteUrl(String discordInviteUrl) { this.discordInviteUrl = discordInviteUrl; }

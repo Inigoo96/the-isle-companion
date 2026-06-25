@@ -672,18 +672,23 @@ CHECKPOINT E - Frontend (admin React + Vite, 100% Discord):
       platformAdmin. Eliminadas las paginas viejas de Steam (SuperAdmin, Pending).
   [x] Nueva pagina Moderation: pestañas por estado + approve/reject/ban.
 
-REGLAS DE MODERACION (afinado tras pruebas):
-  - Auto-accept: si un admin de PLATFORM_ADMINS crea un server, entra directo
-    como accepted (no se aprueba a si mismo).
-  - Maquina de estados (validada en backend, transicion ilegal -> 409):
+REGLAS DE MODERACION (V5 - se modera el ADMIN, no el server):
+  IMPORTANTE: la moderacion es sobre el ADMIN (identidad Discord), NO sobre cada
+  server. Los servers son solo config; su visibilidad publica depende del estado
+  de SU admin (solo se ven los de admins accepted). Migracion V5: el status pasa
+  de servers a admins (admins.status, reviewed_at/by; admin_status enum).
+  - Un admin nuevo entra 'pending'. El de PLATFORM_ADMINS siempre 'accepted'.
+  - Endpoints: GET /admin/admins?status=..., POST /admin/admins/{id}/approve|
+    reject|ban. /admin/me devuelve tambien el status del admin.
+  - Maquina de estados del admin (validada, transicion ilegal -> 409):
       pending  -> accepted | rejected
       rejected -> accepted   (re-aprobar)
-      accepted -> banned     (retirar)
+      accepted -> banned     (retirar acceso)
       banned   -> accepted   (des-banear)
-  - Acceso revocado: un admin con algun server rejected o banned NO puede crear
-    nuevos servers (403 "access has been revoked"). Se restablece solo si la
-    plataforma le re-aprueba ese server. Un admin en buen estado (solo accepted)
-    si puede registrar otros guilds suyos.
+  - Admin pending: puede crear/configurar servers, pero no son publicos hasta
+    aprobarlo.
+  - Acceso revocado: un admin rejected o banned NO puede crear servers (403). Se
+    restablece si la plataforma le re-aprueba.
 
 CONFIGURACION PARA MODERAR:
   Para que tu cuenta vea la moderacion, pon tu Discord user id en la env

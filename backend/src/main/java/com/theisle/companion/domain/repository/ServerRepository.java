@@ -1,7 +1,7 @@
 package com.theisle.companion.domain.repository;
 
 import com.theisle.companion.domain.entity.Server;
-import com.theisle.companion.domain.enums.ServerStatus;
+import com.theisle.companion.domain.enums.AdminStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,6 +14,7 @@ public interface ServerRepository extends JpaRepository<Server, UUID> {
 
     @Query("""
         SELECT s FROM Server s
+        JOIN FETCH s.owner
         LEFT JOIN FETCH s.allowedDinos ad
         LEFT JOIN FETCH ad.dino
         WHERE s.slug = :slug
@@ -42,21 +43,13 @@ public interface ServerRepository extends JpaRepository<Server, UUID> {
 
     boolean existsByDiscordGuildId(String discordGuildId);
 
-    /** ¿El admin tiene algún server en alguno de esos estados? (acceso revocado). */
-    boolean existsByOwnerDiscordUserIdAndStatusIn(String discordUserId,
-                                                  java.util.Collection<ServerStatus> statuses);
+    long countByOwnerId(UUID ownerId);
 
-    List<Server> findAllByOrderByNameAsc();
-
-    /** Listado publico: solo servidores con un estado dado (p.ej. accepted). */
-    List<Server> findByStatusOrderByNameAsc(ServerStatus status);
-
-    /** Cola de moderacion: servidores por estado, con el owner cargado. */
+    /** Listado publico: solo los servers de admins con un estado dado (p.ej. accepted). */
     @Query("""
         SELECT s FROM Server s
-        JOIN FETCH s.owner
-        WHERE s.status = :status
-        ORDER BY s.createdAt ASC
+        WHERE s.owner.status = :ownerStatus
+        ORDER BY s.name ASC
         """)
-    List<Server> findByStatusWithOwner(@Param("status") ServerStatus status);
+    List<Server> findByOwnerStatusOrderByNameAsc(@Param("ownerStatus") AdminStatus ownerStatus);
 }

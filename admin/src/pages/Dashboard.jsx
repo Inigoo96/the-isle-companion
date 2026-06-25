@@ -18,26 +18,30 @@ export default function Dashboard() {
 
   const totalDinos = servers.reduce((sum, s) => sum + (s.allowedDinos?.length || 0), 0);
 
-  function StatusPill({ status }) {
-    if (!status) return null;
-    const colors = {
-      pending:  { bg: 'rgba(234,179,8,0.15)',  fg: '#eab308' },
-      accepted: { bg: 'rgba(34,197,94,0.15)',  fg: '#22c55e' },
-      rejected: { bg: 'rgba(239,68,68,0.15)',  fg: '#ef4444' },
-      banned:   { bg: 'rgba(127,29,29,0.25)',  fg: '#f87171' },
-    };
-    const c = colors[status] || colors.pending;
+  // Aviso segun el estado de moderacion del propio admin.
+  function StatusBanner() {
+    const s = user?.status;
+    if (!s || s === 'accepted') return null;
+    const msg = {
+      pending:  { fg: '#eab308', bg: 'rgba(234,179,8,0.1)',  bd: 'rgba(234,179,8,0.3)',
+                  text: 'Your account is pending approval. Your servers won’t be public until a platform admin approves you.' },
+      rejected: { fg: '#ef4444', bg: 'rgba(239,68,68,0.1)',  bd: 'rgba(239,68,68,0.3)',
+                  text: 'Your access has been rejected. You cannot create new servers.' },
+      banned:   { fg: '#f87171', bg: 'rgba(127,29,29,0.18)', bd: 'rgba(239,68,68,0.3)',
+                  text: 'Your access has been banned. You cannot create new servers.' },
+    }[s];
+    if (!msg) return null;
     return (
-      <span style={{
-        marginLeft: 8, padding: '2px 8px', borderRadius: 999, fontSize: 10,
-        fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em',
-        background: c.bg, color: c.fg, verticalAlign: 'middle',
-      }}>{status}</span>
+      <div style={{
+        background: msg.bg, border: `1px solid ${msg.bd}`, color: msg.fg,
+        padding: '12px 16px', borderRadius: 10, fontSize: 13, marginBottom: 20,
+      }}>{msg.text}</div>
     );
   }
 
   return (
     <div>
+      <StatusBanner />
       <div className={styles.header}>
         <div>
           <h1 className={styles.title}>Dashboard</h1>
@@ -79,10 +83,7 @@ export default function Dashboard() {
             <Link key={s.slug} to={`/servers/${s.slug}`} className={styles.card}>
               <div className={styles.cardAccent} />
               <div className={styles.cardBody}>
-                <div className={styles.cardName}>
-                  {s.name}
-                  <StatusPill status={s.status} />
-                </div>
+                <div className={styles.cardName}>{s.name}</div>
                 <div className={styles.cardSlug}>/{s.slug}</div>
                 {s.rules && (
                   <p className={styles.cardRules}>{s.rules}</p>

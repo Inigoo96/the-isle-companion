@@ -44,6 +44,7 @@ public class AdminSelfController {
                 admin.getDiscordUserId(),
                 admin.getUsername(),
                 admin.getAvatarUrl(),
+                admin.getStatus() != null ? admin.getStatus().name().toLowerCase() : null,
                 adminService.isPlatformAdmin(discordUserId)
         ));
     }

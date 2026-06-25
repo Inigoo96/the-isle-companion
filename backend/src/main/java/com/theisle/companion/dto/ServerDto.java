@@ -11,7 +11,6 @@ public record ServerDto(
         BigDecimal growthMultiplier,
         String rules,
         JsonNode branding,
-        String status,
         String discordGuildName,
         String discordInviteUrl,
         List<AllowedDinoDto> allowedDinos

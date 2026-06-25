@@ -1,5 +1,5 @@
 package com.theisle.companion.domain.enums;
 
-public enum ServerStatus {
+public enum AdminStatus {
     PENDING, ACCEPTED, REJECTED, BANNED
 }

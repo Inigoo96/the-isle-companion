@@ -163,35 +163,38 @@ El token de Discord se usa solo dentro del callback y **nunca se persiste**. Son
 | Método | Ruta | Rol | Descripción |
 |---|---|---|---|
 | GET | `/me` | `player` | Perfil Steam del jugador (`steamId`, `displayName`, `avatarUrl`, `status`, `superAdmin`) |
-| GET | `/admin/me` | `admin` | Perfil del admin Discord (`discordUserId`, `username`, `avatarUrl`, `platformAdmin`) |
+| GET | `/admin/me` | `admin` | Perfil del admin Discord (`discordUserId`, `username`, `avatarUrl`, `status`, `platformAdmin`) |
 | GET | `/admin/guilds` | `admin` | Guilds de Discord donde el admin es owner/ADMINISTRATOR (cache del login) |
 | GET | `/servers/mine` | `admin` | Servidores cuyo `owner` es el admin Discord autenticado |
-| POST | `/servers` | `admin` | Crear servidor — requiere `discordGuildId` **verificado** en backend; queda en `status=pending` |
+| POST | `/servers` | `admin` | Crear servidor — requiere `discordGuildId` **verificado** en backend |
 | PUT | `/servers/{slug}` | `admin` | Actualizar servidor (debe ser el `owner`) |
 | DELETE | `/servers/{slug}` | `admin` | Eliminar servidor (debe ser el `owner`) |
 
 ### Moderación de plataforma (solo `PLATFORM_ADMINS`)
 
+Se modera el **ADMIN** (la identidad Discord), no cada servidor. Un admin entra `pending`; el admin de plataforma lo aprueba/rechaza/banea.
+
 | Método | Ruta | Descripción |
 |---|---|---|
-| GET | `/admin/servers?status=pending` | Lista servidores por estado (`pending`/`accepted`/`rejected`/`banned`) con info del guild verificado |
-| POST | `/admin/servers/{id}/approve` | `accepted` + `reviewed_at`/`reviewed_by` |
-| POST | `/admin/servers/{id}/reject` | `rejected` |
-| POST | `/admin/servers/{id}/ban` | `banned` |
+| GET | `/admin/admins?status=pending` | Lista admins por estado (`pending`/`accepted`/`rejected`/`banned`) con su nº de servers |
+| POST | `/admin/admins/{id}/approve` | `accepted` + `reviewed_at`/`reviewed_by` |
+| POST | `/admin/admins/{id}/reject` | `rejected` |
+| POST | `/admin/admins/{id}/ban` | `banned` |
 
-Gateado por `ROLE_ADMIN` y, dentro, por la allowlist `PLATFORM_ADMINS` (403 si no estás). Los servidores **nunca se borran**; solo cambian de estado. El listado público (`GET /servers`, `GET /servers/{slug}`) solo devuelve `accepted`.
+Gateado por `ROLE_ADMIN` y, dentro, por la allowlist `PLATFORM_ADMINS` (403 si no estás). Los admins **nunca se borran**; solo cambian de estado. El listado público (`GET /servers`, `GET /servers/{slug}`) solo devuelve servidores de admins `accepted`.
 
-**Máquina de estados** (transiciones validadas en backend; una transición ilegal → `409`):
+**Máquina de estados del admin** (transiciones validadas en backend; ilegal → `409`):
 
 ```
 pending  → accepted | rejected
 rejected → accepted            (re-aprobar)
-accepted → banned              (retirar)
+accepted → banned              (retirar acceso)
 banned   → accepted            (des-banear)
 ```
 
-- **Auto-accept:** si un admin de `PLATFORM_ADMINS` crea un servidor, entra directo como `accepted` (no se aprueba a sí mismo).
-- **Acceso revocado:** un admin con algún servidor `rejected` o `banned` no puede crear nuevos servidores (`403`); se restablece solo si la plataforma le re-aprueba ese servidor.
+- **Auto-accept:** un admin de `PLATFORM_ADMINS` entra/se mantiene `accepted` (no se modera a sí mismo).
+- **Admin `pending`:** puede crear/configurar servidores, pero no son públicos hasta que se le apruebe.
+- **Acceso revocado:** un admin `rejected` o `banned` no puede crear servidores (`403`); se restablece si la plataforma le re-aprueba.
 
 > El rol se deriva del claim `type` del JWT: `ROLE_ADMIN` (panel Discord) o `ROLE_PLAYER` (overlay Steam). La verificación de propiedad (`owner`) y la del guild se hacen **siempre en el backend**, no basta con esconderlo en React.
 
@@ -224,18 +227,18 @@ banned   → accepted            (des-banear)
 
 Las dos identidades **nunca se mezclan**. El `owner` de un servidor es un `admin` (Discord). El antiguo gating por `AccountStatus` para gestionar servidores fue eliminado; la columna `accounts.status` se mantiene en BD pero ya no condiciona el panel.
 
-### Estado de servidor (`ServerStatus`)
+### Estado de admin (`AdminStatus`)
 
-Cada servidor tiene un estado de moderación de plataforma:
+La moderación es sobre el **admin** (la persona/identidad Discord), no sobre cada servidor. Los servidores son solo config; su visibilidad pública depende del estado de **su** admin.
 
-| Estado | Descripción | Visible en `/servers` público |
+| Estado | Descripción | Sus servers visibles en público |
 |---|---|---|
-| `pending` | Recién creado, a la espera de revisión | No |
+| `pending` | Recién registrado, a la espera de revisión | No |
 | `accepted` | Aprobado por el admin de plataforma | Sí |
-| `rejected` | Rechazado | No |
-| `banned` | Baneado | No |
+| `rejected` | Rechazado (no puede crear servers) | No |
+| `banned` | Baneado (no puede crear servers) | No |
 
-> El flujo de aprobación (endpoints de moderación) y el filtrado del listado público por `accepted` se implementan en los checkpoints D.
+> Un admin `pending` puede crear/configurar sus servidores, pero no son públicos hasta que se le aprueba. El admin de plataforma (`PLATFORM_ADMINS`) es siempre `accepted`.
 
 ### CORS
 
@@ -265,7 +268,8 @@ Las migraciones están en `src/main/resources/db/migration/`. Se aplican automá
 | `V1__initial_schema.sql` | Esquema base: accounts, servers, dinos, mutations, zones, prime_tasks, server_allowed_dinos |
 | `V2__add_zones.sql` | Tabla de zonas del mapa |
 | `V3__account_status.sql` | Columna `status` en accounts (`PENDING`/`ACTIVE`/`BANNED`) |
-| `V4__discord_admin_identity.sql` | Tabla `admins` (Discord); `servers.owner_id` → `admins`; `servers` gana `status`/`reviewed_*`/`discord_guild_*`; tabla `server_members` |
+| `V4__discord_admin_identity.sql` | Tabla `admins` (Discord); `servers.owner_id` → `admins`; `discord_guild_*` en `servers`; tabla `server_members` |
+| `V5__admin_moderation.sql` | La moderación pasa de server a **admin**: `admins` gana `status`/`reviewed_*`; `servers` pierde su `status`/`reviewed_*` (vuelven a ser solo config) |
 
 ---
 
@@ -276,8 +280,7 @@ Las migraciones están en `src/main/resources/db/migration/`. Se aplican automá
 | A | Esquema V4 + entidades/repos/DTOs + baja del super-admin Steam | ✅ hecho |
 | B | Login Discord OAuth2 del panel (token `type=admin`, roles, `/auth/discord`) | ✅ hecho |
 | C | Verificación de guild en el alta + cache de guilds elegibles + enforcement de propiedad | ✅ hecho |
-| D | Moderación de plataforma (`/admin/servers`, approve/reject/ban) + filtrado público por `accepted` | ✅ hecho |
-| E | Frontend (botón Discord, alta con selector de guild, vista de moderación) | ✅ hecho |
+| D+E | Moderación **de admins** (`/admin/admins`, approve/reject/ban; máquina de estados; público = servers de admins accepted) + frontend Discord completo | ✅ hecho |
 
 ## Próximos pasos
 

@@ -16,7 +16,6 @@ export default function ServerForm() {
   const [guilds, setGuilds]           = useState([]);          // eligible guilds (create only)
   const [guildId, setGuildId]         = useState('');          // selected guild (create)
   const [guildName, setGuildName]     = useState('');          // existing guild (edit)
-  const [status, setStatus]           = useState('');          // existing status (edit)
   const [error, setError]             = useState('');
   const [loading, setLoading]         = useState(true);
   const [saving, setSaving]           = useState(false);
@@ -36,7 +35,6 @@ export default function ServerForm() {
             rules: s.rules || '', discordInviteUrl: s.discordInviteUrl || ''
           });
           setGuildName(s.discordGuildName || '');
-          setStatus(s.status || '');
           const allAllowed = s.allowedDinos?.length === dinos.length;
           setAllowed(allAllowed ? new Set() : new Set(s.allowedDinos?.map(d => d.id) || []));
         })
@@ -148,7 +146,7 @@ export default function ServerForm() {
           <div className={styles.field}>
             <label>Discord Server</label>
             <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>
-              {guildName || '—'} {status && <span>· status: <strong>{status}</strong></span>}
+              {guildName || '—'}
             </p>
           </div>
         )}

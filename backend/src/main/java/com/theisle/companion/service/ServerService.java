@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.theisle.companion.domain.entity.Admin;
 import com.theisle.companion.domain.entity.Server;
 import com.theisle.companion.domain.entity.ServerAllowedDino;
-import com.theisle.companion.domain.enums.ServerStatus;
+import com.theisle.companion.domain.enums.AdminStatus;
 import com.theisle.companion.domain.repository.AdminRepository;
 import com.theisle.companion.domain.repository.DinoRepository;
 import com.theisle.companion.domain.repository.ServerAllowedDinoRepository;
@@ -33,7 +33,6 @@ public class ServerService {
     private final ServerRepository serverRepo;
     private final ServerAllowedDinoRepository allowedDinoRepo;
     private final AdminRepository adminRepo;
-    private final AdminService adminService;
     private final DinoRepository dinoRepo;
     private final EligibleGuildService eligibleGuilds;
     private final ObjectMapper objectMapper;
@@ -44,28 +43,27 @@ public class ServerService {
     public ServerService(ServerRepository serverRepo,
                          ServerAllowedDinoRepository allowedDinoRepo,
                          AdminRepository adminRepo,
-                         AdminService adminService,
                          DinoRepository dinoRepo,
                          EligibleGuildService eligibleGuilds,
                          ObjectMapper objectMapper) {
         this.serverRepo      = serverRepo;
         this.allowedDinoRepo = allowedDinoRepo;
         this.adminRepo       = adminRepo;
-        this.adminService    = adminService;
         this.dinoRepo        = dinoRepo;
         this.eligibleGuilds  = eligibleGuilds;
         this.objectMapper    = objectMapper;
     }
 
     public ServerDto getBySlug(String slug) {
+        // Publico: solo se ven los servers de admins 'accepted'.
         Server server = serverRepo.findBySlugWithDinos(slug)
-                .filter(s -> s.getStatus() == ServerStatus.ACCEPTED)  // publico: solo aceptados
+                .filter(s -> s.getOwner().getStatus() == AdminStatus.ACCEPTED)
                 .orElseThrow(() -> new EntityNotFoundException("Server not found: " + slug));
         return toDto(server);
     }
 
     public List<ServerSummaryDto> listAll() {
-        return serverRepo.findByStatusOrderByNameAsc(ServerStatus.ACCEPTED).stream()
+        return serverRepo.findByOwnerStatusOrderByNameAsc(AdminStatus.ACCEPTED).stream()
                 .map(s -> new ServerSummaryDto(s.getSlug(), s.getName(), s.getGrowthMultiplier()))
                 .toList();
     }
@@ -84,10 +82,11 @@ public class ServerService {
         if (serverRepo.existsBySlug(req.slug())) {
             throw new IllegalArgumentException("Slug already in use: " + req.slug());
         }
-        // Acceso revocado: un admin con un server rechazado o baneado no puede crear
-        // mas. Se restablece solo si la plataforma le re-aprueba ese server.
-        if (serverRepo.existsByOwnerDiscordUserIdAndStatusIn(
-                discordUserId, List.of(ServerStatus.REJECTED, ServerStatus.BANNED))) {
+        Admin owner = adminRepo.findByDiscordUserId(discordUserId)
+                .orElseThrow(() -> new EntityNotFoundException("Admin not found"));
+        // Acceso revocado: un admin rechazado o baneado no puede crear servers.
+        // Un admin 'pending' SI puede crear (solo que no sera publico hasta aceptarlo).
+        if (owner.getStatus() == AdminStatus.REJECTED || owner.getStatus() == AdminStatus.BANNED) {
             throw new AccessDeniedException("Your access has been revoked by the platform");
         }
         // Verificacion de propiedad en el BACKEND: el guild debe estar en el set
@@ -99,8 +98,6 @@ public class ServerService {
         if (serverRepo.existsByDiscordGuildId(guild.id())) {
             throw new IllegalArgumentException("Guild already linked to a server: " + guild.id());
         }
-        Admin owner = adminRepo.findByDiscordUserId(discordUserId)
-                .orElseThrow(() -> new EntityNotFoundException("Admin not found"));
 
         OffsetDateTime now = OffsetDateTime.now();
         Server server = new Server();
@@ -114,15 +111,6 @@ public class ServerService {
         server.setDiscordGuildId(guild.id());
         server.setDiscordGuildName(guild.name());
         server.setDiscordInviteUrl(req.discordInviteUrl());
-        // Los servidores del admin de plataforma se auto-aceptan (no tiene sentido
-        // que se apruebe a si mismo). El resto entra en revision como 'pending'.
-        if (adminService.isPlatformAdmin(discordUserId)) {
-            server.setStatus(ServerStatus.ACCEPTED);
-            server.setReviewedAt(now);
-            server.setReviewedBy(owner);
-        } else {
-            server.setStatus(ServerStatus.PENDING);
-        }
         server.setCreatedAt(now);
         server.setUpdatedAt(now);
 
@@ -199,7 +187,6 @@ public class ServerService {
                 s.getGrowthMultiplier(),
                 s.getRules(),
                 parseJson(s.getBranding()),
-                s.getStatus() != null ? s.getStatus().name().toLowerCase() : null,
                 s.getDiscordGuildName(),
                 s.getDiscordInviteUrl(),
                 allowedDinos
