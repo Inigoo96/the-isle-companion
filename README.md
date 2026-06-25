@@ -141,13 +141,14 @@ El instalador permite elegir la carpeta de instalación y crea acceso directo en
 - [x] Dashboard del admin panel rediseñado con stats y tarjetas elaboradas
 - [x] Optimización: 0 filas en server_allowed_dinos = todos los dinos permitidos
 
-### En progreso — Panel admin 100% Discord (v0.6.0)
-> Identidad del panel separada del overlay: el overlay sigue con Steam; el panel pasa a Discord.
-- [x] Esquema: tabla `admins` (Discord), `servers.owner` → admin, estado de servidor (`pending`/`accepted`/`rejected`/`banned`), tabla `server_members` (checkpoint A)
-- [x] Login del panel por Discord OAuth2 + JWT con identidad dual (`type=admin`/`type=player`) (checkpoint B)
-- [x] Verificación de propiedad del guild de Discord en el alta de servidor + cache de guilds elegibles (checkpoint C)
-- [x] Moderación de plataforma: aprobar/rechazar/banear servidores; público solo ve `accepted` (checkpoint D)
-- [x] Frontend: botón "Login with Discord", alta con selector de guild, vista de moderación (checkpoint E)
+### Completado — Panel admin 100% Discord (v0.6.0)
+> Identidad del panel separada del overlay: el overlay sigue con Steam; el panel es 100% Discord.
+- [x] Esquema: tabla `admins` (Discord), `servers.owner` → admin, tabla `server_members`
+- [x] Login del panel por Discord OAuth2 + JWT con identidad dual (`type=admin`/`type=player`)
+- [x] Verificación de propiedad del guild de Discord en el alta de servidor + cache de guilds elegibles
+- [x] Moderación **a nivel de admin** (la persona): aprobar/rechazar/banear con máquina de estados; un admin `pending` puede crear pero no es público hasta aprobarlo; el público solo ve servers de admins `accepted`
+- [x] Frontend: botón "Login with Discord", alta con selector de guild, vista de moderación de admins
+- [x] Hardening de seguridad: secretos solo por env (Railway); el backend no arranca con el `JWT_SECRET` de dev
 
 ### Pendiente — Corrección de datos de dinosaurios
 > **IMPORTANTE:** Los datos actuales de dinos.json necesitan revisión.
@@ -158,11 +159,13 @@ El instalador permite elegir la carpeta de instalación y crea acceso directo en
 - [ ] **Mutations**: Solo 5 de 20 dinos tienen lista de mutaciones recomendadas
 
 ### Próximas funcionalidades
+- [ ] **Co-admins**: flujo de invitaciones para varios admins por server (la tabla `server_members` ya está modelada)
+- [ ] **Claim de servidores desde BattleMetrics**: buscar/reclamar un server existente
 - [ ] Anuncios de servidor (el admin publica mensajes, el overlay los muestra)
 - [ ] Estado del servidor + IP de conexión directa
 - [ ] Eventos programados (visible en el overlay como recordatorio)
 - [ ] Página pública del servidor (URL shareable para Discord)
-- [ ] Sistema de notificaciones Discord webhook (cuando se aprueban/banean cuentas)
+- [ ] Sistema de notificaciones Discord webhook (cuando se aprueban/banean admins)
 
 ### Fase 2 — Persistencia e historial
 - [ ] Persistencia de datos entre sesiones (patrol zones, último dino, posición)
