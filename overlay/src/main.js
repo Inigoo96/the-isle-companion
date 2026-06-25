@@ -13,6 +13,7 @@ function createOverlay() {
     minHeight: 336,
     x: 20,
     y: 20,
+    icon: path.join(__dirname, '../assets/icon.png'),
     frame: false,
     transparent: true,
     alwaysOnTop: true,
