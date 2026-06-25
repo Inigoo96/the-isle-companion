@@ -1,6 +1,6 @@
-# The Isle Companion
+# Gondwa
 
-Overlay de escritorio para **The Isle** que proporciona herramientas de información y seguimiento para mejorar tu experiencia de juego.
+Overlay de escritorio + plataforma para **The Isle** que proporciona herramientas de información y seguimiento para mejorar tu experiencia de juego. *(Anteriormente "The Isle Companion"; el slug del repo se mantiene por ahora.)*
 
 ![Electron](https://img.shields.io/badge/Electron-35.7.5-47848F?logo=electron&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-24.x-339933?logo=nodedotjs&logoColor=white)

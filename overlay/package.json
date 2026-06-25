@@ -1,7 +1,7 @@
 {
   "name": "the-isle-companion",
   "version": "0.4.0",
-  "description": "The Isle Companion - Overlay de escritorio: minimapa, dino stats, mutations, growth timer",
+  "description": "Gondwa - Overlay de escritorio para The Isle: minimapa, dino stats, mutations, growth timer",
   "main": "src/main.js",
   "license": "MIT",
   "author": "Íñigo",
@@ -13,7 +13,7 @@
   },
   "build": {
     "appId": "io.github.inigoo96.the-isle-companion",
-    "productName": "The Isle Companion",
+    "productName": "Gondwa",
     "directories": {
       "output": "dist"
     },

@@ -2,24 +2,24 @@
    THEME TOKENS — single source of truth
    ============================================================ */
 :root {
-  --accent:        #4B75FF;
-  --accent-rgb:    75, 117, 255;
-  --accent-dim:    #2952c8;
-  --accent-glow:   rgba(75, 117, 255, 0.40);
+  --accent:        #20B488;
+  --accent-rgb:    32, 180, 136;
+  --accent-dim:    #0F6E56;
+  --accent-glow:   rgba(32, 180, 136, 0.40);
 
-  --bg:            rgba(8, 10, 22, 0.92);
-  --bg-panel:      rgba(10, 14, 26, 0.96);
-  --bg-surface:    rgba(18, 22, 48, 0.75);
-  --bg-surface-2:  rgba(12, 16, 36, 0.90);
+  --bg:            rgba(6, 15, 12, 0.92);
+  --bg-panel:      rgba(8, 18, 15, 0.96);
+  --bg-surface:    rgba(14, 30, 25, 0.75);
+  --bg-surface-2:  rgba(9, 20, 17, 0.90);
 
   --border:        rgba(var(--accent-rgb), 0.25);
   --border-dim:    rgba(var(--accent-rgb), 0.12);
   --border-bright: rgba(var(--accent-rgb), 0.45);
 
-  --text:          #eef0ff;
-  --text-mid:      #b8c4ea;
-  --text-dim:      #7888b8;
-  --text-muted:    #3c4870;
+  --text:          #EEF2EE;
+  --text-mid:      #BAC6BD;
+  --text-dim:      #7C8A82;
+  --text-muted:    #3C4A44;
 }
 
 /* ============================================================

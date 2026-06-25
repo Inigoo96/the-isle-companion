@@ -1,4 +1,5 @@
 import { API_BASE } from '../api';
+import { GondwaMark } from '../components/Logo';
 import styles from './Login.module.css';
 
 export default function Login() {
@@ -12,8 +13,8 @@ export default function Login() {
     <div className={styles.page}>
       <div className={styles.card}>
         <div className={styles.logo}>
-          <div className={styles.logoMark}>IC</div>
-          <span className={styles.title}>Isle Admin</span>
+          <div className={styles.logoMark}><GondwaMark size={36} /></div>
+          <span className={styles.title}>Gondwa</span>
         </div>
         <p className={styles.subtitle}>Server Management Panel</p>
         <div className={styles.divider} />

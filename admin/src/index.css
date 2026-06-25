@@ -1,23 +1,23 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --accent:        #4B75FF;
-  --accent-rgb:    75, 117, 255;
-  --accent-dim:    #2952c8;
-  --accent-glow:   rgba(75, 117, 255, 0.30);
+  --accent:        #1D9E75;
+  --accent-rgb:    29, 158, 117;
+  --accent-dim:    #0F6E56;
+  --accent-glow:   rgba(29, 158, 117, 0.30);
 
-  --bg:            #080a16;
-  --bg-surface:    #0e1226;
-  --bg-surface-2:  #141830;
+  --bg:            #07120E;
+  --bg-surface:    #0C1A16;
+  --bg-surface-2:  #112621;
 
-  --border:        rgba(75, 117, 255, 0.18);
+  --border:        rgba(29, 158, 117, 0.18);
   --border-dim:    rgba(255, 255, 255, 0.07);
-  --border-bright: rgba(75, 117, 255, 0.38);
+  --border-bright: rgba(29, 158, 117, 0.38);
 
-  --text:          #eef0ff;
-  --text-mid:      #b8c4ea;
-  --text-dim:      #7888b8;
-  --text-muted:    #3c4870;
+  --text:          #F1ECE0;
+  --text-mid:      #BAC6BD;
+  --text-dim:      #7E8C84;
+  --text-muted:    #3D4A44;
 
   --danger:        #e06040;
   --danger-rgb:    224, 96, 64;

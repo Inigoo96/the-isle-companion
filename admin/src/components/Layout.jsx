@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { getUser, clearAuth } from '../auth';
+import { GondwaMark } from './Logo';
 import styles from './Layout.module.css';
 
 export default function Layout({ children }) {
@@ -24,8 +25,8 @@ export default function Layout({ children }) {
     <div className={styles.shell}>
       <nav className={styles.sidebar}>
         <div className={styles.logo}>
-          <div className={styles.logoMark}>IC</div>
-          <span className={styles.logoText}>Isle Admin</span>
+          <div className={styles.logoMark}><GondwaMark size={30} /></div>
+          <span className={styles.logoText}>Gondwa</span>
         </div>
 
         <ul className={styles.nav}>

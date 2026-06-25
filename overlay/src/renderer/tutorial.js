@@ -2,7 +2,7 @@ const TUTORIAL_KEY = 'tic_tutorial_v1';
 
 const STEPS = [
   {
-    title: 'Welcome to The Isle Companion!',
+    title: 'Welcome to Gondwa!',
     desc: 'A desktop overlay to help you play The Isle Evrima. Quick tour — 2 minutes.',
     target: null,
     tab: null,
