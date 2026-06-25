@@ -75,7 +75,7 @@ class Tutorial {
   }
 
   start() {
-    if (!this.shouldShow()) return;
+    if (!this.shouldShow() || this.el) return;
     this._build();
     this._goto(0);
   }

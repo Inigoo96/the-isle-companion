@@ -1,4 +1,4 @@
-const { app, BrowserWindow, globalShortcut, ipcMain, clipboard, shell } = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain, clipboard, shell, session } = require('electron');
 const path = require('path');
 
 let overlayWindow = null;
@@ -89,6 +89,20 @@ ipcMain.handle('open-steam-login', () => {
 });
 
 app.whenReady().then(() => {
+  // Patch CORS headers for Railway backend so fetch() works from file:// renderer
+  session.defaultSession.webRequest.onHeadersReceived(
+    { urls: [`${BACKEND}/*`] },
+    (details, callback) => {
+      callback({
+        responseHeaders: {
+          ...details.responseHeaders,
+          'access-control-allow-origin':  ['*'],
+          'access-control-allow-headers': ['Authorization, Content-Type'],
+        }
+      });
+    }
+  );
+
   createOverlay();
   startClipboardWatch();
 

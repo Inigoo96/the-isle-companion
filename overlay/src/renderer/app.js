@@ -295,7 +295,6 @@ async function loadDinoData() {
     const resp = await fetch('../../data/dinos.json');
     dinoData = await resp.json();
     populateDinoSelect();
-    window.tutorial?.start();
   } catch (e) {
     console.error('Failed to load dino data:', e);
   }
