@@ -35,6 +35,9 @@ app:
   admin-url: ${ADMIN_URL:http://localhost:5173}
   # Discord user ids con permisos de moderacion de plataforma (separados por coma).
   platform-admins: ${PLATFORM_ADMINS:}
+  # Solo para desarrollo local: permite arrancar con el JWT_SECRET de dev.
+  # En produccion debe quedar false (default) y definirse un JWT_SECRET real.
+  allow-insecure-dev-secret: ${APP_ALLOW_INSECURE_DEV_SECRET:false}
 
 jwt:
   secret: ${JWT_SECRET:dev-secret-change-in-production-must-be-256-bits}

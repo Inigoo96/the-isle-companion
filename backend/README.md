@@ -42,8 +42,11 @@ CREATE DATABASE isle_companion;
 | `DISCORD_CLIENT_SECRET` | *(vacío)* | Client Secret de la app de Discord |
 | `DISCORD_REDIRECT_URI` | `http://localhost:8080/auth/discord/callback` | URL de callback registrada en la app de Discord |
 | `PLATFORM_ADMINS` | *(vacío)* | Discord user ids con permisos de moderación de plataforma (separados por coma) |
+| `APP_ALLOW_INSECURE_DEV_SECRET` | `false` | **Solo dev local:** permite arrancar con el `JWT_SECRET` de dev. En producción debe quedar `false` |
 
 > **Seguridad:** `STEAM_API_KEY`, `DISCORD_CLIENT_SECRET` y `JWT_SECRET` nunca deben commitearse. Usar siempre variables de entorno.
+>
+> **`JWT_SECRET` es obligatorio en producción.** El backend **se niega a arrancar** si detecta que está usando el `JWT_SECRET` de dev (placeholder commiteado) y `APP_ALLOW_INSECURE_DEV_SECRET` no es `true`. Así producción nunca firma tokens con una clave conocida. Para correr en local: exporta `APP_ALLOW_INSECURE_DEV_SECRET=true` o, mejor, pon tu propio `JWT_SECRET`.
 
 ### Configurar la app de Discord (login del panel)
 

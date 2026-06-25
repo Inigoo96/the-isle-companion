@@ -695,6 +695,15 @@ CONFIGURACION PARA MODERAR:
   PLATFORM_ADMINS del backend en Railway (Discord -> Ajustes -> Avanzado ->
   Modo desarrollador, luego clic derecho en tu nombre -> Copiar ID de usuario).
 
+SEGURIDAD (auditoria de secretos):
+  - No hay secretos reales commiteados; .env esta en .gitignore. Las keys/secrets
+    (JWT_SECRET, DISCORD_CLIENT_SECRET, STEAM_API_KEY, DB_*) van por variables de
+    entorno en Railway.
+  - JWT_SECRET es OBLIGATORIO en produccion: StartupSecurityCheck hace que el
+    backend se niegue a arrancar si esta usando el JWT_SECRET de dev (placeholder
+    commiteado) salvo que APP_ALLOW_INSECURE_DEV_SECRET=true (solo dev local).
+    Asi produccion nunca firma tokens con una clave conocida.
+
 
 ================================================================================
  NOTAS PARA FUTURAS VERSIONES DE THE ISLE
