@@ -1,6 +1,6 @@
-# The Isle Companion — Backend
+# Gondwa — Backend
 
-Spring Boot backend para la plataforma multi-tenant de The Isle Companion.
+Spring Boot backend para la plataforma multi-tenant de Gondwa (companion para The Isle).
 
 ## URLs de producción
 

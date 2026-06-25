@@ -1,4 +1,4 @@
-# Proyecto: The Isle Companion — estado y TODO
+# Proyecto: Gondwa (antes "The Isle Companion") — estado y TODO
 # (Actualizado: 2026-06-25. Para el detalle por sesión ver DOCUMENTACION.txt)
 
 ## Qué es

@@ -9,7 +9,7 @@
  1. QUE ES THE ISLE COMPANION
 ========================================
 
-The Isle Companion es una aplicacion de escritorio que funciona como overlay
+Gondwa (anteriormente "The Isle Companion") es una aplicacion de escritorio que funciona como overlay
 (ventana superpuesta) sobre el juego The Isle. Su proposito es proporcionar
 herramientas de informacion y seguimiento que el juego no ofrece de forma
 nativa, sin modificar ni acceder al proceso del juego en ningun momento.
@@ -655,9 +655,10 @@ CHECKPOINT D - Moderacion de plataforma:
       + AdminService.isPlatformAdmin.
   [x] GET /admin/me: perfil del admin (discordUserId, username, avatarUrl,
       platformAdmin). GET /admin/guilds consolidado en el mismo controller.
-  [x] PlatformModerationController: GET /admin/servers?status=...,
+  [x] PlatformModerationController (NOTA: en V5 paso de moderar SERVERS a moderar
+      ADMINS -> /admin/admins). En su momento: GET /admin/servers?status=...,
       POST .../approve|reject|ban (status + reviewed_at/by). 403 si no eres
-      platform admin, 400 status invalido, 404 server inexistente.
+      platform admin, 400 status invalido, 404 inexistente.
   [x] Filtrado publico: GET /servers y /servers/{slug} solo devuelven accepted.
   [x] server_members queda modelado (sin flujo de invitaciones todavia).
 
@@ -703,6 +704,35 @@ SEGURIDAD (auditoria de secretos):
     backend se niegue a arrancar si esta usando el JWT_SECRET de dev (placeholder
     commiteado) salvo que APP_ALLOW_INSECURE_DEV_SECRET=true (solo dev local).
     Asi produccion nunca firma tokens con una clave conocida.
+
+
+========================================
+ REBRAND A GONDWA
+ Fecha: 2026-06-25
+========================================
+
+El proyecto se renombra de "The Isle Companion" a GONDWA (por Gondwana, el
+supercontinente del sur de la era de los dinosaurios). Motivos: nombre propio
+(evita la marca "The Isle"), ownable y future-proof.
+
+  [x] Identidad visual: logo = continente con curvas de nivel topograficas;
+      paleta teal (#0F6E56 / #1D9E75) + hueso (#EFE7D6).
+  [x] Overlay: titulo de ventana, productName, tutorial, paleta del HUD a teal,
+      assets/icon.svg + icon.ico (regenerado) + icon de la ventana en main.js.
+  [x] Panel admin: "Isle Admin"/"IC" -> Gondwa + nuevo mark (componente Logo),
+      paleta CSS azul -> teal/hueso, favicon, titulos de pestaña.
+  [x] Repo de GitHub renombrado the-isle-companion -> gondwa. Panel en
+      inigoo96.github.io/gondwa/ (VITE_BASE_PATH=/gondwa/). GitHub redirige la
+      URL vieja. CORS/sesiones intactos (mismo origen github.io).
+  [x] App de Discord: renombrar a "Gondwa" + subir icono (icon-1024.png) en el
+      portal (paso manual). ADMIN_URL en Railway -> .../gondwa (paso manual).
+  [x] Seguridad: secretos solo por env; el Steam ID sale del codigo.
+
+  NO se toca (a proposito, sin gastar / sin romper): la carpeta local sigue
+  siendo the-isle-companion; la URL del backend en Railway
+  (the-isle-companion-production.up.railway.app) se mantiene -> por eso la
+  pantalla de login de Steam aun muestra ese dominio. Se migrara a dominio
+  propio (gondwa.gg / api.gondwa.gg) el dia que se compre el dominio.
 
 
 ================================================================================

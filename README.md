@@ -102,7 +102,7 @@ El instalador permite elegir la carpeta de instalación y crea acceso directo en
 ### Cómo funciona el mapa
 
 1. Abre The Isle en modo Borderless Windowed.
-2. Ejecuta The Isle Companion.
+2. Ejecuta Gondwa.
 3. En el juego, copia tus coordenadas al clipboard.
 4. La app las detecta automáticamente y muestra tu posición en el minimapa.
 5. Pulsa **F10** para que los clicks pasen al juego mientras el overlay está visible.

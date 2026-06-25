@@ -1,6 +1,6 @@
 # Gondwa — Admin Panel
 
-Panel de administración React + Vite para que los admins de servidor configuren su instancia en la plataforma multi-tenant.
+Panel de administración React + Vite para que los admins de comunidad (identidad **Discord**) configuren su servidor en la plataforma multi-tenant.
 
 ## URLs de producción
 
@@ -41,74 +41,62 @@ Genera la carpeta `dist/` lista para subir a GitHub Pages.
 | `VITE_API_BASE` | *(no necesaria — usa proxy)* | URL pública del backend Railway |
 | `VITE_BASE_PATH` | *(no necesaria — `/`)* | `/gondwa/` |
 
-En producción estas variables se inyectan automáticamente desde los **GitHub Actions secrets** (ver `.github/workflows/deploy-admin.yml`).
+En producción se inyectan desde los **GitHub Actions secrets** (ver `.github/workflows/deploy-admin.yml`). El secret `VITE_API_BASE` debe estar en **GitHub → Settings → Secrets → Actions**.
 
 ## CI/CD — GitHub Actions
 
-Cada push a `master` que modifique archivos en `admin/` o el propio workflow lanza el pipeline automáticamente:
+Cada push a `master` que modifique `admin/` o el workflow lanza el pipeline: `npm ci` + `npm run build` (con las env de producción) + deploy a GitHub Pages.
 
-1. Checkout del código
-2. `npm ci` + `npm run build` con las variables de entorno de producción
-3. Deploy a GitHub Pages via `actions/deploy-pages`
+## Autenticación — Discord OAuth2
 
-El secret `VITE_API_BASE` debe estar configurado en **GitHub → Settings → Secrets → Actions** del repositorio.
-
-## Autenticación
-
-Login mediante Steam OpenID 2.0. Se abre un popup de Steam; al autenticar, el backend redirige el popup a `/auth/callback?token=JWT`, la app guarda el token y cierra el popup. La sesión queda activa en la pestaña principal.
-
-- Token JWT guardado en `localStorage` con clave `isle_admin_token`
-- Expiración: 30 días
-
-### Flujo completo de login (producción)
+El panel se autentica **100% por Discord** (el overlay sigue con Steam, es un flujo aparte). Login mediante **redirección completa** (sin popup):
 
 ```
-1. Usuario abre popup → Railway /auth/steam?source=admin
-2. Steam autentica al usuario
-3. Callback → Railway /auth/steam/callback
-4. Backend emite JWT → redirige popup a GitHub Pages /auth/callback?token=JWT
-5. AuthCallback.jsx guarda token, llama /me, cierra popup
-6. Login.jsx recibe postMessage → redirige a dashboard
+1. "Login with Discord" → backend /auth/discord
+2. Discord muestra la pantalla de autorización (scopes: identify guilds)
+3. Callback en el backend → crea/actualiza el admin, emite JWT (type=admin)
+   → redirige a Pages /auth/callback?token=JWT
+4. AuthCallback.jsx guarda el token y carga el perfil con /admin/me → dashboard
 ```
+
+- Token JWT en `localStorage` con clave `isle_admin_token`, expiración 30 días.
+- El token de Discord se usa solo en el callback del backend y **no se persiste**.
 
 ## Rutas
 
 | Ruta | Descripción | Protección |
 |---|---|---|
-| `/login` | Login con Steam | Pública |
-| `/auth/callback` | Callback del popup de Steam | Pública |
-| `/pending` | Pantalla de cuenta pendiente/baneada | Autenticado |
-| `/` | Dashboard — lista de servidores | Activo |
-| `/servers/new` | Crear nuevo servidor | Activo |
-| `/servers/:slug` | Editar / eliminar servidor | Activo + propietario |
-| `/super-admin` | Gestión de cuentas de admin | Solo super-admin |
+| `/login` | Login con Discord | Pública |
+| `/auth/callback` | Callback de Discord (guarda el token) | Pública |
+| `/` | Dashboard — tus servidores | Admin |
+| `/servers/new` | Crear servidor (selector de guild verificado) | Admin |
+| `/servers/:slug` | Editar / eliminar servidor | Admin propietario |
+| `/moderation` | Aprobar / rechazar / banear admins | Solo platform admin |
 
-### Estados de cuenta
+## Moderación (a nivel de admin)
 
-| Estado | Descripción | Puede gestionar servidores |
-|---|---|---|
-| `PENDING` | Recién registrado, esperando aprobación | No → ve `/pending` |
-| `ACTIVE` | Aprobado por el super-admin | Sí |
-| `BANNED` | Baneado | No → ve `/pending` |
+Se modera el **admin** (la persona/identidad Discord), no cada servidor. Estados: `pending` → `accepted`/`rejected`, `rejected` → `accepted`, `accepted` → `banned`, `banned` → `accepted`.
 
-El super-admin (Steam ID hardcodeado en el backend) puede aprobar, banear y desbanear cuentas desde `/super-admin`.
+- Un admin nuevo entra `pending`: puede crear/configurar servidores, pero **no son públicos** hasta que se le aprueba.
+- El público (overlay) solo ve servidores de admins `accepted`.
+- Un admin `rejected`/`banned` no puede crear servidores.
+- Los **platform admins** (allowlist `PLATFORM_ADMINS` en el backend) ven `/moderation` y operan sobre los admins.
 
 ## Formulario de servidor
 
-- **Nombre** y **slug** (identificador único, solo minúsculas/números/guiones, inmutable tras crear)
-- **Growth Multiplier** — multiplicador de crecimiento del servidor
-- **Rules** — descripción o reglas en texto libre
-- **Dinos permitidos** — selector de chips con los dinosaurios del catálogo
+- **Discord Server** — selector del **guild verificado** (eres owner o tienes ADMINISTRATOR); la propiedad se comprueba en el backend.
+- **Nombre** y **slug** (único, solo minúsculas/números/guiones, inmutable tras crear)
+- **Growth Multiplier** — multiplicador de crecimiento
+- **Discord invite** (opcional) y **Rules** — texto libre
+- **Dinos permitidos** — selector de chips del catálogo
 
-> **Optimización:** Si no se selecciona ningún dino (o se seleccionan todos), no se guardan filas en `server_allowed_dinos`. Cero filas = todos los dinos permitidos.
+> **Optimización:** sin dinos seleccionados (o todos) → no se guardan filas en `server_allowed_dinos`. Cero filas = todos permitidos.
 
 ## UX — Confirmación de logout
 
-Tanto el Layout (sidebar) como la página Pending muestran un flujo de confirmación en dos pasos al hacer logout: el botón inicial se reemplaza por "Log out? / Yes / Cancel" inline, sin modales ni alerts del navegador.
+El sidebar muestra un flujo de confirmación en dos pasos inline ("Log out? / Yes / Cancel"), sin modales ni alerts.
 
 ## Routing en GitHub Pages (SPA)
-
-GitHub Pages no soporta rutas de cliente directamente. La solución implementada:
 
 1. `public/404.html` — encoda la ruta solicitada como query string y redirige al index
 2. `index.html` — script que restaura la ruta original antes de que React monte
