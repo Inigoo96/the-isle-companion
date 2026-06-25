@@ -31,7 +31,7 @@ server:
 
 app:
   base-url: ${APP_BASE_URL:http://localhost:8080}
-  super-admin-steam-id: ${SUPER_ADMIN_STEAM_ID:76561199415486620}
+  super-admin-steam-id: ${SUPER_ADMIN_STEAM_ID:}
   admin-url: ${ADMIN_URL:http://localhost:5173}
   # Discord user ids con permisos de moderacion de plataforma (separados por coma).
   platform-admins: ${PLATFORM_ADMINS:}

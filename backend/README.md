@@ -36,7 +36,7 @@ CREATE DATABASE isle_companion;
 | `JWT_EXPIRATION_DAYS` | `30` | Duración del token JWT |
 | `STEAM_API_KEY` | *(vacío)* | API key de Steam — necesaria para nombre y avatar. Obtener en https://steamcommunity.com/dev/apikey |
 | `APP_BASE_URL` | `http://localhost:8080` | URL pública del backend (usada en el callback de Steam OpenID) |
-| `SUPER_ADMIN_STEAM_ID` | `76561199415486620` | Steam ID del super-administrador (overlay/`/me`; ya **no** gatea la gestión de servidores) |
+| `SUPER_ADMIN_STEAM_ID` | *(vacío)* | Steam ID del super-administrador (overlay/`/me`; ya **no** gatea la gestión de servidores). Va por env, no hardcodeado |
 | `ADMIN_URL` | `http://localhost:5173` | URL del admin panel (para CORS y redirect post-login) |
 | `DISCORD_CLIENT_ID` | *(vacío)* | Client ID de la app de Discord (panel) |
 | `DISCORD_CLIENT_SECRET` | *(vacío)* | Client Secret de la app de Discord |
