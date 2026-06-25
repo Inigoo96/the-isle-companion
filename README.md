@@ -137,6 +137,10 @@ El instalador permite elegir la carpeta de instalación y crea acceso directo en
 - [x] Sistema super-admin: gestión de cuentas con estados PENDING/ACTIVE/BANNED
 - [x] Deploy del admin panel en GitHub Pages con CI/CD (GitHub Actions)
 - [x] Deploy del backend y base de datos en Railway
+- [x] Overlay conectado al backend de Railway en producción (CSP, CORS, encoding UTF-8)
+- [x] Logout con confirmación en overlay y admin panel
+- [x] Dashboard del admin panel rediseñado con stats y tarjetas elaboradas
+- [x] Optimización: 0 filas en server_allowed_dinos = todos los dinos permitidos
 
 ### Pendiente — Corrección de datos de dinosaurios
 > **IMPORTANTE:** Los datos actuales de dinos.json necesitan revisión.

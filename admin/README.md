@@ -102,6 +102,10 @@ El super-admin (Steam ID hardcodeado en el backend) puede aprobar, banear y desb
 
 > **Optimización:** Si no se selecciona ningún dino (o se seleccionan todos), no se guardan filas en `server_allowed_dinos`. Cero filas = todos los dinos permitidos.
 
+## UX — Confirmación de logout
+
+Tanto el Layout (sidebar) como la página Pending muestran un flujo de confirmación en dos pasos al hacer logout: el botón inicial se reemplaza por "Log out? / Yes / Cancel" inline, sin modales ni alerts del navegador.
+
 ## Routing en GitHub Pages (SPA)
 
 GitHub Pages no soporta rutas de cliente directamente. La solución implementada:
