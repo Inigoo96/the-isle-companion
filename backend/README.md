@@ -104,7 +104,7 @@ Configurar en el servicio de backend (Railway → Backend → Variables):
 | `STEAM_API_KEY` | Tu API key de Steam |
 | `APP_BASE_URL` | `https://the-isle-companion-production.up.railway.app` |
 | `SUPER_ADMIN_STEAM_ID` | Tu Steam ID |
-| `ADMIN_URL` | `https://inigoo96.github.io/the-isle-companion` |
+| `ADMIN_URL` | `https://inigoo96.github.io/gondwa` |
 | `DISCORD_CLIENT_ID` | Client ID de tu app de Discord |
 | `DISCORD_CLIENT_SECRET` | Client Secret de tu app de Discord |
 | `DISCORD_REDIRECT_URI` | `https://the-isle-companion-production.up.railway.app/auth/discord/callback` |

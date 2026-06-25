@@ -1,4 +1,4 @@
-# The Isle Companion — Admin Panel
+# Gondwa — Admin Panel
 
 Panel de administración React + Vite para que los admins de servidor configuren su instancia en la plataforma multi-tenant.
 
@@ -6,7 +6,7 @@ Panel de administración React + Vite para que los admins de servidor configuren
 
 | Entorno | URL |
 |---|---|
-| Producción (GitHub Pages) | `https://inigoo96.github.io/the-isle-companion/` |
+| Producción (GitHub Pages) | `https://inigoo96.github.io/gondwa/` |
 | Desarrollo local | `http://localhost:5173` |
 
 ## Requisitos locales
@@ -28,7 +28,7 @@ Abre `http://localhost:5173`. Las peticiones a `/api/*` se proxian automáticame
 
 ```bash
 VITE_API_BASE=https://the-isle-companion-production.up.railway.app \
-VITE_BASE_PATH=/the-isle-companion/ \
+VITE_BASE_PATH=/gondwa/ \
 npm run build
 ```
 
@@ -39,7 +39,7 @@ Genera la carpeta `dist/` lista para subir a GitHub Pages.
 | Variable | Desarrollo | Producción |
 |---|---|---|
 | `VITE_API_BASE` | *(no necesaria — usa proxy)* | URL pública del backend Railway |
-| `VITE_BASE_PATH` | *(no necesaria — `/`)* | `/the-isle-companion/` |
+| `VITE_BASE_PATH` | *(no necesaria — `/`)* | `/gondwa/` |
 
 En producción estas variables se inyectan automáticamente desde los **GitHub Actions secrets** (ver `.github/workflows/deploy-admin.yml`).
 
@@ -112,4 +112,4 @@ GitHub Pages no soporta rutas de cliente directamente. La solución implementada
 
 1. `public/404.html` — encoda la ruta solicitada como query string y redirige al index
 2. `index.html` — script que restaura la ruta original antes de que React monte
-3. `BrowserRouter` con `basename={import.meta.env.BASE_URL}` para el subpath `/the-isle-companion/`
+3. `BrowserRouter` con `basename={import.meta.env.BASE_URL}` para el subpath `/gondwa/`

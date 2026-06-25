@@ -38,7 +38,7 @@ jobs:
         working-directory: admin
         env:
           VITE_API_BASE: ${{ secrets.VITE_API_BASE }}
-          VITE_BASE_PATH: /the-isle-companion/
+          VITE_BASE_PATH: /gondwa/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

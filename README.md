@@ -10,7 +10,7 @@ Overlay de escritorio + plataforma para **The Isle** que proporciona herramienta
 ## Arquitectura del proyecto
 
 ```
-the-isle-companion/               ← monorepo
+gondwa/                          ← monorepo (repo: github.com/Inigoo96/gondwa)
 ├── overlay/                      # App Electron (overlay de escritorio)
 ├── backend/                      # API Spring Boot + PostgreSQL (Railway)
 ├── admin/                        # Panel de administración React + Vite (GitHub Pages)
@@ -21,7 +21,7 @@ the-isle-companion/               ← monorepo
 
 | Componente | Plataforma | URL |
 |---|---|---|
-| Admin Panel | GitHub Pages | `https://inigoo96.github.io/the-isle-companion/` |
+| Admin Panel | GitHub Pages | `https://inigoo96.github.io/gondwa/` |
 | Backend API | Railway | `https://the-isle-companion-production.up.railway.app` |
 | Base de datos | Railway PostgreSQL | (interna al proyecto Railway) |
 
@@ -53,8 +53,8 @@ Dropdown en el overlay que carga los servidores disponibles desde el backend. Al
 ## Instalación
 
 ```bash
-git clone https://github.com/Inigoo96/the-isle-companion.git
-cd the-isle-companion/overlay
+git clone https://github.com/Inigoo96/gondwa.git
+cd gondwa/overlay
 npm install
 ```
 
