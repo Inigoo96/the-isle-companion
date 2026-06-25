@@ -4,6 +4,7 @@ import com.theisle.companion.domain.enums.ServerStatus;
 import com.theisle.companion.dto.ServerModerationDto;
 import com.theisle.companion.service.ModerationService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -65,6 +66,9 @@ public class PlatformModerationController {
             return ResponseEntity.noContent().build();
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
+        } catch (IllegalStateException e) {
+            // Transicion de estado no permitida (p.ej. pending -> banned)
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
 

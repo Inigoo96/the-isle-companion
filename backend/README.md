@@ -181,6 +181,18 @@ El token de Discord se usa solo dentro del callback y **nunca se persiste**. Son
 
 Gateado por `ROLE_ADMIN` y, dentro, por la allowlist `PLATFORM_ADMINS` (403 si no estás). Los servidores **nunca se borran**; solo cambian de estado. El listado público (`GET /servers`, `GET /servers/{slug}`) solo devuelve `accepted`.
 
+**Máquina de estados** (transiciones validadas en backend; una transición ilegal → `409`):
+
+```
+pending  → accepted | rejected
+rejected → accepted            (re-aprobar)
+accepted → banned              (retirar)
+banned   → accepted            (des-banear)
+```
+
+- **Auto-accept:** si un admin de `PLATFORM_ADMINS` crea un servidor, entra directo como `accepted` (no se aprueba a sí mismo).
+- **Acceso revocado:** un admin con algún servidor `rejected` o `banned` no puede crear nuevos servidores (`403`); se restablece solo si la plataforma le re-aprueba ese servidor.
+
 > El rol se deriva del claim `type` del JWT: `ROLE_ADMIN` (panel Discord) o `ROLE_PLAYER` (overlay Steam). La verificación de propiedad (`owner`) y la del guild se hacen **siempre en el backend**, no basta con esconderlo en React.
 
 > **Verificación de guild:** en el login se leen los guilds del admin (`/users/@me/guilds`), se filtran los que es owner/ADMINISTRATOR y se cachean en memoria (TTL 30 min). Al crear un servidor, el `discordGuildId` enviado debe estar en ese set (si no → 403). El token de Discord nunca se persiste.

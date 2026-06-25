@@ -4,6 +4,17 @@ import styles from './Moderation.module.css';
 
 const TABS = ['pending', 'accepted', 'rejected', 'banned'];
 
+// Transiciones permitidas por estado (debe coincidir con el backend).
+const ACTIONS = {
+  pending:  ['approve', 'reject'],
+  rejected: ['approve'],
+  accepted: ['ban'],
+  banned:   ['approve'],
+};
+
+const ACTION_LABEL = { approve: 'Approve', reject: 'Reject', ban: 'Ban' };
+const ACTION_CLASS = { approve: 'approve', reject: 'reject', ban: 'ban' };
+
 export default function Moderation() {
   const [status, setStatus]   = useState('pending');
   const [servers, setServers] = useState([]);
@@ -72,18 +83,14 @@ export default function Moderation() {
                 </div>
               </div>
               <div className={styles.actions}>
-                {status !== 'accepted' && (
-                  <button className={styles.approve} disabled={busy === s.id + 'approve'}
-                    onClick={() => act(s.id, 'approve')}>Approve</button>
-                )}
-                {status !== 'rejected' && (
-                  <button className={styles.reject} disabled={busy === s.id + 'reject'}
-                    onClick={() => act(s.id, 'reject')}>Reject</button>
-                )}
-                {status !== 'banned' && (
-                  <button className={styles.ban} disabled={busy === s.id + 'ban'}
-                    onClick={() => act(s.id, 'ban')}>Ban</button>
-                )}
+                {(ACTIONS[status] || []).map(action => (
+                  <button key={action}
+                    className={styles[ACTION_CLASS[action]]}
+                    disabled={busy === s.id + action}
+                    onClick={() => act(s.id, action)}>
+                    {ACTION_LABEL[action]}
+                  </button>
+                ))}
               </div>
             </div>
           ))}

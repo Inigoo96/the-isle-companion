@@ -42,6 +42,10 @@ public interface ServerRepository extends JpaRepository<Server, UUID> {
 
     boolean existsByDiscordGuildId(String discordGuildId);
 
+    /** ¿El admin tiene algún server en alguno de esos estados? (acceso revocado). */
+    boolean existsByOwnerDiscordUserIdAndStatusIn(String discordUserId,
+                                                  java.util.Collection<ServerStatus> statuses);
+
     List<Server> findAllByOrderByNameAsc();
 
     /** Listado publico: solo servidores con un estado dado (p.ej. accepted). */

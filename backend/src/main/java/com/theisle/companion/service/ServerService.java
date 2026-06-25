@@ -33,6 +33,7 @@ public class ServerService {
     private final ServerRepository serverRepo;
     private final ServerAllowedDinoRepository allowedDinoRepo;
     private final AdminRepository adminRepo;
+    private final AdminService adminService;
     private final DinoRepository dinoRepo;
     private final EligibleGuildService eligibleGuilds;
     private final ObjectMapper objectMapper;
@@ -43,12 +44,14 @@ public class ServerService {
     public ServerService(ServerRepository serverRepo,
                          ServerAllowedDinoRepository allowedDinoRepo,
                          AdminRepository adminRepo,
+                         AdminService adminService,
                          DinoRepository dinoRepo,
                          EligibleGuildService eligibleGuilds,
                          ObjectMapper objectMapper) {
         this.serverRepo      = serverRepo;
         this.allowedDinoRepo = allowedDinoRepo;
         this.adminRepo       = adminRepo;
+        this.adminService    = adminService;
         this.dinoRepo        = dinoRepo;
         this.eligibleGuilds  = eligibleGuilds;
         this.objectMapper    = objectMapper;
@@ -81,6 +84,12 @@ public class ServerService {
         if (serverRepo.existsBySlug(req.slug())) {
             throw new IllegalArgumentException("Slug already in use: " + req.slug());
         }
+        // Acceso revocado: un admin con un server rechazado o baneado no puede crear
+        // mas. Se restablece solo si la plataforma le re-aprueba ese server.
+        if (serverRepo.existsByOwnerDiscordUserIdAndStatusIn(
+                discordUserId, List.of(ServerStatus.REJECTED, ServerStatus.BANNED))) {
+            throw new AccessDeniedException("Your access has been revoked by the platform");
+        }
         // Verificacion de propiedad en el BACKEND: el guild debe estar en el set
         // elegible del admin (owner/ADMINISTRATOR), cacheado en el login. Nunca
         // confiamos en el guild_id que mande el frontend sin contrastarlo.
@@ -93,6 +102,7 @@ public class ServerService {
         Admin owner = adminRepo.findByDiscordUserId(discordUserId)
                 .orElseThrow(() -> new EntityNotFoundException("Admin not found"));
 
+        OffsetDateTime now = OffsetDateTime.now();
         Server server = new Server();
         server.setId(UUID.randomUUID());
         server.setOwner(owner);
@@ -101,11 +111,18 @@ public class ServerService {
         server.setGrowthMultiplier(req.growthMultiplier());
         server.setRules(req.rules());
         server.setBranding("{}");
-        server.setStatus(ServerStatus.PENDING);
         server.setDiscordGuildId(guild.id());
         server.setDiscordGuildName(guild.name());
         server.setDiscordInviteUrl(req.discordInviteUrl());
-        OffsetDateTime now = OffsetDateTime.now();
+        // Los servidores del admin de plataforma se auto-aceptan (no tiene sentido
+        // que se apruebe a si mismo). El resto entra en revision como 'pending'.
+        if (adminService.isPlatformAdmin(discordUserId)) {
+            server.setStatus(ServerStatus.ACCEPTED);
+            server.setReviewedAt(now);
+            server.setReviewedBy(owner);
+        } else {
+            server.setStatus(ServerStatus.PENDING);
+        }
         server.setCreatedAt(now);
         server.setUpdatedAt(now);
 

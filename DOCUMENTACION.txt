@@ -672,6 +672,19 @@ CHECKPOINT E - Frontend (admin React + Vite, 100% Discord):
       platformAdmin. Eliminadas las paginas viejas de Steam (SuperAdmin, Pending).
   [x] Nueva pagina Moderation: pestañas por estado + approve/reject/ban.
 
+REGLAS DE MODERACION (afinado tras pruebas):
+  - Auto-accept: si un admin de PLATFORM_ADMINS crea un server, entra directo
+    como accepted (no se aprueba a si mismo).
+  - Maquina de estados (validada en backend, transicion ilegal -> 409):
+      pending  -> accepted | rejected
+      rejected -> accepted   (re-aprobar)
+      accepted -> banned     (retirar)
+      banned   -> accepted   (des-banear)
+  - Acceso revocado: un admin con algun server rejected o banned NO puede crear
+    nuevos servers (403 "access has been revoked"). Se restablece solo si la
+    plataforma le re-aprueba ese server. Un admin en buen estado (solo accepted)
+    si puede registrar otros guilds suyos.
+
 CONFIGURACION PARA MODERAR:
   Para que tu cuenta vea la moderacion, pon tu Discord user id en la env
   PLATFORM_ADMINS del backend en Railway (Discord -> Ajustes -> Avanzado ->

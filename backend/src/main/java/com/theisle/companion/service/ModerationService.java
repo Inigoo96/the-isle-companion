@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -23,6 +25,20 @@ import java.util.UUID;
 @Service
 @Transactional(readOnly = true)
 public class ModerationService {
+
+    /**
+     * Transiciones permitidas del ciclo de vida de moderacion:
+     *   pending  -> accepted | rejected
+     *   rejected -> accepted        (re-aprobar)
+     *   accepted -> banned          (retirar)
+     *   banned   -> accepted        (des-banear)
+     */
+    private static final Map<ServerStatus, Set<ServerStatus>> TRANSITIONS = Map.of(
+            ServerStatus.PENDING,  Set.of(ServerStatus.ACCEPTED, ServerStatus.REJECTED),
+            ServerStatus.REJECTED, Set.of(ServerStatus.ACCEPTED),
+            ServerStatus.ACCEPTED, Set.of(ServerStatus.BANNED),
+            ServerStatus.BANNED,   Set.of(ServerStatus.ACCEPTED)
+    );
 
     private final ServerRepository serverRepo;
     private final AdminRepository adminRepo;
@@ -50,6 +66,15 @@ public class ModerationService {
                 .orElseThrow(() -> new EntityNotFoundException("Admin not found"));
         Server server = serverRepo.findById(serverId)
                 .orElseThrow(() -> new EntityNotFoundException("Server not found: " + serverId));
+
+        ServerStatus current = server.getStatus();
+        if (current == newStatus) {
+            return; // idempotente: ya esta en ese estado
+        }
+        if (!TRANSITIONS.getOrDefault(current, Set.of()).contains(newStatus)) {
+            throw new IllegalStateException(
+                    "Invalid transition: " + current + " -> " + newStatus);
+        }
 
         OffsetDateTime now = OffsetDateTime.now();
         server.setStatus(newStatus);

@@ -7,10 +7,12 @@ import com.theisle.companion.service.ServerService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/servers")
@@ -42,13 +44,15 @@ public class ServerController {
     }
 
     @PostMapping
-    public ResponseEntity<ServerDto> create(Authentication auth,
-                                            @RequestBody ServerRequest req) {
+    public ResponseEntity<?> create(Authentication auth,
+                                    @RequestBody ServerRequest req) {
         try {
             ServerDto created = service.create(principal(auth), req);
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", e.getMessage()));
         }
     }
 
