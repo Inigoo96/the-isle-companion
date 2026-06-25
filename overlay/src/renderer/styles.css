@@ -110,7 +110,9 @@ body {
   align-items: center;
   gap: 8px;
   -webkit-app-region: no-drag;
+  cursor: default;
 }
+#titlebar .controls button { cursor: pointer; }
 
 .hint {
   font-size: 0.85em;
