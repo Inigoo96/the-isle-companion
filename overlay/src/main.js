@@ -64,7 +64,7 @@ function startClipboardWatch() {
   }, 500);
 }
 
-const BACKEND = process.env.BACKEND_URL || 'https://the-isle-companion-production.up.railway.app';
+const BACKEND = process.env.BACKEND_URL || 'https://gondwa.up.railway.app';
 
 ipcMain.handle('open-steam-login', () => {
   const authWin = new BrowserWindow({

@@ -754,7 +754,7 @@ document.getElementById('toggle-migration').addEventListener('change', drawMap);
 document.getElementById('toggle-sanctuaries').addEventListener('change', drawMap);
 
 // --- STEAM AUTH ---
-const BACKEND = 'https://the-isle-companion-production.up.railway.app';
+const BACKEND = 'https://gondwa.up.railway.app';
 
 function getToken()        { return localStorage.getItem('isle_token'); }
 function getDisplayName()  { return localStorage.getItem('isle_display_name'); }

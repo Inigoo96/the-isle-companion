@@ -6,7 +6,7 @@ Spring Boot backend para la plataforma multi-tenant de Gondwa (companion para Th
 
 | Entorno | URL |
 |---|---|
-| Producción (Railway) | `https://the-isle-companion-production.up.railway.app` |
+| Producción (Railway) | `https://gondwa.up.railway.app` |
 | Desarrollo local | `http://localhost:8080` |
 
 ## Requisitos locales
@@ -55,7 +55,7 @@ El panel de administración se autentica **100% por Discord** (el overlay sigue 
 1. Crear una aplicación en [discord.com/developers/applications](https://discord.com/developers/applications).
 2. En **OAuth2 → Redirects**, añadir la URL de callback:
    - Local: `http://localhost:8080/auth/discord/callback`
-   - Producción: `https://the-isle-companion-production.up.railway.app/auth/discord/callback`
+   - Producción: `https://gondwa.up.railway.app/auth/discord/callback`
 3. Copiar **Client ID** y **Client Secret** a las variables `DISCORD_CLIENT_ID` / `DISCORD_CLIENT_SECRET`, y poner `DISCORD_REDIRECT_URI` con la URL de callback correspondiente.
 4. Scopes usados: `identify guilds` (el `guilds` se usará en el alta de servidor para verificar propiedad del guild).
 
@@ -102,12 +102,12 @@ Configurar en el servicio de backend (Railway → Backend → Variables):
 | `SPRING_DATASOURCE_PASSWORD` | Contraseña de la BD |
 | `JWT_SECRET` | Cadena aleatoria de 32+ caracteres |
 | `STEAM_API_KEY` | Tu API key de Steam |
-| `APP_BASE_URL` | `https://the-isle-companion-production.up.railway.app` |
+| `APP_BASE_URL` | `https://gondwa.up.railway.app` |
 | `SUPER_ADMIN_STEAM_ID` | Tu Steam ID |
 | `ADMIN_URL` | `https://inigoo96.github.io/gondwa` |
 | `DISCORD_CLIENT_ID` | Client ID de tu app de Discord |
 | `DISCORD_CLIENT_SECRET` | Client Secret de tu app de Discord |
-| `DISCORD_REDIRECT_URI` | `https://the-isle-companion-production.up.railway.app/auth/discord/callback` |
+| `DISCORD_REDIRECT_URI` | `https://gondwa.up.railway.app/auth/discord/callback` |
 | `PLATFORM_ADMINS` | Tu Discord user id (para moderar). Varios → separados por coma |
 
 > Los datos de conexión de PostgreSQL se obtienen desde Railway → Postgres → Connect → Public URL. Separar en URL, usuario y contraseña (Railway no soporta bien la URL completa con credenciales en la variable `${{Postgres.DATABASE_URL}}`).

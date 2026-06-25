@@ -631,7 +631,7 @@ CHECKPOINT B - Login del panel por Discord OAuth2:
 
 CONFIGURACION REQUERIDA PARA PROBAR EN PRODUCCION:
   En https://discord.com/developers/applications crear una app, anadir el
-  redirect "https://the-isle-companion-production.up.railway.app/auth/discord/
+  redirect "https://gondwa.up.railway.app/auth/discord/
   callback" y configurar en Railway (servicio backend):
     DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET,
     DISCORD_REDIRECT_URI = <ese mismo callback de produccion>.
@@ -728,11 +728,14 @@ supercontinente del sur de la era de los dinosaurios). Motivos: nombre propio
       portal (paso manual). ADMIN_URL en Railway -> .../gondwa (paso manual).
   [x] Seguridad: secretos solo por env; el Steam ID sale del codigo.
 
-  NO se toca (a proposito, sin gastar / sin romper): la carpeta local sigue
-  siendo the-isle-companion; la URL del backend en Railway
-  (the-isle-companion-production.up.railway.app) se mantiene -> por eso la
-  pantalla de login de Steam aun muestra ese dominio. Se migrara a dominio
-  propio (gondwa.gg / api.gondwa.gg) el dia que se compre el dominio.
+  [x] URL del backend en Railway renombrada a gondwa.up.railway.app (gratis,
+      cambio de subdominio) -> la pantalla de login de Steam ya muestra "gondwa".
+      Implica actualizar TODAS las referencias a la URL vieja: overlay (URL
+      hardcodeada + CSP), panel (secret VITE_API_BASE), Discord redirect, y en
+      Railway APP_BASE_URL/DISCORD_REDIRECT_URI; luego rebuild del overlay.
+
+  NO se toca: la carpeta local del repo sigue siendo the-isle-companion. El
+  dominio propio (gondwa.gg / api.gondwa.gg) queda para cuando se compre.
 
 
 ================================================================================

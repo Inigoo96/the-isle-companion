@@ -27,7 +27,7 @@ Abre `http://localhost:5173`. Las peticiones a `/api/*` se proxian automáticame
 ## Build de producción manual
 
 ```bash
-VITE_API_BASE=https://the-isle-companion-production.up.railway.app \
+VITE_API_BASE=https://gondwa.up.railway.app \
 VITE_BASE_PATH=/gondwa/ \
 npm run build
 ```

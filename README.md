@@ -22,7 +22,7 @@ gondwa/                          ← monorepo (repo: github.com/Inigoo96/gondwa)
 | Componente | Plataforma | URL |
 |---|---|---|
 | Admin Panel | GitHub Pages | `https://inigoo96.github.io/gondwa/` |
-| Backend API | Railway | `https://the-isle-companion-production.up.railway.app` |
+| Backend API | Railway | `https://gondwa.up.railway.app` |
 | Base de datos | Railway PostgreSQL | (interna al proyecto Railway) |
 
 El flujo de CI/CD es totalmente automático: cada push a `master` que toque archivos de `admin/` lanza un GitHub Actions workflow que construye y despliega en GitHub Pages. El backend se redespliega en Railway automáticamente si el repo de GitHub está conectado.
